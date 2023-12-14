@@ -13,9 +13,8 @@ namespace SharedKernel.Auth
     public class ExecutionContext
     {
         public string AccessToken { get; set; }
-        public long OwnerId { get; set; }
+        public Guid OwnerId { get; set; }
         public string Username { get; set; }
-        public long TenantId { get; set; }
         public string Permission { get; set; }
         public HttpContext HttpContext { get; set; }
     }

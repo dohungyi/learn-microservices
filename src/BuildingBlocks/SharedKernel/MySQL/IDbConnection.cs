@@ -11,9 +11,7 @@ namespace SharedKernel.MySQL
         MySqlConnection Connection { get; }
 
         MySqlTransaction CurrentTransaction { get; }
-
-        Task PublishEvents(IEventDispatcher eventDispatcher, CancellationToken cancellationToken);
-
+        
         /// <summary>
         ///  Execute a query asynchronously using Task.
         /// </summary>

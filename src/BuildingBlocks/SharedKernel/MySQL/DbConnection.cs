@@ -48,20 +48,7 @@ namespace SharedKernel.MySQL
                 return _transaction;
             }
         }
-
-        #region Events
-        public async Task PublishEvents(IEventDispatcher eventDispatcher, CancellationToken cancellationToken)
-        {
-            await Task.Yield();
-            if (DomainEvents != null && DomainEvents.Any())
-            {
-                var events = DomainEvents.Select(x => x).ToList();
-                _ = eventDispatcher.FireEvent(events, cancellationToken);
-
-                DomainEvents.Clear();
-            }
-        }
-        #endregion
+        
 
         #region Query
         public async Task<IEnumerable<T>> QueryAsync<T>(string sql, object param = null, int? commandTimeout = null, CommandType? commandType = CommandType.Text)
@@ -199,14 +186,6 @@ namespace SharedKernel.MySQL
             try
             {
                 _currentState = ConnectionState.Executing;
-                if (param != null && typeof(IBaseEntity).IsAssignableFrom(param.GetType()))
-                {
-                    var @base = (IBaseEntity)param;
-                    if (@base.DomainEvents != null && @base.DomainEvents.Any())
-                    {
-                        DomainEvents.AddRange(@base.DomainEvents);
-                    }
-                }
 
                 var result = await _connection.ExecuteAsync(sql, param, CurrentTransaction, commandTimeout, commandType);
                 if (autoCommit)
@@ -230,14 +209,6 @@ namespace SharedKernel.MySQL
             try
             {
                 _currentState = ConnectionState.Executing;
-                if (param != null && typeof(IBaseEntity).IsAssignableFrom(param.GetType()))
-                {
-                    var @base = (IBaseEntity)param;
-                    if (@base.DomainEvents != null && @base.DomainEvents.Any())
-                    {
-                        DomainEvents.AddRange(@base.DomainEvents);
-                    }
-                }
 
                 var result = await _connection.ExecuteScalarAsync(sql, param, CurrentTransaction, commandTimeout, commandType);
                 if (autoCommit)
@@ -261,14 +232,7 @@ namespace SharedKernel.MySQL
             try
             {
                 _currentState = ConnectionState.Executing;
-                if (param != null && typeof(IBaseEntity).IsAssignableFrom(param.GetType()))
-                {
-                    var @base = (IBaseEntity)param;
-                    if (@base.DomainEvents != null && @base.DomainEvents.Any())
-                    {
-                        DomainEvents.AddRange(@base.DomainEvents);
-                    }
-                }
+               
                 return await _connection.QueryAsync<T>(sql, param, CurrentTransaction, commandTimeout: commandTimeout, commandType: commandType);
             }
             finally
@@ -285,17 +249,6 @@ namespace SharedKernel.MySQL
             try
             {
                 _currentState = ConnectionState.Executing;
-                if (typeof(IBaseEntity).IsAssignableFrom(typeof(T)))
-                {
-                    foreach (var entity in entites)
-                    {
-                        var @base = (IBaseEntity)entity;
-                        if (@base.DomainEvents != null && @base.DomainEvents.Any())
-                        {
-                            DomainEvents.AddRange(@base.DomainEvents);
-                        }
-                    }
-                }
 
                 // Create object of MySqlBulkCopy which help to insert  
                 var bulk = new MySqlBulkCopy(_connection, CurrentTransaction);

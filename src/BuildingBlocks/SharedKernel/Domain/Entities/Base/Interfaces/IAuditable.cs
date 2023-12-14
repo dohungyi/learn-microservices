@@ -4,14 +4,14 @@
     {
         DateTime CreatedDate { get; set; }
 
-        long CreatedBy { get; set; }
+        Guid CreatedBy { get; set; }
 
         DateTime? LastModifiedDate { get; set; }
 
-        long? LastModifiedBy { get; set; }
+        Guid? LastModifiedBy { get; set; }
 
         DateTime? DeletedDate { get; set; }
 
-        long? DeletedBy { get; set; }
+        Guid? DeletedBy { get; set; }
     }
 }

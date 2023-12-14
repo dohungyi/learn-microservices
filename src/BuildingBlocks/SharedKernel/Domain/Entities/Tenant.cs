@@ -20,14 +20,14 @@ namespace SharedKernel.Domain
 
         public DateTime CreatedDate { get; set; } = DateHelper.Now;
 
-        public long CreatedBy { get; set; }
+        public Guid CreatedBy { get; set; }
 
         public DateTime? LastModifiedDate { get; set; }
 
-        public long? LastModifiedBy { get; set; }
+        public Guid? LastModifiedBy { get; set; }
 
         public DateTime? DeletedDate { get; set; }
 
-        public long? DeletedBy { get; set; }
+        public Guid? DeletedBy { get; set; }
     }
 }

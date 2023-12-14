@@ -27,7 +27,7 @@ namespace SharedKernel.Filters
                     var isRevoked = !string.IsNullOrEmpty(await sequenceCaching.GetStringAsync(key));
 
                     // If the user is logged out
-                    if (isRevoked || token.Context.TenantId <= 0)
+                    if (isRevoked)
                     {
                         context.Result = new ContentResult()
                         {

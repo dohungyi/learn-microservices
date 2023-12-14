@@ -3,7 +3,6 @@ using System.Text.Json.Serialization;
 
 namespace SharedKernel.Domain
 {
-    //[ModelBinder(BinderType = typeof(BaseEntityBinder))]
     public abstract class BaseEntity<TKey> : CoreEntity, IBaseEntity<TKey>
     {
         [System.ComponentModel.DataAnnotations.Key]
@@ -11,43 +10,18 @@ namespace SharedKernel.Domain
 
         [JsonIgnore]
         public bool IsDeleted { get; set; }
-
-        public long TenantId { get; set; }
-
+        
         public DateTime CreatedDate { get; set; } = SharedKernel.Libraries.DateHelper.Now;
 
-        public long CreatedBy { get; set; }
+        public Guid CreatedBy { get; set; }
 
         public DateTime? LastModifiedDate { get; set; }
 
-        public long? LastModifiedBy { get; set; }
+        public Guid? LastModifiedBy { get; set; }
 
         public DateTime? DeletedDate { get; set; }
 
-        public long? DeletedBy { get; set; }
-
-        #region Domain events
-        private List<DomainEvent> _domainEvents;
-
-        [NotMapped, Libraries.Ignore]
-        public IReadOnlyCollection<DomainEvent> DomainEvents => _domainEvents?.AsReadOnly();
-
-        public void AddDomainEvent(DomainEvent @event)
-        {
-            _domainEvents = _domainEvents ?? new List<DomainEvent>();
-            _domainEvents.Add(@event);
-        }
-
-        public void RemoveDomainEvent(DomainEvent @event)
-        {
-            _domainEvents?.Remove(@event);
-        }
-
-        public void ClearDomainEvents()
-        {
-            _domainEvents = null;
-        }
-        #endregion
+        public Guid? DeletedBy { get; set; }
 
         #region Cloneable
         public object Clone()
@@ -60,7 +34,7 @@ namespace SharedKernel.Domain
     /// <summary>
     /// By default, TKey is long
     /// </summary>
-    public class BaseEntity : BaseEntity<long>, IBaseEntity
+    public class BaseEntity : BaseEntity<Guid>, IBaseEntity
     {
     }
 }

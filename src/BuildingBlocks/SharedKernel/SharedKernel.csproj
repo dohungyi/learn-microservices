@@ -121,5 +121,10 @@
         <PackageReference Include="ZymLabs.NSwag.FluentValidation" Version="0.6.2" />
 
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Application\Repositories\EFCore\" />
+      <Folder Include="Infrastructures\Repositories\EFCore\" />
+    </ItemGroup>
     
 </Project>

@@ -11,7 +11,7 @@
         public static string GetSystemRecordByForeignIdKey(string tableName, object foreignKeyId) => $"system-record-by-foreignkey-id:{tableName}:{foreignKeyId}";
         public static string GetFullRecordsKey(string tableName, object tenantId, object ownerId) => $"full-records:{tableName}:{tenantId}:{ownerId}";
         public static string GetRecordByIdKey(string tableName, object recordId, object tenantId, object ownerId) => $"record-by-id:{tableName}:{recordId}:{tenantId}:{ownerId}";
-        public static string GetSecretKey(string keyName, object tenantId, object ownerId) => $"{keyName}:{tenantId}:{ownerId}";
+        public static string GetSecretKey(string keyName, object ownerId) => $"{keyName}:{ownerId}";
 
     }
 }

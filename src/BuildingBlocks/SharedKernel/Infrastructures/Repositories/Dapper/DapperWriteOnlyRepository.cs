@@ -13,7 +13,7 @@ using SharedKernel.UnitOfWork;
 
 namespace SharedKernel.Infrastructures
 {
-    public class BaseWriteOnlyRepository<TEntity> : IBaseWriteOnlyRepository<TEntity> where TEntity : IBaseEntity
+    public class DapperWriteOnlyRepository<TEntity> : IDapperWriteOnlyRepository<TEntity> where TEntity : IBaseEntity
     {
         protected IDbConnection _dbConnection;
         protected readonly string _tableName;
@@ -22,7 +22,7 @@ namespace SharedKernel.Infrastructures
         protected readonly bool _isSystemTable;
         protected readonly IStringLocalizer<Resources> _localizer;
 
-        public BaseWriteOnlyRepository(
+        public DapperWriteOnlyRepository(
             IDbConnection dbConnection,
             IToken token,
             ISequenceCaching sequenceCaching,
@@ -34,7 +34,6 @@ namespace SharedKernel.Infrastructures
             _sequenceCaching = sequenceCaching;
             _localizer = localizer;
             _tableName = ((TEntity)Activator.CreateInstance(typeof(TEntity))).GetTableName();
-            _isSystemTable = typeof(TEntity).GetProperty("TenantId") == null && typeof(TEntity).GetProperty("OwnerId") == null;
         }
 
         public IUnitOfWork UnitOfWork => _dbConnection;
@@ -102,12 +101,10 @@ namespace SharedKernel.Infrastructures
             var columnParams = new List<string>();
             var ignoreFields = new string[]
             {
-                nameof(BaseEntity.DomainEvents),
                 nameof(BaseEntity.Id),
                 nameof(BaseEntity.CreatedDate),
                 nameof(BaseEntity.CreatedBy),
                 nameof(BaseEntity.IsDeleted),
-                nameof(BaseEntity.TenantId),
                 nameof(PersonalizedEntity.OwnerId),
             };
             var properties = entity.GetPropertyInfos();
@@ -181,14 +178,7 @@ namespace SharedKernel.Infrastructures
                     DeletedDate = DateHelper.Now,
                     DeletedBy = _token.Context.OwnerId,
                 };
-
-                foreach (var entity in entities)
-                {
-                    foreach (var domainEvent in entity.DomainEvents)
-                    {
-                        param.AddDomainEvent(domainEvent);
-                    }
-                }
+                
                 await _dbConnection.ExecuteAsync(deleteCommand, param);
             }
             await ClearCacheWhenChangesAsync(entities.Select(x => (object)x.Id).ToList(), cancellationToken);
@@ -202,19 +192,13 @@ namespace SharedKernel.Infrastructures
             {
                 entities.ForEach(entity =>
                 {
-                    entity.Id = AuthUtility.GenerateSnowflakeId();
+                    entity.Id = Guid.NewGuid();
                     entity.CreatedBy = _token.Context.OwnerId;
                     entity.CreatedDate = DateHelper.Now;
                     entity.LastModifiedDate = null;
                     entity.LastModifiedBy = null;
                     entity.DeletedDate = null;
                     entity.DeletedBy = null;
-                    entity.TenantId = _token.Context.TenantId;
-
-                    var clone = (TEntity)entity.Clone();
-                    clone.ClearDomainEvents();
-
-                    entity.AddDomainEvent(new InsertAuditEvent<TEntity>(new List<TEntity> { clone }, _token));
                 });
 
                 if (batches.Count() > 1)
@@ -233,7 +217,6 @@ namespace SharedKernel.Infrastructures
 
         protected virtual void BeforeUpdate(TEntity entity, TEntity oldValue)
         {
-            entity.TenantId = _token.Context.TenantId;
             entity.CreatedBy = _token.Context.OwnerId;
             entity.LastModifiedDate = DateHelper.Now;
             entity.LastModifiedBy = _token.Context.OwnerId;
@@ -241,35 +224,24 @@ namespace SharedKernel.Infrastructures
             {
                 entity["OwnerId"] = _token.Context.OwnerId;
             }
-
-            var newValue = (TEntity)entity.Clone();
-            newValue.ClearDomainEvents();
-            oldValue.ClearDomainEvents();
-
-            entity.AddDomainEvent(new UpdateAuditEvent<TEntity>(new List<UpdateAuditModel<TEntity>> { new UpdateAuditModel<TEntity>(newValue, oldValue) }, _token));
         }
 
         protected virtual void BeforeDelete(IEnumerable<TEntity> entities)
         {
-            foreach (var entity in entities)
-            {
-                var clone = (TEntity)entity.Clone();
-                clone.ClearDomainEvents();
-                entity.AddDomainEvent(new DeleteAuditEvent<TEntity>(new List<TEntity> { clone }, _token));
-            }
+            
         }
 
         protected virtual async Task ClearCacheWhenChangesAsync(List<object> ids, CancellationToken cancellationToken)
         {
             var tasks = new List<Task>();
-            var fullRecordKey = _isSystemTable ? BaseCacheKeys.GetSystemFullRecordsKey(_tableName) : BaseCacheKeys.GetFullRecordsKey(_tableName, _token.Context.TenantId, _token.Context.OwnerId);
+            var fullRecordKey = BaseCacheKeys.GetSystemFullRecordsKey(_tableName);
             tasks.Add(_sequenceCaching.RemoveAsync(fullRecordKey, cancellationToken: cancellationToken));
 
             if (ids != null && ids.Any())
             {
                 foreach (var id in ids)
                 {
-                    var recordByIdKey = _isSystemTable ? BaseCacheKeys.GetSystemRecordByIdKey(_tableName, id) : BaseCacheKeys.GetRecordByIdKey(_tableName, id, _token.Context.TenantId, _token.Context.OwnerId);
+                    var recordByIdKey = BaseCacheKeys.GetSystemRecordByIdKey(_tableName, id);
                     tasks.Add(_sequenceCaching.RemoveAsync(recordByIdKey, cancellationToken: cancellationToken));
                 }
             }

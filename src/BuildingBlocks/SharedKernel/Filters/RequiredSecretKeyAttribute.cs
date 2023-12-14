@@ -26,7 +26,7 @@ namespace SharedKernel.Filters
 
             var token = context.HttpContext.RequestServices.GetRequiredService<IToken>();
             var sequenceCaching = context.HttpContext.RequestServices.GetRequiredService<ISequenceCaching>();
-            var key = BaseCacheKeys.GetSecretKey(_keyName, token.Context.TenantId, token.Context.OwnerId);
+            var key = BaseCacheKeys.GetSecretKey(_keyName, token.Context.OwnerId);
             var value = await sequenceCaching.GetStringAsync(key);
 
             if (!code.Equals(value))

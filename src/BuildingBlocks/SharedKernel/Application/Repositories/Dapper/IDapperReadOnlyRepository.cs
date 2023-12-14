@@ -2,7 +2,7 @@
 
 namespace SharedKernel.Application
 {
-    public interface IBaseReadOnlyRepository<TEntity> where TEntity : BaseEntity
+    public interface IDapperReadOnlyRepository<TEntity> where TEntity : BaseEntity
     {
 
         #region Cache

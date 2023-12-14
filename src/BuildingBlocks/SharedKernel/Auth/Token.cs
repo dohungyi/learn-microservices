@@ -57,10 +57,9 @@ namespace SharedKernel.Auth
             return new ExecutionContext
             {
                 AccessToken = accessToken,
-                OwnerId = Convert.ToInt64(claims.First(c => c.Type == ClaimConstant.USER_ID).Value),
+                OwnerId = Guid.Parse(claims.First(c => c.Type == ClaimConstant.USER_ID).Value),
                 Username = claims.First(c => c.Type == ClaimConstant.USERNAME).Value,
                 Permission = claims.First(c => c.Type == ClaimConstant.PERMISSION).Value,
-                TenantId =  Convert.ToInt64(claims.First(c => c.Type == ClaimConstant.TENANT_ID).Value),
                 HttpContext = httpContext
             };
         }

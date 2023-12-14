@@ -29,9 +29,6 @@ namespace SharedKernel.Domain
         public DateTime DateOfBirth { get; set; }
 
         public GenderType Gender { get; set; }
-
-        public long PositionId { get; set; }
-
-        public long DepartmentId { get; set; }
+        
     }
 }

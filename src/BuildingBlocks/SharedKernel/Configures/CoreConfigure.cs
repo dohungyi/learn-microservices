@@ -34,7 +34,6 @@ using SharedKernel.Auth;
 using SharedKernel.Caching;
 using SharedKernel.Core;
 using SharedKernel.Domain;
-using SharedKernel.DomainEvents;
 using SharedKernel.Infrastructures;
 using SharedKernel.Libraries;
 using SharedKernel.Log;
@@ -229,13 +228,7 @@ namespace SharedKernel.Configure
             services.AddScoped<IToken, Token>();
             return services;
         }
-
-        public static IServiceCollection AddDispatchers(this IServiceCollection services)
-        {
-            services.AddScoped<IEventDispatcher, EventDispatcher>();
-            return services;
-        }
-
+        
         public static IServiceCollection AddExceptionHandler(this IServiceCollection services)
         {
             services.AddSingleton<IExceptionHandler, ExceptionHandler>();
@@ -274,7 +267,6 @@ namespace SharedKernel.Configure
         {
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestBehavior<,>));
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(EventsBehavior<,>));
             return services;
         }
         #endregion
@@ -487,6 +479,17 @@ namespace SharedKernel.Configure
 
             CoreSettings.SetLoggingConfig(configuration, logger);
         });
+        
+        public static void AddAppConfigurations(this ConfigureHostBuilder host)
+        {
+            host.ConfigureAppConfiguration((context, config) =>
+            {
+                var env = context.HostingEnvironment;
+                config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                    .AddEnvironmentVariables();
+            }).UseCoreSerilog();
+        }
         #endregion
 
         #region ApiGateway

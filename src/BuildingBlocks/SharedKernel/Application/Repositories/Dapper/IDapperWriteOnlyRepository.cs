@@ -4,7 +4,7 @@ using SharedKernel.UnitOfWork;
 
 namespace SharedKernel.Application
 {
-    public interface IBaseWriteOnlyRepository<TEntity> where TEntity : IBaseEntity
+    public interface IDapperWriteOnlyRepository<TEntity> where TEntity : IBaseEntity
     {
         IUnitOfWork UnitOfWork { get; }
 

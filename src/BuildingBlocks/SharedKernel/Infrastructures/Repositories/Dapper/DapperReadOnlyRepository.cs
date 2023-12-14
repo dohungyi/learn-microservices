@@ -11,23 +11,21 @@ using SharedKernel.Runtime.Exceptions;
 
 namespace SharedKernel.Infrastructures
 {
-    public class BaseReadOnlyRepository<TEntity> : IBaseReadOnlyRepository<TEntity> where TEntity : BaseEntity
+    public class DapperReadOnlyRepository<TEntity> : IDapperReadOnlyRepository<TEntity> where TEntity : BaseEntity
     {
         protected IDbConnection _dbConnection;
         protected readonly string _tableName;
         protected readonly IToken _token;
         protected readonly ISequenceCaching _sequenceCaching;
         protected readonly IServiceProvider _provider;
-        protected readonly bool _isSystemTable;
 
-        public BaseReadOnlyRepository(IDbConnection dbConnection, IToken token, ISequenceCaching sequenceCaching, IServiceProvider provider)
+        public DapperReadOnlyRepository(IDbConnection dbConnection, IToken token, ISequenceCaching sequenceCaching, IServiceProvider provider)
         {
             _dbConnection = dbConnection;
             _token = token;
             _sequenceCaching = sequenceCaching;
             _tableName = ((TEntity)Activator.CreateInstance(typeof(TEntity))).GetTableName();
             _provider = provider;
-            _isSystemTable = typeof(TEntity).GetProperty("TenantId") == null && typeof(TEntity).GetProperty("OwnerId") == null;
         }
 
         public virtual async Task<IEnumerable<TResult>> GetAllAsync<TResult>(CancellationToken cancellationToken)
@@ -42,10 +40,6 @@ namespace SharedKernel.Infrastructures
             if (typeof(TEntity).GetProperty("OwnerId") != null)
             {
                 cmd += $" AND T.OwnerId = '{_token.Context.OwnerId}'";
-            }
-            if (typeof(TEntity).GetProperty("TenantId") != null)
-            {
-                cmd += $" AND T.TenantId = '{_token.Context.TenantId}'";
             }
 
             cmd += " AND T.IsDeleted = 0";
@@ -67,8 +61,10 @@ namespace SharedKernel.Infrastructures
             }
 
             var cmd = $"SELECT * FROM {_tableName} as T WHERE T.Id = @Id";
-            if (typeof(TEntity).GetProperty("OwnerId") != null) cmd += $" AND T.OwnerId = '{_token.Context.OwnerId}'";
-            if (typeof(TEntity).GetProperty("TenantId") != null) cmd += $" AND T.TenantId = '{_token.Context.TenantId}'";
+            if (typeof(TEntity).GetProperty("OwnerId") != null)
+            {
+                cmd += $" AND T.OwnerId = '{_token.Context.OwnerId}'";
+            }
 
             cmd += " AND T.IsDeleted = 0";
 
@@ -89,11 +85,6 @@ namespace SharedKernel.Infrastructures
             {
                 cmd += $" AND T.OwnerId = '{_token.Context.OwnerId}'";
                 countCmd += $" AND T.OwnerId = '{_token.Context.OwnerId}'";
-            }
-            if (typeof(TEntity).GetProperty("TenantId") != null)
-            {
-                cmd += $" AND T.TenantId = '{_token.Context.TenantId}'";
-                countCmd += $" AND T.TenantId = '{_token.Context.TenantId}'";
             }
 
             cmd += " AND T.IsDeleted = 0";
@@ -159,8 +150,10 @@ namespace SharedKernel.Infrastructures
         public async Task<long> GetCountAsync(CancellationToken cancellationToken)
         {
             var cmd = $"SELECT COUNT(*) FROM {_tableName} as T WHERE 1=1";
-            if (typeof(TEntity).GetProperty("OwnerId") != null) cmd += $" AND T.OwnerId = '{_token.Context.OwnerId}'";
-            if (typeof(TEntity).GetProperty("TenantId") != null) cmd += $" AND T.TenantId = '{_token.Context.TenantId}'";
+            if (typeof(TEntity).GetProperty("OwnerId") != null)
+            {
+                cmd += $" AND T.OwnerId = '{_token.Context.OwnerId}'";
+            }
 
             cmd += " AND T.IsDeleted = 0";
 
@@ -172,29 +165,15 @@ namespace SharedKernel.Infrastructures
         #region Get
         public virtual async Task<CacheResult<List<TResult>>> GetAllCacheAsync<TResult>(CancellationToken cancellationToken)
         {
-            string key = string.Empty;
-            if (_isSystemTable)
-            {
-                key = BaseCacheKeys.GetSystemFullRecordsKey(_tableName);
-            }
-            else
-            {
-                key =  BaseCacheKeys.GetFullRecordsKey(_tableName, _token.Context.TenantId, _token.Context.OwnerId);
-            }
+            string key = BaseCacheKeys.GetSystemFullRecordsKey(_tableName);
+                
             return new CacheResult<List<TResult>>(key, await _sequenceCaching.GetAsync<List<TResult>>(key, cancellationToken: cancellationToken));
         }
 
         public virtual async Task<CacheResult<TResult>> GetByIdCacheAsync<TResult>(object id, CancellationToken cancellationToken)
         {
-            string key = string.Empty;
-            if (_isSystemTable)
-            {
-                key = BaseCacheKeys.GetSystemRecordByIdKey(_tableName, id);
-            }
-            else
-            {
-                key =  BaseCacheKeys.GetRecordByIdKey(_tableName, id, _token.Context.TenantId, _token.Context.OwnerId);
-            }
+            string key = BaseCacheKeys.GetSystemRecordByIdKey(_tableName, id);
+           
             return new CacheResult<TResult>(key, await _sequenceCaching.GetAsync<TResult>(key, cancellationToken: cancellationToken));
         }
         #endregion

@@ -2,6 +2,6 @@
 {
     public abstract class PersonalizedEntity : BaseEntity, IPersonalizeEntity
     {
-        public long OwnerId { get; set; }
+        public Guid OwnerId { get; set; }
     }
 }

@@ -2,6 +2,6 @@
 {
     public interface IPersonalizeEntity : IBaseEntity
     {
-        long OwnerId { get; set; }
+        Guid OwnerId { get; set; }
     }
 }
