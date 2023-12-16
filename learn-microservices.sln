@@ -24,6 +24,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApps", "WebApps", "{67F973BD-3EB7-4931-B115-A48D6CC5B24C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "resources", "resources", "{25D6FB18-2A9B-4E08-A27B-13B4905E8F8C}"
+	ProjectSection(SolutionItems) = preProject
+		resources\Api Gateway Routing List.xlsx = resources\Api Gateway Routing List.xlsx
+		resources\microservices-solution-architect.jpg = resources\microservices-solution-architect.jpg
+		resources\postgresql_tutorial.pdf = resources\postgresql_tutorial.pdf
+		resources\Redis-For-Dummies_FINAL.pdf = resources\Redis-For-Dummies_FINAL.pdf
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedKernel", "src\BuildingBlocks\SharedKernel\SharedKernel.csproj", "{9B8F7219-4BFD-4EFD-B103-1975E8462B02}"
 EndProject

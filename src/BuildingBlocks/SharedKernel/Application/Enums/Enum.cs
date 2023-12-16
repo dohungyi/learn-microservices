@@ -115,6 +115,13 @@ namespace SharedKernel.Application
             Image = 1,
             Video = 2,
             Other = 3,
+            Document = 4,
+        }
+        
+        public enum StatusType
+        {
+            Active = 0,
+            InActive = 1,
         }
     }
 }
