@@ -103,10 +103,6 @@ namespace SharedKernel.Application
             Import = 5,
             Upload = 6,
             Download = 7,
-            Process = 8,
-            Cloud = 9,
-            ChatGenerator = 10,
-            Notebook = 11,
         }
 
         public enum FileType
