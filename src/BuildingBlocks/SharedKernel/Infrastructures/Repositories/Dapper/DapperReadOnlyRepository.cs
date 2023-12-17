@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Caching;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using SharedKernel.Application;
 using SharedKernel.Auth;
-using SharedKernel.Caching;
 using SharedKernel.Domain;
 using SharedKernel.Libraries;
 using SharedKernel.MySQL;
@@ -15,14 +15,14 @@ namespace SharedKernel.Infrastructures
     {
         protected IDbConnection _dbConnection;
         protected readonly string _tableName;
-        protected readonly IToken _token;
+        protected readonly ICurrentUser CurrentUser;
         protected readonly ISequenceCaching _sequenceCaching;
         protected readonly IServiceProvider _provider;
 
-        public DapperReadOnlyRepository(IDbConnection dbConnection, IToken token, ISequenceCaching sequenceCaching, IServiceProvider provider)
+        public DapperReadOnlyRepository(IDbConnection dbConnection, ICurrentUser currentUser, ISequenceCaching sequenceCaching, IServiceProvider provider)
         {
             _dbConnection = dbConnection;
-            _token = token;
+            CurrentUser = currentUser;
             _sequenceCaching = sequenceCaching;
             _tableName = ((TEntity)Activator.CreateInstance(typeof(TEntity))).GetTableName();
             _provider = provider;
@@ -39,7 +39,7 @@ namespace SharedKernel.Infrastructures
             var cmd = $"SELECT * FROM {_tableName} as T WHERE 1=1";
             if (typeof(TEntity).GetProperty("OwnerId") != null)
             {
-                cmd += $" AND T.OwnerId = '{_token.Context.OwnerId}'";
+                cmd += $" AND T.OwnerId = '{CurrentUser.Context.OwnerId}'";
             }
 
             cmd += " AND T.IsDeleted = 0";
@@ -63,7 +63,7 @@ namespace SharedKernel.Infrastructures
             var cmd = $"SELECT * FROM {_tableName} as T WHERE T.Id = @Id";
             if (typeof(TEntity).GetProperty("OwnerId") != null)
             {
-                cmd += $" AND T.OwnerId = '{_token.Context.OwnerId}'";
+                cmd += $" AND T.OwnerId = '{CurrentUser.Context.OwnerId}'";
             }
 
             cmd += " AND T.IsDeleted = 0";
@@ -83,8 +83,8 @@ namespace SharedKernel.Infrastructures
 
             if (typeof(TEntity).GetProperty("OwnerId") != null)
             {
-                cmd += $" AND T.OwnerId = '{_token.Context.OwnerId}'";
-                countCmd += $" AND T.OwnerId = '{_token.Context.OwnerId}'";
+                cmd += $" AND T.OwnerId = '{CurrentUser.Context.OwnerId}'";
+                countCmd += $" AND T.OwnerId = '{CurrentUser.Context.OwnerId}'";
             }
 
             cmd += " AND T.IsDeleted = 0";
@@ -152,7 +152,7 @@ namespace SharedKernel.Infrastructures
             var cmd = $"SELECT COUNT(*) FROM {_tableName} as T WHERE 1=1";
             if (typeof(TEntity).GetProperty("OwnerId") != null)
             {
-                cmd += $" AND T.OwnerId = '{_token.Context.OwnerId}'";
+                cmd += $" AND T.OwnerId = '{CurrentUser.Context.OwnerId}'";
             }
 
             cmd += " AND T.IsDeleted = 0";

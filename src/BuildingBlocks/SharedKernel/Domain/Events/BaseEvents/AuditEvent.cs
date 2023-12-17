@@ -5,7 +5,7 @@ namespace SharedKernel.Domain
 {
     public class AuditEvent : DomainEvent
     {
-        public AuditEvent(string tableName, AuditAction auditAction, IToken token, Guid eventId = default) : base(eventId, null, token)
+        public AuditEvent(string tableName, AuditAction auditAction, ICurrentUser currentUser, Guid eventId = default) : base(eventId, null, currentUser)
         {
             TableName = tableName;
             AuditAction = auditAction;
@@ -17,9 +17,9 @@ namespace SharedKernel.Domain
             {
                 EventQueue = "audit-event";
             }
-            if(token.Context.HttpContext != null)
+            if(currentUser.Context.HttpContext != null)
             {
-                IpAddress = AuthUtility.TryGetIP(token.Context.HttpContext.Request);
+                IpAddress = AuthUtility.TryGetIP(currentUser.Context.HttpContext.Request);
             }
             else
             {

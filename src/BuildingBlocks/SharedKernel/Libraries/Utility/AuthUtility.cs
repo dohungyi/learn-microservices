@@ -5,10 +5,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using SharedKernel.Application;
-using SharedKernel.Application.Models;
-using SharedKernel.Caching;
 using SharedKernel.Domain;
 using System.Numerics;
+using Caching;
 
 namespace SharedKernel.Libraries
 {

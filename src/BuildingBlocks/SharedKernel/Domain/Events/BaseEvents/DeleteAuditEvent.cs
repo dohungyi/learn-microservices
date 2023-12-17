@@ -6,7 +6,7 @@ namespace SharedKernel.Domain
     {
         public List<T> Entities { get; }
 
-        public DeleteAuditEvent(List<T> entities, IToken token) : base(typeof(T).Name, AuditAction.Delete, token)
+        public DeleteAuditEvent(List<T> entities, ICurrentUser currentUser) : base(typeof(T).Name, AuditAction.Delete, currentUser)
         {
             Entities = entities;
         }

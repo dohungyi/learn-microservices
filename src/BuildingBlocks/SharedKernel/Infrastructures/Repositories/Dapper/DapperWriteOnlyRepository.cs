@@ -1,9 +1,9 @@
-﻿using MassTransit.Internals;
+﻿using Caching;
+using MassTransit.Internals;
 using Microsoft.Extensions.Localization;
 using MySqlConnector;
 using SharedKernel.Application;
 using SharedKernel.Auth;
-using SharedKernel.Caching;
 using SharedKernel.Domain;
 using SharedKernel.Libraries;
 using SharedKernel.MySQL;
@@ -17,20 +17,20 @@ namespace SharedKernel.Infrastructures
     {
         protected IDbConnection _dbConnection;
         protected readonly string _tableName;
-        protected readonly IToken _token;
+        protected readonly ICurrentUser CurrentUser;
         protected readonly ISequenceCaching _sequenceCaching;
         protected readonly bool _isSystemTable;
         protected readonly IStringLocalizer<Resources> _localizer;
 
         public DapperWriteOnlyRepository(
             IDbConnection dbConnection,
-            IToken token,
+            ICurrentUser currentUser,
             ISequenceCaching sequenceCaching,
             IStringLocalizer<Resources> localizer
         )
         {
             _dbConnection = dbConnection;
-            _token = token;
+            CurrentUser = currentUser;
             _sequenceCaching = sequenceCaching;
             _localizer = localizer;
             _tableName = ((TEntity)Activator.CreateInstance(typeof(TEntity))).GetTableName();
@@ -133,11 +133,11 @@ namespace SharedKernel.Infrastructures
             sqlCommand += string.Join(", ", columnParams) + " WHERE T.Id = @Id AND T.IsDeleted = 0";
             if (typeof(TEntity).GetProperty("OwnerId") != null)
             {
-                sqlCommand += $" AND IF(OwnerId = '{_token.Context.OwnerId}', TRUE, IF(CreatedBy = '{_token.Context.OwnerId}', TRUE, FALSE));";
+                sqlCommand += $" AND IF(OwnerId = '{CurrentUser.Context.OwnerId}', TRUE, IF(CreatedBy = '{CurrentUser.Context.OwnerId}', TRUE, FALSE));";
             }
             else
             {
-                sqlCommand += $" AND IF(CreatedBy = '{_token.Context.OwnerId}', TRUE, FALSE);";
+                sqlCommand += $" AND IF(CreatedBy = '{CurrentUser.Context.OwnerId}', TRUE, FALSE);";
             }
 
             await _dbConnection.ExecuteAsync(sqlCommand, entity);
@@ -159,13 +159,13 @@ namespace SharedKernel.Infrastructures
 
             if (typeof(TEntity).GetProperty("OwnerId") != null)
             {
-                sqlCommand += $" AND IF(OwnerId = '{_token.Context.OwnerId}', TRUE, IF(CreatedBy = '{_token.Context.OwnerId}', TRUE, FALSE));";
-                deleteCommand += $" AND IF(OwnerId = '{_token.Context.OwnerId}', TRUE, IF(CreatedBy = '{_token.Context.OwnerId}', TRUE, FALSE));";
+                sqlCommand += $" AND IF(OwnerId = '{CurrentUser.Context.OwnerId}', TRUE, IF(CreatedBy = '{CurrentUser.Context.OwnerId}', TRUE, FALSE));";
+                deleteCommand += $" AND IF(OwnerId = '{CurrentUser.Context.OwnerId}', TRUE, IF(CreatedBy = '{CurrentUser.Context.OwnerId}', TRUE, FALSE));";
             }
             else
             {
-                sqlCommand += $" AND IF(CreatedBy = '{_token.Context.OwnerId}', TRUE, FALSE);";
-                deleteCommand += $" AND IF(CreatedBy = '{_token.Context.OwnerId}', TRUE, FALSE);";
+                sqlCommand += $" AND IF(CreatedBy = '{CurrentUser.Context.OwnerId}', TRUE, FALSE);";
+                deleteCommand += $" AND IF(CreatedBy = '{CurrentUser.Context.OwnerId}', TRUE, FALSE);";
             }
 
             var entities = await _dbConnection.QueryAsync<TEntity>(sqlCommand);
@@ -176,7 +176,7 @@ namespace SharedKernel.Infrastructures
                 var param = new BaseEntity
                 {
                     DeletedDate = DateHelper.Now,
-                    DeletedBy = _token.Context.OwnerId,
+                    DeletedBy = CurrentUser.Context.OwnerId,
                 };
                 
                 await _dbConnection.ExecuteAsync(deleteCommand, param);
@@ -193,7 +193,7 @@ namespace SharedKernel.Infrastructures
                 entities.ForEach(entity =>
                 {
                     entity.Id = Guid.NewGuid();
-                    entity.CreatedBy = _token.Context.OwnerId;
+                    entity.CreatedBy = CurrentUser.Context.OwnerId;
                     entity.CreatedDate = DateHelper.Now;
                     entity.LastModifiedDate = null;
                     entity.LastModifiedBy = null;
@@ -210,19 +210,19 @@ namespace SharedKernel.Infrastructures
             {
                 foreach (var entity in entities)
                 {
-                    entity["OwnerId"] = _token.Context.OwnerId;
+                    entity["OwnerId"] = CurrentUser.Context.OwnerId;
                 }
             }
         }
 
         protected virtual void BeforeUpdate(TEntity entity, TEntity oldValue)
         {
-            entity.CreatedBy = _token.Context.OwnerId;
+            entity.CreatedBy = CurrentUser.Context.OwnerId;
             entity.LastModifiedDate = DateHelper.Now;
-            entity.LastModifiedBy = _token.Context.OwnerId;
+            entity.LastModifiedBy = CurrentUser.Context.OwnerId;
             if (typeof(TEntity).HasInterface(typeof(IPersonalizeEntity)))
             {
-                entity["OwnerId"] = _token.Context.OwnerId;
+                entity["OwnerId"] = CurrentUser.Context.OwnerId;
             }
         }
 

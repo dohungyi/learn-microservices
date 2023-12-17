@@ -1,4 +1,4 @@
-﻿using SharedKernel.Caching;
+﻿using Caching;
 using static SharedKernel.Application.Enum;
 
 namespace SharedKernel.Providers

@@ -31,9 +31,7 @@ using Serilog;
 using SharedKernel.ApiGateway;
 using SharedKernel.Application;
 using SharedKernel.Auth;
-using SharedKernel.Caching;
 using SharedKernel.Core;
-using SharedKernel.Domain;
 using SharedKernel.Infrastructures;
 using SharedKernel.Libraries;
 using SharedKernel.Log;
@@ -50,6 +48,7 @@ using System.Globalization;
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using Caching;
 using IExceptionHandler = SharedKernel.Runtime.IExceptionHandler;
 
 namespace SharedKernel.Configure
@@ -202,7 +201,7 @@ namespace SharedKernel.Configure
                 options.InstanceName = "";
             });
 
-            services.AddTransient<IDistributedRedisCache, DistributedRedisCache>();
+            services.AddTransient<IRedisCache, RedisCache>();
             services.AddSingleton<IMemoryCaching, MemoryCaching>();
             services.AddTransient<ISequenceCaching, SequenceCaching>();
             return services;
@@ -225,7 +224,7 @@ namespace SharedKernel.Configure
 
         public static IServiceCollection AddToken(this IServiceCollection services)
         {
-            services.AddScoped<IToken, Token>();
+            services.AddScoped<ICurrentUser, CurrentUser>();
             return services;
         }
         

@@ -2,7 +2,7 @@
 
 namespace SharedKernel.Auth
 {
-    public interface IToken
+    public interface ICurrentUser
     {
         string TokenId { get; }
 

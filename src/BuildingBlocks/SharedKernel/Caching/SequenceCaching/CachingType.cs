@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Caching;
 
-namespace SharedKernel.Caching
+public enum CachingType
 {
-    public enum CachingType
-    {
-        Couple = 0,
-        Memory = 1,
-        Distributed = 2,
-    }
+    Couple = 0,
+    Memory = 1,
+    Redis = 2,
 }

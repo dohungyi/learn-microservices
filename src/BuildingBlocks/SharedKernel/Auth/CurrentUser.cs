@@ -5,7 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace SharedKernel.Auth
 {
-    public class Token : IToken
+    public class CurrentUser : ICurrentUser
     {
         #region Properties
         private readonly IHttpContextAccessor _accessor;
@@ -26,7 +26,7 @@ namespace SharedKernel.Auth
         #endregion
 
         #region Constructors
-        public Token(IHttpContextAccessor accessor)
+        public CurrentUser(IHttpContextAccessor accessor)
         {
             _accessor = accessor;
         }

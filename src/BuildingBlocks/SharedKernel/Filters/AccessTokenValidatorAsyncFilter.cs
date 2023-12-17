@@ -5,9 +5,9 @@ using Microsoft.Net.Http.Headers;
 using Ocelot.Infrastructure.Extensions;
 using SharedKernel.Application;
 using SharedKernel.Auth;
-using SharedKernel.Caching;
 using SharedKernel.Libraries;
 using System.Net;
+using Caching;
 
 namespace SharedKernel.Filters
 {
@@ -20,7 +20,7 @@ namespace SharedKernel.Filters
                 var bearerToken = context.HttpContext.Request.Headers[HeaderNames.Authorization];
                 if (!string.IsNullOrEmpty(bearerToken.GetValue()))
                 {
-                    var token = context.HttpContext.RequestServices.GetRequiredService<IToken>();
+                    var token = context.HttpContext.RequestServices.GetRequiredService<ICurrentUser>();
                     var sequenceCaching = context.HttpContext.RequestServices.GetRequiredService<ISequenceCaching>();
                     var accessToken = bearerToken.GetValue()[7..];
                     var key = BaseCacheKeys.GetRevokeAccessTokenKey(accessToken);

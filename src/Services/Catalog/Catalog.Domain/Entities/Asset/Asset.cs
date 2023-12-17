@@ -21,6 +21,7 @@ public class Asset : BaseEntity
     #region Navigations
     
     public ICollection<ProductAsset>? ProductAssets { get; set; }
+    
     #endregion
     
 }

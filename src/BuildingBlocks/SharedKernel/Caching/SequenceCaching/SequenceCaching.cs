@@ -1,123 +1,120 @@
-﻿namespace SharedKernel.Caching
+﻿namespace Caching;
+
+public class SequenceCaching : ISequenceCaching
 {
-    public class SequenceCaching : ISequenceCaching
+    private readonly IMemoryCaching _memCaching;
+    private readonly IRedisCache _redisCaching;
+
+    public SequenceCaching(IMemoryCaching memCaching, IRedisCache redisCaching)
     {
-        private readonly IMemoryCaching _memCaching;
-        private readonly IDistributedRedisCache _disCaching;
-
-        public SequenceCaching(IMemoryCaching memCaching, IDistributedRedisCache disCaching)
+        _memCaching = memCaching;
+        _redisCaching = redisCaching;
+    }
+    
+    public TimeSpan DefaultAbsoluteExpireTime => TimeSpan.FromHours(2);
+    
+    public async Task<object> GetAsync(string key, CachingType type = CachingType.Couple, CancellationToken cancellationToken = default)
+    {
+        switch (type)
         {
-            _memCaching = memCaching;
-            _disCaching = disCaching;
-        }
-
-        public TimeSpan DefaultSlidingExpireTime => TimeSpan.FromHours(3);
-
-        public TimeSpan DefaultAbsoluteExpireTime => TimeSpan.FromHours(3);
-
-        public async Task<object> GetAsync(string key, CachingType type = CachingType.Couple, CancellationToken cancellationToken = default)
-        {
-            switch (type)
-            {
-                case CachingType.Couple:
-                    var result = await _memCaching.GetAsync(key, cancellationToken);
-                    if (result == null)
+            case CachingType.Couple:
+                var result = await _memCaching.GetAsync<object>(key);
+                if (result is null)
+                {
+                    result = await _redisCaching.GetAsync<object>(key);
+                    if (result is not null)
                     {
-                        result = await _disCaching.GetAsync(key, cancellationToken);
-                        if (result != null)
-                        {
-                            await _memCaching.SetAsync(key, result, DefaultAbsoluteExpireTime, cancellationToken: cancellationToken);
-                        }
+                        await _memCaching.SetAsync(key, result, DefaultAbsoluteExpireTime);
                     }
-                    return result;
-                case CachingType.Memory:
-                    return await _memCaching.GetAsync(key, cancellationToken);
-                case CachingType.Distributed:
-                    return await _disCaching.GetAsync(key, cancellationToken);
-            }
-            throw new Exception("The caching type is invalid. Please re-check!!!");
+                }
+                return result;
+            case CachingType.Memory:
+                return await _memCaching.GetAsync<object>(key);
+            case CachingType.Redis:
+                return await _redisCaching.GetAsync<object>(key);
         }
+        throw new Exception("The caching type is invalid. Please re-check!!!");
+    }
 
-        public async Task<T> GetAsync<T>(string key, CachingType type = CachingType.Couple, CancellationToken cancellationToken = default)
+    public async Task<T> GetAsync<T>(string key, CachingType type = CachingType.Couple, CancellationToken cancellationToken = default)
+    {
+        switch (type)
         {
-            switch (type)
-            {
-                case CachingType.Couple:
-                    var result = await _memCaching.GetAsync<T>(key, cancellationToken);
-                    if (result == null)
+            case CachingType.Couple:
+                var result = await _memCaching.GetAsync<T>(key);
+                if (result is null)
+                {
+                    result = await _redisCaching.GetAsync<T>(key);
+                    if (result is not null)
                     {
-                        result = await _disCaching.GetAsync<T>(key, cancellationToken);
-                        if (result != null)
-                        {
-                            await _memCaching.SetAsync(key, result, DefaultAbsoluteExpireTime, cancellationToken: cancellationToken);
-                        }
+                        await _memCaching.SetAsync(key, result, DefaultAbsoluteExpireTime);
                     }
-                    return result;
-                case CachingType.Memory:
-                    return await _memCaching.GetAsync<T>(key, cancellationToken);
-                case CachingType.Distributed:
-                    return await _disCaching.GetAsync<T>(key, cancellationToken);
-            }
-            throw new Exception("The caching type is invalid. Please re-check!!!");
+                }
+                return result;
+            case CachingType.Memory:
+                return await _memCaching.GetAsync<T>(key);
+            case CachingType.Redis:
+                return await _redisCaching.GetAsync<T>(key);
         }
+        throw new Exception("The caching type is invalid. Please re-check!!!");
+    }
 
-        public async Task<string> GetStringAsync(string key, CachingType type = CachingType.Couple, CancellationToken cancellationToken = default)
+    public async Task<string> GetStringAsync(string key, CachingType type = CachingType.Couple, CancellationToken cancellationToken = default)
+    {
+        switch (type)
         {
-            switch (type)
-            {
-                case CachingType.Couple:
-                    var result = await _memCaching.GetStringAsync(key, cancellationToken);
-                    if (string.IsNullOrEmpty(result))
+            case CachingType.Couple:
+                var result = await _memCaching.GetStringAsync(key);
+                if (string.IsNullOrEmpty(result))
+                {
+                    result = await _redisCaching.GetStringAsync(key);
+                    if (!string.IsNullOrEmpty(result))
                     {
-                        result = await _disCaching.GetStringAsync(key, cancellationToken);
-                        if (!string.IsNullOrEmpty(result))
-                        {
-                            await _memCaching.SetAsync(key, result, DefaultAbsoluteExpireTime, cancellationToken: cancellationToken);
-                        }
+                        await _memCaching.SetAsync(key, result, DefaultAbsoluteExpireTime);
                     }
-                    return result;
-                case CachingType.Memory:
-                    return await _memCaching.GetStringAsync(key, cancellationToken);
-                case CachingType.Distributed:
-                    return await _disCaching.GetStringAsync(key, cancellationToken);
-            }
-            throw new Exception("The caching type is invalid. Please re-check!!!");
+                }
+                return result;
+            case CachingType.Memory:
+                return await _memCaching.GetStringAsync(key);
+            case CachingType.Redis:
+                return await _redisCaching.GetStringAsync(key);
         }
+        throw new Exception("The caching type is invalid. Please re-check!!!");
+    }
 
-        public async Task SetAsync(string key, object value, TimeSpan? absoluteExpireTime = null, TimeSpan? slidingExpireTime = null, CachingType onlyUseType = CachingType.Couple, CancellationToken cancellationToken = default)
+    public async Task SetAsync(string key, object value, TimeSpan? absoluteExpireTime = null, bool keepTtl = false , CachingType onlyUseType = CachingType.Couple, CancellationToken cancellationToken = default)
+    {
+        switch (onlyUseType)
         {
-            switch (onlyUseType)
-            {
-                case CachingType.Couple:
-                    await _memCaching.SetAsync(key, value, absoluteExpireTime, slidingExpireTime, cancellationToken);
-                    await _disCaching.SetAsync(key, value, absoluteExpireTime, slidingExpireTime, cancellationToken);
-                    return;
-                case CachingType.Memory:
-                    await _memCaching.SetAsync(key, value, absoluteExpireTime, slidingExpireTime, cancellationToken);
-                    return;
-                case CachingType.Distributed:
-                    await _disCaching.SetAsync(key, value, absoluteExpireTime, slidingExpireTime, cancellationToken);
-                    return;
-            }
-            throw new Exception("The caching type is invalid. Please re-check!!!");
+            case CachingType.Couple:
+                await _memCaching.SetAsync(key, value, absoluteExpireTime, keepTtl);
+                await _redisCaching.SetAsync(key, value, absoluteExpireTime, keepTtl);
+                return;
+            case CachingType.Memory:
+                await _memCaching.SetAsync(key, value, absoluteExpireTime, keepTtl);
+                return;
+            case CachingType.Redis:
+                await _redisCaching.SetAsync(key, value, absoluteExpireTime, keepTtl);
+                return;
         }
+        throw new Exception("The caching type is invalid. Please re-check!!!");
+    }
 
-        public async Task RemoveAsync(string key, CachingType type = CachingType.Couple, CancellationToken cancellationToken = default)
+    public async Task RemoveAsync(string key, CachingType type = CachingType.Couple, CancellationToken cancellationToken = default)
+    {
+        switch (type)
         {
-            switch (type)
-            {
-                case CachingType.Couple:
-                    await _memCaching.RemoveAsync(key, cancellationToken);
-                    await _disCaching.RemoveAsync(key, cancellationToken);
-                    return;
-                case CachingType.Memory:
-                    await _memCaching.RemoveAsync(key, cancellationToken);
-                    return;
-                case CachingType.Distributed:
-                    await _disCaching.RemoveAsync(key, cancellationToken);
-                    return;
-            }
-            throw new Exception("The caching type is invalid. Please re-check!!!");
+            case CachingType.Couple:
+                await _memCaching.DeleteAsync(key);
+                await _redisCaching.DeleteAsync(key);
+                return;
+            case CachingType.Memory:
+                await _memCaching.DeleteAsync(key);
+                return;
+            case CachingType.Redis:
+                await _redisCaching.DeleteAsync(key);
+                return;
         }
+        throw new Exception("The caching type is invalid. Please re-check!!!");
     }
 }

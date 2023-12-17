@@ -33,8 +33,6 @@ namespace SharedKernel.MySQL
         #endregion
 
         #region Implementation
-        private List<DomainEvent> DomainEvents { get; set; } = new();
-
         public MySqlConnection Connection => _connection;
 
         public MySqlTransaction CurrentTransaction
@@ -290,18 +288,20 @@ namespace SharedKernel.MySQL
         #endregion
 
         #region UnitOfWork
-        public async Task CommitAsync(bool dispatchEvent = true, CancellationToken cancellationToken = default)
-        {
-            await CurrentTransaction.CommitAsync(cancellationToken);
-            if (!dispatchEvent)
-            {
-                DomainEvents.Clear();
-            }
-        }
-
-        public async Task RollBackAsync(CancellationToken cancellationToken = default)
+        
+        public async Task RollbackAsync(CancellationToken cancellationToken = default)
         {
             await CurrentTransaction.RollbackAsync(cancellationToken);
+        }
+        
+        public async Task CommitAsync(CancellationToken cancellationToken = default)
+        {
+            await CurrentTransaction.CommitAsync(cancellationToken);
+        }
+        
+        public void BeginTransaction()
+        {
+           
         }
         #endregion
 
@@ -317,5 +317,6 @@ namespace SharedKernel.MySQL
         #endregion
 
         #endregion
+        
     }
 }

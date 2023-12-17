@@ -6,7 +6,7 @@ namespace SharedKernel.Domain
     {
         public List<T> Entities { get; set; }
 
-        public InsertAuditEvent(List<T> entities, IToken token) : base(typeof(T).Name, AuditAction.Insert, token)
+        public InsertAuditEvent(List<T> entities, ICurrentUser currentUser) : base(typeof(T).Name, AuditAction.Insert, currentUser)
         {
             Entities = entities;
         }

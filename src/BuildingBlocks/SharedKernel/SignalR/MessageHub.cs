@@ -9,7 +9,7 @@ namespace SharedKernel.SignalR
     public class MessageHub : Hub
     {
         public readonly IHubContext<MessageHub> _hubContext;
-        public readonly IToken _token;
+        public readonly ICurrentUser CurrentUser;
         public readonly IDbConnection _dbConnection;
         public readonly IMapper _mapper;
         public static Dictionary<string, List<string>> Connections = new Dictionary<string, List<string>>();
@@ -17,9 +17,9 @@ namespace SharedKernel.SignalR
         public static DateTime LastSendTyping = new DateTime();
         public static object lockObj = new object();
 
-        public MessageHub(IHubContext<MessageHub> hubContext, IToken token, IDbConnection dbConnection, IMapper mapper)
+        public MessageHub(IHubContext<MessageHub> hubContext, ICurrentUser currentUser, IDbConnection dbConnection, IMapper mapper)
         {
-            _token = token;
+            CurrentUser = currentUser;
             _dbConnection = dbConnection;
             _mapper = mapper;
             _hubContext = hubContext;

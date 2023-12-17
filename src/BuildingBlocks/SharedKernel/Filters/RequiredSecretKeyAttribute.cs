@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Caching;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using SharedKernel.Application;
 using SharedKernel.Auth;
-using SharedKernel.Caching;
 using SharedKernel.Runtime.Exceptions;
 
 namespace SharedKernel.Filters
@@ -24,7 +24,7 @@ namespace SharedKernel.Filters
                 throw new ForbiddenException();
             }
 
-            var token = context.HttpContext.RequestServices.GetRequiredService<IToken>();
+            var token = context.HttpContext.RequestServices.GetRequiredService<ICurrentUser>();
             var sequenceCaching = context.HttpContext.RequestServices.GetRequiredService<ISequenceCaching>();
             var key = BaseCacheKeys.GetSecretKey(_keyName, token.Context.OwnerId);
             var value = await sequenceCaching.GetStringAsync(key);

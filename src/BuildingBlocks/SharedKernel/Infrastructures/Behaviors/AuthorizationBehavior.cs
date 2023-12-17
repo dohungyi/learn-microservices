@@ -9,12 +9,12 @@ namespace SharedKernel.Infrastructures
 {
     public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
     {
-        private readonly IToken _token;
+        private readonly ICurrentUser _currentUser;
         private readonly IAuthService _authService;
 
-        public AuthorizationBehavior(IToken token, IAuthService authService)
+        public AuthorizationBehavior(ICurrentUser currentUser, IAuthService authService)
         {
-            _token = token;
+            _currentUser = currentUser;
             _authService = authService;
         }
         
