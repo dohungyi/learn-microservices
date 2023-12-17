@@ -6,13 +6,14 @@ using SharedKernel.Domain;
 namespace Catalog.Domain.Entities;
 
 [Table(TableName.ProductAsset)]
-public class ProductAsset : BaseEntity
+public class ProductAsset : Entity
 {
     public ProductImageType ImageType { get; set; }
     
     #region Relationships
 
     public Guid ProductId { get; set; }
+    public Guid ProductVariantId { get; set; }
     public Guid AssetId { get; set; }
 
     #endregion
@@ -20,6 +21,7 @@ public class ProductAsset : BaseEntity
     #region Navigations
     
     public virtual Product Product { get; set; }
+    public virtual ProductVariant ProductVariant { get; set; }
     public virtual Asset Asset { get; set; }
     
     #endregion

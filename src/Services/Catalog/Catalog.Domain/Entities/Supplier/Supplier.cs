@@ -25,15 +25,15 @@ public class Supplier : BaseEntity
     
     #region Relationships
 
-    public Guid TaxId { get; set; }
+    public Guid? TaxId { get; set; }
 
     #endregion
     
     #region Navigations
     
-    public Tax Tax { get; set; }
+    public Tax? Tax { get; set; }
     
-    public ICollection<Product>? Products { get; set; }
+    public ICollection<ProductSupplier>? ProductSuppliers { get; set; }
     
     #endregion
 }

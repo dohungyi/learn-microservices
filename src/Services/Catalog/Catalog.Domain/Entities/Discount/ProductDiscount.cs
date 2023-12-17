@@ -1,8 +1,10 @@
+using System.ComponentModel.DataAnnotations.Schema;
+using Catalog.Domain.Constants;
 using SharedKernel.Domain;
 
 namespace Catalog.Domain.Entities;
 
-
+[Table(TableName.ProductDiscount)]
 public class ProductDiscount : BaseEntity
 {
     public float DiscountValue { get; set; }

@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations.Schema;
+using Catalog.Domain.Constants;
 using SharedKernel.Domain;
 
 namespace Catalog.Domain.Entities;
 
+[Table(TableName.Category)]
 public class Category : BaseEntity
 {
     public string Code { get; set; }
@@ -10,6 +13,7 @@ public class Category : BaseEntity
     public string FileName { get; set; }
     public int OrderNumber { get; set; }
     public bool Status { get; set; }
+    public string Path { get; set; }
     
     #region Relationships
 
@@ -20,7 +24,8 @@ public class Category : BaseEntity
     #region Navigations
     
     public virtual Category Parent { get; set; }
-    public ICollection<Product>? Products { get; set; }
+    
+    public ICollection<ProductCategory>? ProductCategories { get; set; }
     
     #endregion
 }

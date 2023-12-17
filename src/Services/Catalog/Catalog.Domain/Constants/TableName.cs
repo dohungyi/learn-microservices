@@ -20,6 +20,8 @@ public static class TableName
     public const string ProductReview = "product_reviews";
     public const string ProductAsset = "product_assets";
     public const string ProductPricing = "product_pricing";
+    public const string ProductSupplier = "product_suppliers";
+    public const string ProductCategory = "product_categories";
     
     #endregion
     

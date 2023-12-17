@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations.Schema;
+using Catalog.Domain.Constants;
 using SharedKernel.Domain;
 
 namespace Catalog.Domain.Entities;
 
+[Table(TableName.ProductVariantSpecification)]
 public class ProductVariantSpecification : Entity
 {
     public string Key { get; set; }
@@ -15,7 +18,7 @@ public class ProductVariantSpecification : Entity
     
     #region Navigations
     
-    public virtual ProductVariant ProductVariants { get; set; }
+    public virtual ProductVariant ProductVariant { get; set; }
     
     #endregion
 }

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.ComponentModel.DataAnnotations.Schema;
 using Catalog.Domain.Constants;
 using SharedKernel.Domain;
@@ -20,7 +21,6 @@ public class Asset : BaseEntity
     #region Navigations
     
     public ICollection<ProductAsset>? ProductAssets { get; set; }
-    
     #endregion
     
 }

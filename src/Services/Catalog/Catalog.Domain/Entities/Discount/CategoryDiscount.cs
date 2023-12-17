@@ -4,7 +4,6 @@ namespace Catalog.Domain.Entities;
 
 public class CategoryDiscount : BaseEntity
 {
-    
     public float DiscountValue { get; set; }
     public string DiscountUnit { get; set; }
     public DateTime CreateDate { get; set; }

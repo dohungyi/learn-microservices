@@ -7,7 +7,9 @@ namespace Catalog.Domain.Entities;
 [Table(TableName.ProductPricing)]
 public class ProductPricing : Entity
 {
-    public decimal BasePrice { get; set; }
+    public decimal SalePrice { get; set; }
+    
+    public decimal PurchasePrice { get; set; }
     
     public DateTime CreateDate { get; set; }
     
