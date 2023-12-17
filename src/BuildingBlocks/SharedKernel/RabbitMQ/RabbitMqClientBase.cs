@@ -10,7 +10,7 @@ namespace SharedKernel.RabbitMQ
 {
     public class RabbitMqClientBase : IRabbitMqClientBase
     {
-        protected const string EXCHANGE = "openvn-event-bus";
+        protected const string EXCHANGE = "learn-microservices-event-bus";
         protected readonly ConnectionFactory _connectionFactory;
         protected readonly ILogger _logger;
         protected Dictionary<string, int> retries = new Dictionary<string, int>();
