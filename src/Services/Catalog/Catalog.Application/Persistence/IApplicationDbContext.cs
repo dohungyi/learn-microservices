@@ -1,16 +1,11 @@
-﻿using Catalog.Application.Persistence;
-using Catalog.Domain.Entities;
+﻿using Catalog.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using SharedKernel.Persistence;
 
-namespace Catalog.Infrastructure.Persistence;
+namespace Catalog.Application.Persistence;
 
-public class ApplicationDbContext : AppDbContext, IApplicationDbContext
+public interface IApplicationDbContext : IAppDbContext
 {
-    public ApplicationDbContext(DbContextOptions options) : base(options)
-    {
-        
-    }
-
     #region DbSet
 
     #region Tax

@@ -7,13 +7,18 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Persistence\Configurations\" />
-      <Folder Include="Repositories\" />
+      <Folder Include="Repositories\Asset\" />
+      <Folder Include="Repositories\Discount\" />
+      <Folder Include="Repositories\Product\" />
+      <Folder Include="Repositories\Tax\" />
+      <Folder Include="Repositories\Weight\" />
       <Folder Include="Services\" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\BuildingBlocks\SharedKernel\SharedKernel.csproj" />
+      <ProjectReference Include="..\Catalog.Application\Catalog.Application.csproj" />
+      <ProjectReference Include="..\Catalog.Domain\Catalog.Domain.csproj" />
     </ItemGroup>
 
 </Project>

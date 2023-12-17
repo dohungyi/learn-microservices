@@ -1,0 +1,1 @@
+﻿global using Attribute = Catalog.Domain.Entities.Attribute;

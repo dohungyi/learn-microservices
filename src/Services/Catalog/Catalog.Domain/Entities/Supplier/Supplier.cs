@@ -6,7 +6,7 @@ using StatusType = SharedKernel.Application.Enum.StatusType;
 namespace Catalog.Domain.Entities;
 
 [Table(TableName.Supplier)]
-public class Supplier : BaseEntity
+public class Supplier : DomainEntity
 {
     public string Description { get; set; }
     public string Delegate { get; set; }
