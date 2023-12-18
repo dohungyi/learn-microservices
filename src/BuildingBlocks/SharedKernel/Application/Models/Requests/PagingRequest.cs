@@ -6,6 +6,7 @@ namespace SharedKernel.Application
     {
         private int _page = 0;
         private int _size = 20;
+        private int _indexFrom = 1;
 
         public int Page
         {
@@ -20,7 +21,7 @@ namespace SharedKernel.Application
                 {
                     throw new BadRequestException("Page must be greater than or equal 0");
                 }
-                _page = value;
+                _page = IndexFrom > Page ? _indexFrom : value;
             }
         }
 
@@ -40,8 +41,25 @@ namespace SharedKernel.Application
                 _size = value;
             }
         }
+        
+        public int IndexFrom
+        {
+            get
+            {
+                return _indexFrom;
+            }
 
-        public int Offset => _page * _size;
+            set
+            {
+                if (value <= 0 || value > 1000)
+                {
+                    throw new BadRequestException("Size should be between 1 and 1000");
+                }
+                _indexFrom = value;
+            }
+        }
+
+        public int Offset => (_page - _indexFrom) * _size;
 
         public Filter Filter { get; set; }
 

@@ -16,7 +16,7 @@ namespace SharedKernel.Core
         public static DefaultElasticSearchConfig DefaultElasticSearchConfig { get; private set; }
 
         public static DefaultS3Config DefaultS3Config { get; private set; }
-
+        public static DefaultJwtConfig DefaultJwtConfig { get; private set; }
         public static List<string> Black3pKeywords { get; private set; }
 
         public static void SetConfig(IConfiguration configuration, ILogger logger)
@@ -34,6 +34,11 @@ namespace SharedKernel.Core
             ConnectionStrings = configuration.GetRequiredSection("ConnectionStrings").Get<Dictionary<string, string>>();
         }
 
+        public static void SetJwtConfig(IConfiguration configuration)
+        {
+            DefaultJwtConfig.SetDefaultJwtConfig(configuration);
+        }
+        
         public static void SetEmailConfig(IConfiguration configuration)
         {
             DefaultEmailConfig.SetConfig(configuration);

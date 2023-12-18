@@ -76,7 +76,7 @@ namespace SharedKernel.Infrastructures
             return result;
         }
 
-        public virtual async Task<PagingResult<TResult>> GetPagingAsync<TResult>(PagingRequest request, CancellationToken cancellationToken)
+        public virtual async Task<IPagedList<TResult>> GetPagingAsync<TResult>(PagingRequest request, CancellationToken cancellationToken)
         {
             var cmd = $"SELECT * FROM {_tableName} as T WHERE 1 = 1";
             var countCmd = $"SELECT Count(Id) FROM {_tableName} as T WHERE 1 = 1";
@@ -137,17 +137,23 @@ namespace SharedKernel.Infrastructures
             }
 
             var dataTask = _dbConnection.QueryAsync<TResult>(cmd, param);
-            var countTask = _dbConnection.QuerySingleOrDefaultAsync<long>(countCmd, param);
+            var countTask = _dbConnection.QuerySingleOrDefaultAsync<int>(countCmd, param);
             
             await Task.WhenAll(dataTask, countTask);
-            return new PagingResult<TResult>
-            {
-                Data = await dataTask,
-                Count = await countTask
-            };
+            
+            int totalCount = await countTask;
+            var totalPages = (int)Math.Ceiling(totalCount / (double)request.Size);
+            return new PagedList<TResult>(
+                request.Page,
+                request.Size,
+                request.IndexFrom,
+                totalCount,
+                totalPages,
+                await dataTask
+                );
         }
 
-        public async Task<long> GetCountAsync(CancellationToken cancellationToken)
+        public async Task<int> GetCountAsync(CancellationToken cancellationToken)
         {
             var cmd = $"SELECT COUNT(*) FROM {_tableName} as T WHERE 1=1";
             if (typeof(TEntity).GetProperty("OwnerId") != null)
@@ -157,7 +163,7 @@ namespace SharedKernel.Infrastructures
 
             cmd += " AND T.IsDeleted = 0";
 
-            return await _dbConnection.QuerySingleOrDefaultAsync<long>(cmd);
+            return await _dbConnection.QuerySingleOrDefaultAsync<int>(cmd);
         }
 
         #region Cache

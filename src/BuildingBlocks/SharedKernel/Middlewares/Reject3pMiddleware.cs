@@ -44,7 +44,7 @@ namespace SharedKernel.Middlewares
 
                         var localizer = context.RequestServices.GetRequiredService<IStringLocalizer<Resources>>();
                         var error = new Error(400, localizer["not_support_3p_tool"], "NOT_SUPPORTED");
-                        await context.Response.WriteAsync(JsonConvert.SerializeObject(new BaseResponse(error), new JsonSerializerSettings
+                        await context.Response.WriteAsync(JsonConvert.SerializeObject(new ApiResult(error), new JsonSerializerSettings
                         {
                             ContractResolver = new CamelCasePropertyNamesContractResolver()
                         }));

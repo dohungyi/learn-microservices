@@ -49,6 +49,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using Caching;
+using FluentValidation;
 using IExceptionHandler = SharedKernel.Runtime.IExceptionHandler;
 
 namespace SharedKernel.Configure
@@ -56,66 +57,66 @@ namespace SharedKernel.Configure
     public static class ConfigureExtension
     {
         #region DependencyInjection
-        public static IServiceCollection AddCoreServices(this IServiceCollection services, IConfiguration Configuration)
-        {
-            CoreSettings.SetConnectionStrings(Configuration);
-            CoreSettings.SetBlack3pKeywords(Configuration);
-
-            services.AddSingleton(_ => Configuration);
-
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-            //services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate();
-
-            services.Configure<FormOptions>(x =>
-            {
-                x.ValueLengthLimit = int.MaxValue;
-                x.MultipartBodyLengthLimit = int.MaxValue; // In case of multipart
-                x.MultipartHeadersLengthLimit = int.MaxValue;
-            });
-
-            //services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
-
-            //services.AddResponseCompression(options =>
-            //{
-            //    options.EnableForHttps = true;
-            //    options.MimeTypes = ResponseCompressionDefaults.MimeTypes;
-            //    options.Providers.Add<GzipCompressionProvider>();
-            //});
-
-            services.AddCors();
-
-            services.AddCoreLocalization();
-
-            services.AddCoreRateLimit();
-
-            services.AddCoreBehaviors();
-
-            #region AddController + CamelCase + FluentValidation
-            services.AddControllersWithViews()
-                    .AddJsonOptions(options =>
-                        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                    )
-                    .AddFluentValidation(delegate (FluentValidationMvcConfiguration f)
-                    {
-                        f.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies().Where(p => !p.IsDynamic));
-                        //f.RegisterValidatorsFromAssembly(Assembly.GetEntryAssembly());
-                    })
-                    .ConfigureApiBehaviorOptions(delegate (ApiBehaviorOptions options)
-                    {
-                        options.InvalidModelStateResponseFactory = delegate (ActionContext c)
-                        {
-                            string errors = string.Join(", ", from v in c.ModelState.Values.Where((ModelStateEntry v) => v.Errors.Any()).SelectMany((ModelStateEntry v) => v.Errors) select v.ErrorMessage);
-                            return new OkObjectResult(new BaseResponse
-                            {
-                                Error = new Error(HttpStatusCode.BadRequest, errors)
-                            });
-                        };
-                    });
-            #endregion
-
-            return services;
-        }
+        // public static IServiceCollection AddCoreServices(this IServiceCollection services, IConfiguration Configuration)
+        // {
+        //     CoreSettings.SetConnectionStrings(Configuration);
+        //     CoreSettings.SetBlack3pKeywords(Configuration);
+        //
+        //     services.AddSingleton(_ => Configuration);
+        //
+        //     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        //
+        //     //services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate();
+        //
+        //     services.Configure<FormOptions>(x =>
+        //     {
+        //         x.ValueLengthLimit = int.MaxValue;
+        //         x.MultipartBodyLengthLimit = int.MaxValue; // In case of multipart
+        //         x.MultipartHeadersLengthLimit = int.MaxValue;
+        //     });
+        //
+        //     //services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
+        //
+        //     //services.AddResponseCompression(options =>
+        //     //{
+        //     //    options.EnableForHttps = true;
+        //     //    options.MimeTypes = ResponseCompressionDefaults.MimeTypes;
+        //     //    options.Providers.Add<GzipCompressionProvider>();
+        //     //});
+        //
+        //     services.AddCors();
+        //
+        //     services.AddCoreLocalization();
+        //
+        //     services.AddCoreRateLimit();
+        //
+        //     services.AddCoreBehaviors();
+        //
+        //     #region AddController + CamelCase + FluentValidation
+        //     services.AddControllersWithViews()
+        //             .AddJsonOptions(options =>
+        //                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        //             )
+        //             .AddFluentValidation(delegate (FluentValidationMvcConfiguration f)
+        //             {
+        //                 f.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies().Where(p => !p.IsDynamic));
+        //                 //f.RegisterValidatorsFromAssembly(Assembly.GetEntryAssembly());
+        //             })
+        //             .ConfigureApiBehaviorOptions(delegate (ApiBehaviorOptions options)
+        //             {
+        //                 options.InvalidModelStateResponseFactory = delegate (ActionContext c)
+        //                 {
+        //                     string errors = string.Join(", ", from v in c.ModelState.Values.Where((ModelStateEntry v) => v.Errors.Any()).SelectMany((ModelStateEntry v) => v.Errors) select v.ErrorMessage);
+        //                     return new OkObjectResult(new ApiResult()
+        //                     {
+        //                         Error = new Error(HttpStatusCode.BadRequest, errors)
+        //                     });
+        //                 };
+        //             });
+        //     #endregion
+        //
+        //     return services;
+        // }
 
         public static IServiceCollection AddCoreLocalization(this IServiceCollection services)
         {
@@ -222,7 +223,7 @@ namespace SharedKernel.Configure
             return services;
         }
 
-        public static IServiceCollection AddToken(this IServiceCollection services)
+        public static IServiceCollection AddCurrentUser(this IServiceCollection services)
         {
             services.AddScoped<ICurrentUser, CurrentUser>();
             return services;
@@ -282,19 +283,12 @@ namespace SharedKernel.Configure
             app.UseCoreExceptionHandler();
             app.UseIpRateLimiting();
             app.UseForwardedHeaders();
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection(); 
             app.UseCoreUnauthorized();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseWebSockets(new WebSocketOptions
-            {
-                KeepAliveInterval = TimeSpan.FromSeconds(120),
-            });
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapHub<MessageHub>("/socket-message");
-            });
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -368,7 +362,7 @@ namespace SharedKernel.Configure
             {
                 var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
                 var exception = exceptionHandlerPathFeature.Error;
-                var responseContent = new BaseResponse();
+                var responseContent = new ApiResult();
                 var localizer = context.RequestServices.GetRequiredService<IStringLocalizer<Resources>>();
 
                 // Catchable
@@ -377,23 +371,20 @@ namespace SharedKernel.Configure
                     responseContent.Error = new Error(500, exception.Message);
                     Logging.Error(exception);
                 }
-                // For bi đần
                 else if (exception is ForbiddenException)
                 {
                     responseContent.Error = new Error(403, localizer["not_permission"].Value);
                 }
-                // Sql Injection
                 else if (exception is SqlInjectionException)
                 {
                     responseContent.Error = new Error(400, Secure.MsgDetectedSqlInjection);
                     Logging.Error(exception);
                 }
-                // Bad request
                 else if (exception is BadRequestException)
                 {
                     if ((exception as BadRequestException).Body != null)
                     {
-                        responseContent = new SimpleDataResult
+                        responseContent = new ApiSimpleResult
                         {
                             Data = (exception as BadRequestException).Body,
                             Error = new Error(400, exception.Message, (exception as BadRequestException).Type)
@@ -403,6 +394,18 @@ namespace SharedKernel.Configure
                     {
                         responseContent.Error = new Error(400, exception.Message, (exception as BadRequestException).Type);
                     }
+                }
+                else if(exception is ValidationException validationException)
+                {
+                    string errors = string.Join(", ", validationException.Errors
+                        .GroupBy(x => x.PropertyName)
+                        .ToDictionary(
+                            x => x.Key,
+                            x => string.Join("; ", x.Select(y => y.ErrorMessage))
+                        )
+                        .Select(kv => $"{kv.Key}: {kv.Value}"));
+                
+                    responseContent.Error = new Error(HttpStatusCode.BadRequest, errors, "BAD_REQUEST");
                 }
                 // Unknown exception
                 else
@@ -479,16 +482,6 @@ namespace SharedKernel.Configure
             CoreSettings.SetLoggingConfig(configuration, logger);
         });
         
-        public static void AddAppConfigurations(this ConfigureHostBuilder host)
-        {
-            host.ConfigureAppConfiguration((context, config) =>
-            {
-                var env = context.HostingEnvironment;
-                config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                    .AddEnvironmentVariables();
-            }).UseCoreSerilog();
-        }
         #endregion
 
         #region ApiGateway

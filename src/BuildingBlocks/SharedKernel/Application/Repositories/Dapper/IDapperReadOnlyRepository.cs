@@ -23,8 +23,8 @@ namespace SharedKernel.Application
 
         Task<TResult> GetByIdAsync<TResult>(object id, CancellationToken cancellationToken);
 
-        Task<PagingResult<TResult>> GetPagingAsync<TResult>(PagingRequest request, CancellationToken cancellationToken);
+        Task<IPagedList<TResult>> GetPagingAsync<TResult>(PagingRequest request, CancellationToken cancellationToken);
 
-        Task<long> GetCountAsync(CancellationToken cancellationToken);
+        Task<int> GetCountAsync(CancellationToken cancellationToken);
     }
 }

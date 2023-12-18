@@ -13,13 +13,12 @@ public static class ConfigureServices
         services.AddDbContextPool<ApplicationDbContext>((provider, options) =>
         {
             options.UseMySql(
-                    connectionString: CoreSettings.ConnectionStrings["CatalogDb"],
-                    serverVersion: ServerVersion.AutoDetect(CoreSettings.ConnectionStrings["CatalogDb"]))
+                    connectionString: CoreSettings.ConnectionStrings["MasterDb"],
+                    serverVersion: ServerVersion.AutoDetect(CoreSettings.ConnectionStrings["MasterDb"]))
                 .LogTo(s => System.Diagnostics.Debug.WriteLine(s))
                 .EnableDetailedErrors(true)
                 .EnableSensitiveDataLogging(true);
         });
-        
         
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
         

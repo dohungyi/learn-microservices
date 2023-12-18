@@ -38,10 +38,10 @@ namespace SharedKernel.Filters
                     }
                 }
             }
-            //else
-            //{
-            //    context.HttpContext.Request.Headers[HeaderNames.Authorization] = string.Empty;
-            //}
+            else
+            {
+                context.HttpContext.Request.Headers[HeaderNames.Authorization] = string.Empty;
+            }
             await next();
         }
     }

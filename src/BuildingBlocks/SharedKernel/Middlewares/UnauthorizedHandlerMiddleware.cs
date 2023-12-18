@@ -28,7 +28,7 @@ namespace SharedKernel.Middlewares
                 context.Response.ContentType = "application/json";
 
                 var localizer = context.RequestServices.GetRequiredService<IStringLocalizer<Resources>>();
-                await context.Response.WriteAsync(JsonConvert.SerializeObject(new BaseResponse { Status = "unauthorized", Error = new Error(401, localizer["unauthorized"]) }, new JsonSerializerSettings
+                await context.Response.WriteAsync(JsonConvert.SerializeObject(new ApiResult() { Status = "unauthorized", Error = new Error(401, localizer["unauthorized"]) }, new JsonSerializerSettings
                 {
                     ContractResolver = new CamelCasePropertyNamesContractResolver()
                 }));
