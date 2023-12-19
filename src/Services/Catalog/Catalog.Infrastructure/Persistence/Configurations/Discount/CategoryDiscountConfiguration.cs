@@ -1,5 +1,7 @@
 ﻿using Catalog.Domain.Entities;
+using Catalog.Domain.Enum;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Enum = System.Enum;
 
 namespace Catalog.Infrastructure.Persistence.Configurations;
 
@@ -8,24 +10,26 @@ public class CategoryDiscountConfiguration : BaseEntityConfiguration<CategoryDis
     public override void Configure(EntityTypeBuilder<CategoryDiscount> builder)
     {
         base.Configure(builder);
+
+        #region Indexes
+
         
+
+        #endregion
+        
+        #region Columns
+
         builder.Property(cd => cd.DiscountUnit)
-            .HasMaxLength(50);
+            .HasConversion(
+                v => v.ToString(),   
+                v => (DiscountUnit)Enum.Parse(typeof(DiscountUnit), v)  
+            );
         
         builder.Property(cd => cd.CouponCode)
-            .HasMaxLength(255);
-
-        builder.Property(cd => cd.MinimumOrderValue)
-            .IsRequired();
-
-        builder.Property(cd => cd.MaximumDiscountAmount)
-            .IsRequired();
-
-        builder.Property(cd => cd.IsRedeemAllowed)
-            .IsRequired();
-
-        builder.Property(cd => cd.CategoryId)
-            .IsRequired();
-
+            .HasMaxLength(255)
+            .IsUnicode(false);
+        
+        #endregion
+        
     }
 }

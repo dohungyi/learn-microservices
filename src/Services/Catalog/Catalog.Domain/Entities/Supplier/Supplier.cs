@@ -17,21 +17,17 @@ public class Supplier : DomainEntity
     public string AddressTwo { get; set; }
     public string Phone { get; set; }
     public string Fax { get; set; }
-    public string TaxCode { get; set; }
     public string NationCode { get; set; }
     public string ProvinceCode { get; set; }
     public string DistrictCode { get; set; }
     public bool Status { get; set; }
     
     #region Relationships
-
-    public Guid? TaxId { get; set; }
+    
 
     #endregion
     
     #region Navigations
-    
-    public Tax? Tax { get; set; }
     
     public ICollection<ProductSupplier>? ProductSuppliers { get; set; }
     

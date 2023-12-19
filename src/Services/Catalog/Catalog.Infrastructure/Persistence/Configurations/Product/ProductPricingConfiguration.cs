@@ -1,6 +1,14 @@
-﻿namespace Catalog.Infrastructure.Persistence.Configurations;
+﻿using Catalog.Domain.Entities;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-public class ProductPricingConfiguration
+namespace Catalog.Infrastructure.Persistence.Configurations;
+
+public class ProductPricingConfiguration : EntityConfiguration<ProductPricing>
 {
-    
+    public override void Configure(EntityTypeBuilder<ProductPricing> builder)
+    {
+        base.Configure(builder);
+        
+        
+    }
 }

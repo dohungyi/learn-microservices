@@ -1,6 +1,20 @@
-﻿namespace Catalog.Infrastructure.Persistence.Configurations;
+﻿using Catalog.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-public class ProductVariantAttributeConfiguration
+namespace Catalog.Infrastructure.Persistence.Configurations;
+
+public class ProductVariantAttributeConfiguration : EntityConfiguration<ProductVariantAttribute>
 {
-    
+    public override void Configure(EntityTypeBuilder<ProductVariantAttribute> builder)
+    {
+        base.Configure(builder);
+        
+        #region Columns
+
+        builder
+            .HasKey(sc => new { sc.ProductVariantId, sc.AttributeId});
+
+        #endregion
+    }
 }

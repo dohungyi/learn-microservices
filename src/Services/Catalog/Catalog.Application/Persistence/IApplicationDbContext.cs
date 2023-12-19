@@ -7,12 +7,6 @@ namespace Catalog.Application.Persistence;
 public interface IApplicationDbContext : IAppDbContext
 {
     #region DbSet
-
-    #region Tax
-
-    public DbSet<Tax> Taxes { get; }
-    
-    #endregion
     
     #region Asset
 
@@ -44,6 +38,7 @@ public interface IApplicationDbContext : IAppDbContext
     public DbSet<ProductVariant> ProductVariants { get; }
     public DbSet<ProductVariantAttribute> ProductVariantAttributes { get; }
     public DbSet<ProductVariantSpecification> ProductVariantSpecifications { get; }
+    public DbSet<ProductWeight> Weights { get; }
     
     #endregion
 
@@ -56,8 +51,6 @@ public interface IApplicationDbContext : IAppDbContext
     #endregion
 
     #region Weight
-
-    public DbSet<Weight> Weights { get; }
     
     public DbSet<WeightCategory> WeightCategories { get; }
     

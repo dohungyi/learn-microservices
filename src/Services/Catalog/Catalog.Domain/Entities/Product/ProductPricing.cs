@@ -19,13 +19,12 @@ public class ProductPricing : Entity
     
     #region Relationships
 
-    public Guid ProductId { get; set; }
-
+    public Guid ProductVariantId { get; set; }
     #endregion
     
     #region Navigations
     
-    public virtual Product Product { get; set; }
+    public virtual ProductVariant ProductVariant { get; set; }
     
     #endregion
 }

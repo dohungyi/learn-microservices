@@ -9,7 +9,7 @@ public class WeightCategory : BaseEntity
 
     #region MyRegion
     
-    public ICollection<Weight> Weights { get; set; }
+    public ICollection<ProductWeight> ProductWeights { get; set; }
 
     #endregion
 }

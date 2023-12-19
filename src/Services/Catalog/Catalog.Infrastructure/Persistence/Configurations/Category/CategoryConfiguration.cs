@@ -10,6 +10,14 @@ public class CategoryConfiguration : BaseEntityConfiguration<Category>
     {
         base.Configure(builder);
 
+        #region Indexes
+
+        
+
+        #endregion
+        
+        #region Columns
+
         builder
             .Property(e => e.Code)
             .HasMaxLength(50)
@@ -32,6 +40,15 @@ public class CategoryConfiguration : BaseEntityConfiguration<Category>
             .WithMany()
             .HasForeignKey(c => c.ParentId)
             .IsRequired(false);
+        
+        builder
+            .HasMany(e => e.CategoryDiscounts)
+            .WithOne(e => e.Category)
+            .HasForeignKey(e => e.CategoryId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired(false);
+
+        #endregion
 
     }
 }

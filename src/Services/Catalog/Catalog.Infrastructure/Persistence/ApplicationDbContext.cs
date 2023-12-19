@@ -12,12 +12,6 @@ public class ApplicationDbContext : AppDbContext, IApplicationDbContext
     }
 
     #region DbSet
-
-    #region Tax
-
-    public DbSet<Tax> Taxes { get; }
-    
-    #endregion
     
     #region Asset
 
@@ -49,6 +43,7 @@ public class ApplicationDbContext : AppDbContext, IApplicationDbContext
     public DbSet<ProductVariant> ProductVariants { get; }
     public DbSet<ProductVariantAttribute> ProductVariantAttributes { get; }
     public DbSet<ProductVariantSpecification> ProductVariantSpecifications { get; }
+    public DbSet<ProductWeight> Weights { get; }
     
     #endregion
 
@@ -61,8 +56,6 @@ public class ApplicationDbContext : AppDbContext, IApplicationDbContext
     #endregion
 
     #region Weight
-
-    public DbSet<Weight> Weights { get; }
     
     public DbSet<WeightCategory> WeightCategories { get; }
     

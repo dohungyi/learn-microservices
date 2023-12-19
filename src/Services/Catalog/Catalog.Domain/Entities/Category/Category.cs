@@ -27,5 +27,7 @@ public class Category : BaseEntity
     
     public ICollection<ProductCategory>? ProductCategories { get; set; }
     
+    public ICollection<CategoryDiscount> CategoryDiscounts { get; set; }
+    
     #endregion
 }

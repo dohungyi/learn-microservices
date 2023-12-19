@@ -17,7 +17,7 @@ public class ProductVariant : Entity
     public decimal PurchasePrice { get; set; } // Giá nhập
     
     public int StkQtyMinMin { get; set; }
-    
+
     public string Sets { get; set; }
     public string Status { get; set; }
     public string RelatedType { get; set; }
