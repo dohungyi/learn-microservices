@@ -1,0 +1,3 @@
++ không cung cấp IsRequired và không cung cấp giá trị mặc định cho nó, mặc định sẽ là true
++ Nếu để mặc định không sử dụng thì nó là .IsUnicode(),
+còn nếu sử dụng thì nó là IsUnicode(false)  thì nó sẽ tắt Unicode        

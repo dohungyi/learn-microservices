@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Catalog.Domain.Constants;
+using Catalog.Domain.Enum;
 using SharedKernel.Domain;
 
 namespace Catalog.Domain.Entities;
@@ -8,7 +9,7 @@ namespace Catalog.Domain.Entities;
 public class CategoryDiscount : BaseEntity
 {
     public float DiscountValue { get; set; }
-    public string DiscountUnit { get; set; }
+    public DiscountUnit DiscountUnit { get; set; }
     public DateTime CreateDate { get; set; }
     public DateTime ValidFrom { get; set; }
     public DateTime ValidUntil { get; set; }

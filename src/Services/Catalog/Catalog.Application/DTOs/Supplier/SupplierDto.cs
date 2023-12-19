@@ -1,4 +1,6 @@
-﻿namespace Catalog.Application.DTOs;
+﻿using AutoMapper;
+
+namespace Catalog.Application.DTOs;
 
 public class SupplierDto
 {
@@ -17,4 +19,6 @@ public class SupplierDto
     public string ProvinceCode { get; set; }
     public string DistrictCode { get; set; }
     public bool Status { get; set; }
+    
+    
 }
