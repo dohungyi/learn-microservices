@@ -25,7 +25,7 @@ try
 
     #endregion
     
-    // builder.Host.AddAppConfigurations();
+    builder.Host.AddAppConfigurations();
     
     #region Add services
     
