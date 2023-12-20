@@ -74,6 +74,11 @@ public class ProductConfiguration : BaseEntityConfiguration<Product>
                 .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired(false);
         
+            builder
+                .HasMany(e => e.ProductSuppliers)
+                .WithOne(e => e.Product)
+                .HasForeignKey(e => e.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
             
             #endregion
 

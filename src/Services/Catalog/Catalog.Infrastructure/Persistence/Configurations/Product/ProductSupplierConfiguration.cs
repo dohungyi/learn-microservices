@@ -22,19 +22,7 @@ public class ProductSupplierConfiguration : EntityConfiguration<ProductSupplier>
 
         builder
             .HasKey(sc => new { sc.ProductId, sc.SupplierId });
-
-        builder
-            .HasOne(e => e.Product)
-            .WithMany(e => e.ProductSuppliers)
-            .HasForeignKey(e => e.ProductId)
-            .OnDelete(DeleteBehavior.Restrict);
         
-        builder
-            .HasOne(e => e.Supplier)
-            .WithMany(e => e.ProductSuppliers)
-            .HasForeignKey(e => e.SupplierId)
-            .OnDelete(DeleteBehavior.Restrict);
-
         #endregion
     }
 }

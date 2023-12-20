@@ -71,16 +71,22 @@ public class ProductVariantConfiguration : EntityConfiguration<ProductVariant>
             .HasForeignKey(sc => sc.ProductVariantId)
             .OnDelete(DeleteBehavior.Cascade);
         
+        
         builder.HasMany(p => p.ProductPricings)
             .WithOne(pd => pd.ProductVariant)
             .HasForeignKey(pd => pd.ProductVariantId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(p => p.ProductVariantSpecifications)
             .WithOne(pd => pd.ProductVariant)
             .HasForeignKey(pd => pd.ProductVariantId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
         
+        builder
+            .HasOne(e => e.ProductAsset)
+            .WithOne(e => e.ProductVariant)
+            .HasForeignKey<ProductVariant>(e => e.ProductAssetId)
+            .OnDelete(DeleteBehavior.Cascade);
         
         #endregion
 

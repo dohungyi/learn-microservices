@@ -35,7 +35,6 @@ public class ProductVariant : Entity
     
     public virtual Product Product { get; set; }
     public virtual ProductAsset ProductAsset { get; set; }
-    
     public ICollection<ProductPricing> ProductPricings { get; set; }
     public ICollection<ProductVariantAttribute> ProductVariantAttributes { get; set; }
     public ICollection<ProductVariantSpecification> ProductVariantSpecifications { get; set; }

@@ -13,7 +13,6 @@ public class ProductAsset : Entity
     #region Relationships
 
     public Guid ProductId { get; set; }
-    public Guid ProductVariantId { get; set; }
     public Guid AssetId { get; set; }
 
     #endregion
@@ -21,8 +20,8 @@ public class ProductAsset : Entity
     #region Navigations
     
     public virtual Product Product { get; set; }
-    public virtual ProductVariant ProductVariant { get; set; }
     public virtual Asset Asset { get; set; }
+    public virtual ProductVariant ProductVariant { get; set; }
     
     #endregion
 }

@@ -15,7 +15,7 @@ public class ProductAssetConfiguration : EntityConfiguration<ProductAsset>
         #region Indexes
 
         builder
-            .HasIndex(sc => new { sc.ProductId, sc.AssetId, sc.ProductVariantId })
+            .HasIndex(sc => new { sc.ProductId, sc.AssetId })
             .IsUnique();
 
         #endregion
@@ -29,13 +29,6 @@ public class ProductAssetConfiguration : EntityConfiguration<ProductAsset>
                 v => v.ToString(),   
                 v => (ProductImageType)Enum.Parse(typeof(ProductImageType), v)  
             );
-
-        
-        // builder
-        //     .HasOne(sc => sc.ProductVariant)
-        //     .WithOne(s => s.ProductAsset)
-        //     .HasForeignKey<ProductVariant>(s => s.ProductAssetId)
-        //     .OnDelete(DeleteBehavior.Cascade);
         
         #endregion
     }
