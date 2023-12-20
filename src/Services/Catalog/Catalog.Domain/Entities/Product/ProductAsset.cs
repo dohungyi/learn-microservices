@@ -15,6 +15,7 @@ public class ProductAsset : Entity
     public Guid ProductId { get; set; }
     public Guid AssetId { get; set; }
 
+    public Guid ProductVariantId { get; set; }
     #endregion
     
     #region Navigations

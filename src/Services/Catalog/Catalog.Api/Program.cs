@@ -1,5 +1,7 @@
+using Caching;
 using Catalog.Api.Extensions;
 using Catalog.Application.Persistence;
+using Catalog.Infrastructure;
 using Catalog.Infrastructure.Persistence;
 using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
@@ -16,14 +18,14 @@ try
 {
     #region Core settings projects
 
-    CoreSettings.SetEmailConfig(configuration);
-    CoreSettings.SetS3Config(configuration);
+    // CoreSettings.SetEmailConfig(configuration);
+    // CoreSettings.SetS3Config(configuration);
     CoreSettings.SetJwtConfig(configuration);
     CoreSettings.SetConnectionStrings(configuration);
 
     #endregion
     
-    builder.Host.AddAppConfigurations();
+    // builder.Host.AddAppConfigurations();
     
     #region Add services
     
@@ -45,6 +47,8 @@ try
     {
         options.Filters.Add(new AccessTokenValidatorAsyncFilter());
     });
+
+    services.AddInfrastructureServices(configuration);
     
     #endregion
     

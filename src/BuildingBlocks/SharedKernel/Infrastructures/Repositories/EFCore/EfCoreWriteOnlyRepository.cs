@@ -46,16 +46,7 @@ public class EfCoreWriteOnlyRepository<TEntity,TDbContext>
         
         return entities;
     }
-
-    public async Task<IList<TEntity>> BulkInsertAsync(IList<TEntity> entities, CancellationToken cancellationToken = default)
-    {
-        BeforeInsert(entities);
-        
-        await _dbContext.BulkInsertEntitiesAsync(entities, cancellationToken: cancellationToken);
-        
-        return entities;
-    }
-
+    
     #endregion
 
     #region [UPDATE]
@@ -94,15 +85,7 @@ public class EfCoreWriteOnlyRepository<TEntity,TDbContext>
 
         await ClearCacheWhenChangesAsync(entities.Select(x => (object)x.Id).ToList(), cancellationToken);
     }
-    public async Task BulkDeleteAsync(IList<TEntity> entities, CancellationToken cancellationToken = default)
-    {
-        BeforeDelete(entities);
-        
-        await _dbContext.BulkDeleteEntitiesAsync(entities, cancellationToken);
-
-        await ClearCacheWhenChangesAsync(entities.Select(x => (object)x.Id).ToList(), cancellationToken);
-    }
-
+    
     #endregion
     
     #region [PROTECTED]

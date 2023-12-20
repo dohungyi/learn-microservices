@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Catalog.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231220195847_init_catalog_db")]
+    [Migration("20231220224426_init_catalog_db")]
     partial class initcatalogdb
     {
         /// <inheritdoc />
@@ -547,6 +547,9 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<int>("AvailableStock")
+                        .HasColumnType("int");
+
                     b.Property<string>("Barcode")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -572,6 +575,9 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int>("RestockThreshold")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("SalePrice")
                         .HasColumnType("decimal(65,30)");
 
@@ -587,7 +593,7 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("StkQtyMinMin")
+                    b.Property<int>("StockQuantityMinimum")
                         .HasColumnType("int");
 
                     b.Property<string>("TotalDescription")

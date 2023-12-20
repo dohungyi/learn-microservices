@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Catalog.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel.Log;
 
 namespace Catalog.Infrastructure.Persistence;
 
@@ -23,7 +23,7 @@ public class ApplicationDbContextSeed
         }
         catch (Exception e)
         {
-            Logging.Error("An error occurred while initialising the database.");
+            // Logging.Error("An error occurred while initialising the database.");
             throw;
         }
     }
@@ -37,13 +37,23 @@ public class ApplicationDbContextSeed
         }
         catch (Exception e)
         {
-            Logging.Error("An error occurred while seeding the database;");
+            // Logging.Error("An error occurred while seeding the database;");
             throw;
         }
     }
 
     private async Task TrySeedAsync()
     {
-        
+        if (!_context.WeightCategories.Any())
+        {
+            var weightCategories = new List<WeightCategory>
+            {
+                new WeightCategory { Code = "G", Description = "Gam" },
+                new WeightCategory { Code = "KG", Description = "Kilogram" },
+            };
+
+            _context.WeightCategories.AddRange(weightCategories);
+            await _context.SaveChangesAsync();
+        }
     }
 }

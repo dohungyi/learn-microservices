@@ -350,7 +350,9 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     SalePrice = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     PurchasePrice = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    StkQtyMinMin = table.Column<int>(type: "int", nullable: false),
+                    StockQuantityMinimum = table.Column<int>(type: "int", nullable: false),
+                    AvailableStock = table.Column<int>(type: "int", nullable: false),
+                    RestockThreshold = table.Column<int>(type: "int", nullable: false),
                     Sets = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Status = table.Column<string>(type: "longtext", nullable: false)

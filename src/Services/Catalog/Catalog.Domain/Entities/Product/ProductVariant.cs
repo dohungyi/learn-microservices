@@ -16,7 +16,9 @@ public class ProductVariant : Entity
     public decimal SalePrice { get; set; } // Giá bán
     public decimal PurchasePrice { get; set; } // Giá nhập
     
-    public int StkQtyMinMin { get; set; }
+    public int StockQuantityMinimum { get; set; } 
+    public int AvailableStock { get; set; } // Quantity in stock
+    public int RestockThreshold { get; set; } // Available stock at which we should reorder
 
     public string Sets { get; set; }
     public string Status { get; set; }
@@ -27,7 +29,6 @@ public class ProductVariant : Entity
     #region Relationships
     
     public Guid ProductId { get; set; }
-    public Guid ProductAssetId { get; set; }
     
     #endregion
     
@@ -38,5 +39,6 @@ public class ProductVariant : Entity
     public ICollection<ProductPricing> ProductPricings { get; set; }
     public ICollection<ProductVariantAttribute> ProductVariantAttributes { get; set; }
     public ICollection<ProductVariantSpecification> ProductVariantSpecifications { get; set; }
+    
     #endregion
 }

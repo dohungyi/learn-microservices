@@ -194,20 +194,6 @@ namespace SharedKernel.Configure
             return services;
         }
 
-        public static IServiceCollection AddCoreCaching(this IServiceCollection services, IConfiguration Configuration)
-        {
-            services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = Configuration.GetRequiredSection("Redis").Value;
-                options.InstanceName = "";
-            });
-
-            services.AddTransient<IRedisCache, RedisCache>();
-            services.AddSingleton<IMemoryCaching, MemoryCaching>();
-            services.AddTransient<ISequenceCaching, SequenceCaching>();
-            return services;
-        }
-
         public static IServiceCollection AddCoreORM(this IServiceCollection services)
         {
             services.AddScoped(typeof(IMongoService<>), typeof(MongoService<>));
@@ -273,8 +259,8 @@ namespace SharedKernel.Configure
 
         #region Middlewares
         public static void UseCoreConfigure(this IApplicationBuilder app, IWebHostEnvironment environment)
-        {
-            //app.UseCoreAuthor();
+        { 
+            app.UseCoreAuthor();
             app.UseCoreLocalization();
             if (!environment.IsDevelopment())
             {
@@ -293,7 +279,7 @@ namespace SharedKernel.Configure
             {
                 endpoints.MapControllers();
             });
-            app.UseCoreHealthChecks();
+            // app.UseCoreHealthChecks();
         }
 
         public static void UseCoreCors(this IApplicationBuilder app, IConfiguration configuration)
@@ -427,7 +413,7 @@ namespace SharedKernel.Configure
         #region ELK
         public static IHostBuilder UseCoreSerilog(this IHostBuilder builder) => builder.UseSerilog((context, loggerConfiguration) =>
         {
-            CoreSettings.SetElasticSearchConfig(context.Configuration);
+            // CoreSettings.SetElasticSearchConfig(context.Configuration);
             loggerConfiguration
                 .Enrich.FromLogContext()
                 .Enrich.WithMachineName()
