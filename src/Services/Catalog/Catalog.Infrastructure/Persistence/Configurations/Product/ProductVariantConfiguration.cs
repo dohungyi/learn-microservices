@@ -85,7 +85,7 @@ public class ProductVariantConfiguration : EntityConfiguration<ProductVariant>
         builder
             .HasOne(e => e.ProductAsset)
             .WithOne(e => e.ProductVariant)
-            .HasForeignKey<ProductVariant>(e => e.ProductAssetId)
+            .HasForeignKey<ProductAsset>(e => e.ProductVariantId)
             .OnDelete(DeleteBehavior.Cascade);
         
         #endregion
