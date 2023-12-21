@@ -18,10 +18,6 @@ public class ProductConfiguration : BaseEntityConfiguration<Product>
 
         #region Columns
 
-        builder.Property(p => p.TaxCateCode)
-                .HasMaxLength(255)
-                .IsUnicode(false);
-
             builder.Property(p => p.ViewCount)
                 .HasDefaultValue(0);
             

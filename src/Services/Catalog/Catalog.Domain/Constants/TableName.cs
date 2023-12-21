@@ -31,4 +31,10 @@ public static class TableName
     public const string CategoryDiscount = "category_discounts";
     
     #endregion
+
+    #region Weight Category
+
+    public const string WeightCategory = "weights";
+
+    #endregion
 }

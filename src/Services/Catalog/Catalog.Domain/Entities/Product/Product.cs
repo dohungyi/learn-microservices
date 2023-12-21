@@ -8,8 +8,6 @@ namespace Catalog.Domain.Entities;
 [Table(TableName.Product)]
 public class Product : BaseEntity
 {
-    public string TaxCateCode { get; set; }
-    
     public bool HomeFlag { get; set; }
     public bool HotFlag { get; set; }
     public bool IsBestSelling { get; set; }

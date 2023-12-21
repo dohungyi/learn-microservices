@@ -7,7 +7,9 @@ namespace Catalog.Domain.Entities;
 [Table(TableName.ProductVariant)]
 public class ProductVariant : Entity
 {
+    public string Code { get; set; }
     public string Name { get; set; }
+    public string Alias  { get; set; }
     public string BriefDescription { get; set; }
     public string TotalDescription { get; set; }
     public string Barcode { get; set; }

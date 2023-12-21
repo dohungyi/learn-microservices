@@ -12,7 +12,17 @@ public class CategoryConfiguration : BaseEntityConfiguration<Category>
 
         #region Indexes
 
+        builder
+            .HasIndex(e => e.Code)
+            .IsUnique();
         
+        builder
+            .HasIndex(e => e.Name)
+            .IsUnique();
+        
+        builder
+            .HasIndex(e => e.Alias)
+            .IsUnique();
 
         #endregion
         
@@ -21,6 +31,15 @@ public class CategoryConfiguration : BaseEntityConfiguration<Category>
         builder
             .Property(e => e.Code)
             .HasMaxLength(50)
+            .IsUnicode(false);
+        
+        builder
+            .Property(e => e.Name)
+            .HasMaxLength(255);
+        
+        builder
+            .Property(e => e.Alias)
+            .HasMaxLength(255)
             .IsUnicode(false);
 
         builder

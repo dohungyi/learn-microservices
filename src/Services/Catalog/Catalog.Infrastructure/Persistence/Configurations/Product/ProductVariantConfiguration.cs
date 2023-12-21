@@ -19,6 +19,10 @@ public class ProductVariantConfiguration : EntityConfiguration<ProductVariant>
             .HasIndex(e => e.Name)
             .IsUnique();
         
+        builder
+            .HasIndex(e => e.Alias)
+            .IsUnique();
+        
         builder.HasIndex(e => e.Barcode)
             .IsUnique();
         
@@ -28,11 +32,15 @@ public class ProductVariantConfiguration : EntityConfiguration<ProductVariant>
         #endregion
 
         #region Columns
-
+        
         builder
             .Property(e => e.Name)
-            .HasMaxLength(100);
+            .HasMaxLength(255);
 
+        builder
+            .Property(e => e.Alias)
+            .HasMaxLength(255);
+        
         builder
             .Property(e => e.BriefDescription)
             .IsRequired(false);

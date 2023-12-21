@@ -11,5 +11,7 @@ public class ProductVariantSpecificationConfiguration : EntityConfiguration<Prod
         
         builder
             .HasKey(e => e.Id);
+        
+        
     }
 }

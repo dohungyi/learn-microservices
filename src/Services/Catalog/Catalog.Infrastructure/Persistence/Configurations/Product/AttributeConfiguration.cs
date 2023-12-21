@@ -11,7 +11,9 @@ public class AttributeConfiguration : BaseEntityConfiguration<Attribute>
 
         #region Indexes
 
-        
+        builder
+            .HasIndex(e => e.Key)
+            .IsUnique();
 
         #endregion
 
