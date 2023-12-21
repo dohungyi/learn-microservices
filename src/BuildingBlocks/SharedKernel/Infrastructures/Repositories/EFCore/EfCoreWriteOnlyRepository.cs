@@ -1,4 +1,5 @@
 using Caching;
+using Microsoft.EntityFrameworkCore;
 using SharedKernel.Application;
 using SharedKernel.Application.Repositories;
 using SharedKernel.Auth;
@@ -31,9 +32,9 @@ public class EfCoreWriteOnlyRepository<TEntity,TDbContext>
     
     public async Task<TEntity> InsertAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        BeforeInsert(new List<TEntity>() {entity});
+        BeforeInsert(new List<TEntity>() { entity });
         
-        await _dbContext.AddAsync<TEntity>(entity, cancellationToken);
+        await _dbSet.AddAsync(entity, cancellationToken);
         
         return entity;
     }
@@ -42,7 +43,7 @@ public class EfCoreWriteOnlyRepository<TEntity,TDbContext>
     {
         BeforeInsert(entities);
         
-        await _dbContext.AddRangeAsync(entities, cancellationToken);
+        await _dbSet.AddRangeAsync(entities, cancellationToken);
         
         return entities;
     }
@@ -51,17 +52,14 @@ public class EfCoreWriteOnlyRepository<TEntity,TDbContext>
 
     #region [UPDATE]
     
-    public async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        var currentEntity = await _dbSet.FindAsync(entity.Id);
+        if (_dbContext.Entry(entity).State == EntityState.Unchanged) return;
         
-        BeforeUpdate(entity, currentEntity);
-        
-        _dbContext.Update(entity);
+        TEntity exist = await _dbSet.FindAsync(entity.Id);
+        _dbSet.Entry(exist).CurrentValues.SetValues(entity);
         
         await ClearCacheWhenChangesAsync(new List<object>() { entity.Id }, cancellationToken);
-        
-        return entity;
     }
     
     #endregion
@@ -72,7 +70,7 @@ public class EfCoreWriteOnlyRepository<TEntity,TDbContext>
     {
         BeforeDelete(new List<TEntity>() { entity });
         
-        _dbContext.Remove(entity);
+        _dbContext.Set<TEntity>().Remove(entity);
         
         await ClearCacheWhenChangesAsync(new List<object>() { entity.Id }, cancellationToken);
     }
@@ -81,7 +79,7 @@ public class EfCoreWriteOnlyRepository<TEntity,TDbContext>
     {
         BeforeDelete(entities);
         
-        _dbContext.RemoveRange(entities);
+        _dbContext.Set<TEntity>().RemoveRange(entities);
 
         await ClearCacheWhenChangesAsync(entities.Select(x => (object)x.Id).ToList(), cancellationToken);
     }
@@ -143,6 +141,8 @@ public class EfCoreWriteOnlyRepository<TEntity,TDbContext>
                 tasks.Add(_sequenceCaching.RemoveAsync(recordByIdKey, cancellationToken: cancellationToken));
             }
         }
+        
+        await Task.WhenAll(tasks);
     }
     #endregion
     
