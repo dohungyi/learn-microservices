@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using MySqlConnector;
 using SharedKernel.Core;
-using SharedKernel.Domain;
 using SharedKernel.Log;
 using System.Data;
 using static Dapper.SqlMapper;
@@ -317,6 +316,5 @@ namespace SharedKernel.MySQL
         #endregion
 
         #endregion
-        
     }
 }

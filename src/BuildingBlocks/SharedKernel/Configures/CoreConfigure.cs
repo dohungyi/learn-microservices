@@ -1,8 +1,6 @@
 ﻿using AspNetCoreRateLimit;
-using FluentValidation.AspNetCore;
 using HealthChecks.UI.Client;
 using KSharedKernel.RabbitMQ;
-using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -10,11 +8,8 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Localization.Routing;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -50,74 +45,15 @@ using System.Text;
 using System.Text.Json;
 using Caching;
 using FluentValidation;
+using Enum = SharedKernel.Application.Enum;
 using IExceptionHandler = SharedKernel.Runtime.IExceptionHandler;
+using static SharedKernel.Application.Enum;
 
 namespace SharedKernel.Configure
 {
-    public static class ConfigureExtension
+    public static partial class ConfigureExtension
     {
         #region DependencyInjection
-        // public static IServiceCollection AddCoreServices(this IServiceCollection services, IConfiguration Configuration)
-        // {
-        //     CoreSettings.SetConnectionStrings(Configuration);
-        //     CoreSettings.SetBlack3pKeywords(Configuration);
-        //
-        //     services.AddSingleton(_ => Configuration);
-        //
-        //     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-        //
-        //     //services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate();
-        //
-        //     services.Configure<FormOptions>(x =>
-        //     {
-        //         x.ValueLengthLimit = int.MaxValue;
-        //         x.MultipartBodyLengthLimit = int.MaxValue; // In case of multipart
-        //         x.MultipartHeadersLengthLimit = int.MaxValue;
-        //     });
-        //
-        //     //services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
-        //
-        //     //services.AddResponseCompression(options =>
-        //     //{
-        //     //    options.EnableForHttps = true;
-        //     //    options.MimeTypes = ResponseCompressionDefaults.MimeTypes;
-        //     //    options.Providers.Add<GzipCompressionProvider>();
-        //     //});
-        //
-        //     services.AddCors();
-        //
-        //     services.AddCoreLocalization();
-        //
-        //     services.AddCoreRateLimit();
-        //
-        //     services.AddCoreBehaviors();
-        //
-        //     #region AddController + CamelCase + FluentValidation
-        //     services.AddControllersWithViews()
-        //             .AddJsonOptions(options =>
-        //                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        //             )
-        //             .AddFluentValidation(delegate (FluentValidationMvcConfiguration f)
-        //             {
-        //                 f.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies().Where(p => !p.IsDynamic));
-        //                 //f.RegisterValidatorsFromAssembly(Assembly.GetEntryAssembly());
-        //             })
-        //             .ConfigureApiBehaviorOptions(delegate (ApiBehaviorOptions options)
-        //             {
-        //                 options.InvalidModelStateResponseFactory = delegate (ActionContext c)
-        //                 {
-        //                     string errors = string.Join(", ", from v in c.ModelState.Values.Where((ModelStateEntry v) => v.Errors.Any()).SelectMany((ModelStateEntry v) => v.Errors) select v.ErrorMessage);
-        //                     return new OkObjectResult(new ApiResult()
-        //                     {
-        //                         Error = new Error(HttpStatusCode.BadRequest, errors)
-        //                     });
-        //                 };
-        //             });
-        //     #endregion
-        //
-        //     return services;
-        // }
-
         public static IServiceCollection AddCoreLocalization(this IServiceCollection services)
         {
             var supportedCultures = new List<CultureInfo> { new CultureInfo("en-US"), new CultureInfo("vi-VN") };
@@ -193,13 +129,7 @@ namespace SharedKernel.Configure
             });
             return services;
         }
-
-        public static IServiceCollection AddCoreORM(this IServiceCollection services)
-        {
-            services.AddScoped(typeof(IMongoService<>), typeof(MongoService<>));
-            services.AddScoped<IDbConnection, DbConnection>();
-            return services;
-        }
+        
 
         public static IServiceCollection AddCoreProviders(this IServiceCollection services)
         {
@@ -255,262 +185,6 @@ namespace SharedKernel.Configure
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestBehavior<,>));
             return services;
         }
-        #endregion
-
-        #region Middlewares
-        public static void UseCoreConfigure(this IApplicationBuilder app, IWebHostEnvironment environment)
-        { 
-            app.UseCoreAuthor();
-            app.UseCoreLocalization();
-            if (!environment.IsDevelopment())
-            {
-                app.UseReject3P();
-            }
-            app.UseCoreExceptionHandler();
-            app.UseIpRateLimiting();
-            app.UseForwardedHeaders();
-            // app.UseHttpsRedirection(); 
-            app.UseCoreUnauthorized();
-            app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
-            
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-            // app.UseCoreHealthChecks();
-        }
-
-        public static void UseCoreCors(this IApplicationBuilder app, IConfiguration configuration)
-        {
-            var origins = configuration.GetRequiredSection("Allowedhosts").Value;
-            if (origins.Equals("*"))
-            {
-                app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-            }
-            else
-            {
-                app.UseCors(x => x.WithOrigins(origins.Split(";")).AllowAnyHeader().AllowAnyMethod().AllowCredentials());
-            }
-        }
-
-        public static void UseCoreLocalization(this IApplicationBuilder app)
-        {
-            //app.Use(async (context, next) =>
-            //{
-            //    var culture = context.Request.Headers[HeaderNames.AcceptLanguage].ToString();
-            //    switch (culture)
-            //    {
-            //        case "vi":
-            //            Thread.CurrentThread.CurrentCulture = new CultureInfo("vi-VN");
-            //            Thread.CurrentThread.CurrentUICulture = new CultureInfo("vi-VN");
-            //            break;
-            //        default:
-            //            break;
-            //    }
-
-            //    await next();
-            //});
-
-            var supportedCultures = new List<CultureInfo> { new CultureInfo("en-US"), new CultureInfo("vi-VN") };
-            app.UseRequestLocalization(new RequestLocalizationOptions
-            {
-                DefaultRequestCulture = new RequestCulture("en-US"),
-                SupportedCultures = supportedCultures,
-                SupportedUICultures = supportedCultures
-            });
-        }
-
-        public static void UseCoreHealthChecks(this IApplicationBuilder app)
-        {
-            app.UseHealthChecks("/health", new HealthCheckOptions
-            {
-                Predicate = (HealthCheckRegistration _) => true,
-                ResponseWriter = new Func<HttpContext, HealthReport, Task>(UIResponseWriter.WriteHealthCheckUIResponse)
-            });
-        }
-
-        public static void UseCoreSwagger(this IApplicationBuilder app)
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "");
-                c.RoutePrefix = string.Empty;
-            });
-        }
-
-        public static void UseCoreExceptionHandler(this IApplicationBuilder app)
-        {
-            // Handle exception
-            app.UseExceptionHandler(a => a.Run(async context =>
-            {
-                var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
-                var exception = exceptionHandlerPathFeature.Error;
-                var responseContent = new ApiResult();
-                var localizer = context.RequestServices.GetRequiredService<IStringLocalizer<Resources>>();
-
-                // Catchable
-                if (exception is CatchableException)
-                {
-                    responseContent.Error = new Error(500, exception.Message);
-                    Logging.Error(exception);
-                }
-                else if (exception is ForbiddenException)
-                {
-                    responseContent.Error = new Error(403, localizer["not_permission"].Value);
-                }
-                else if (exception is SqlInjectionException)
-                {
-                    responseContent.Error = new Error(400, Secure.MsgDetectedSqlInjection);
-                    Logging.Error(exception);
-                }
-                else if (exception is BadRequestException)
-                {
-                    if ((exception as BadRequestException).Body != null)
-                    {
-                        responseContent = new ApiSimpleResult
-                        {
-                            Data = (exception as BadRequestException).Body,
-                            Error = new Error(400, exception.Message, (exception as BadRequestException).Type)
-                        };
-                    }
-                    else
-                    {
-                        responseContent.Error = new Error(400, exception.Message, (exception as BadRequestException).Type);
-                    }
-                }
-                else if(exception is ValidationException validationException)
-                {
-                    string errors = string.Join(", ", validationException.Errors
-                        .GroupBy(x => x.PropertyName)
-                        .ToDictionary(
-                            x => x.Key,
-                            x => string.Join("; ", x.Select(y => y.ErrorMessage))
-                        )
-                        .Select(kv => $"{kv.Key}: {kv.Value}"));
-                
-                    responseContent.Error = new Error(HttpStatusCode.BadRequest, errors, "BAD_REQUEST");
-                }
-                // Unknown exception
-                else
-                {
-                    responseContent.Error = new Error(500, localizer["system_error_occurred"].Value);
-                    Logging.Error(exception);
-                }
-
-                context.Response.StatusCode = (int)HttpStatusCode.OK;
-                context.Response.ContentType = "application/json";
-                await context.Response.WriteAsync(JsonConvert.SerializeObject(responseContent, new JsonSerializerSettings
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                }));
-            }));
-        }
-        #endregion
-
-        #region ELK
-        public static IHostBuilder UseCoreSerilog(this IHostBuilder builder) => builder.UseSerilog((context, loggerConfiguration) =>
-        {
-            // CoreSettings.SetElasticSearchConfig(context.Configuration);
-            loggerConfiguration
-                .Enrich.FromLogContext()
-                .Enrich.WithMachineName()
-                .Enrich.WithProperty("Application", DefaultElasticSearchConfig.ApplicationName)
-                .WriteTo.Console(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level}] {Message}{NewLine}{Exception}")
-                .WriteTo.Elasticsearch(new Serilog.Sinks.Elasticsearch.ElasticsearchSinkOptions(new Uri(DefaultElasticSearchConfig.Uri))
-                {
-                    IndexFormat = $"{DefaultElasticSearchConfig.ApplicationName}-{DateTime.UtcNow:yyyy-MM}",
-                    AutoRegisterTemplate = true,
-                    NumberOfReplicas = 1,
-                    NumberOfShards = 2,
-                    ModifyConnectionSettings = x => x.BasicAuthentication(DefaultElasticSearchConfig.Username, DefaultElasticSearchConfig.Password)
-                })
-                .ReadFrom.Configuration(context.Configuration);
-        })
-        .ConfigureServices(services =>
-        {
-            var sp = services.BuildServiceProvider();
-            var logger = sp.GetRequiredService<ILogger>();
-            var configuration = sp.GetRequiredService<IConfiguration>();
-
-            CoreSettings.SetLoggingConfig(configuration, logger);
-        });
-        
-        public static Action<HostBuilderContext, LoggerConfiguration> Configure =>
-            (context, configuration) =>
-            {
-                var applicationName = context.HostingEnvironment.ApplicationName?.ToLower().Replace(".", "-");
-                var environmentName = context.HostingEnvironment.EnvironmentName ?? "Development";
-
-                configuration
-                    .WriteTo.Debug()
-                    .WriteTo.Console(outputTemplate:
-                        "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
-                    .Enrich.FromLogContext()
-                    .Enrich.WithMachineName()
-                    .Enrich.WithProperty("Environment", environmentName)
-                    .Enrich.WithProperty("Application", applicationName)
-                    .ReadFrom.Configuration(context.Configuration);
-            };
-
-
-        [Obsolete]
-        public static IWebHostBuilder UseCoreSerilog(this IWebHostBuilder builder) =>
-        builder.UseSerilog((context, loggerConfiguration) =>
-        {
-            CoreSettings.SetElasticSearchConfig(context.Configuration);
-            loggerConfiguration
-                .Enrich.FromLogContext()
-                .Enrich.WithMachineName()
-                .Enrich.WithProperty("Application", DefaultElasticSearchConfig.ApplicationName)
-                .WriteTo.Console(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level}] {Message}{NewLine}{Exception}")
-                .WriteTo.Elasticsearch(new Serilog.Sinks.Elasticsearch.ElasticsearchSinkOptions(new Uri(DefaultElasticSearchConfig.Uri))
-                {
-                    IndexFormat = $"{DefaultElasticSearchConfig.ApplicationName}-{DateTime.UtcNow:yyyy-MM}",
-                    AutoRegisterTemplate = true,
-                    NumberOfReplicas = 1,
-                    NumberOfShards = 2,
-                    ModifyConnectionSettings = x => x.BasicAuthentication(DefaultElasticSearchConfig.Username, DefaultElasticSearchConfig.Password)
-                })
-                .ReadFrom.Configuration(context.Configuration);
-        })
-        .ConfigureServices(services =>
-        {
-            var sp = services.BuildServiceProvider();
-            var logger = sp.GetRequiredService<ILogger>();
-            var configuration = sp.GetRequiredService<IConfiguration>();
-
-            CoreSettings.SetLoggingConfig(configuration, logger);
-        });
-        
-        #endregion
-
-        #region ApiGateway
-        [Obsolete]
-        public static IWebHostBuilder ConfigCoreApiGateway(this IWebHostBuilder builder) =>
-        builder.ConfigureKestrel(serverOptions =>
-                {
-                    serverOptions.Limits.MaxRequestBodySize = int.MaxValue;
-                })
-                .ConfigureAppConfiguration(config =>
-                     config.AddJsonFile("appsettings.json", false, true)
-                           .AddJsonFile("ocelot.json"))
-                           .ConfigureServices(services =>
-                           {
-                               services.AddSingleton(builder);
-                               services.AddOcelot().AddPolly();
-                               services.AddCors();
-                           })
-                           .UseCoreSerilog()
-                           .Configure(app =>
-                           {
-                               app.UseCoreExceptionHandler();
-                               app.UseCoreCors(app.ApplicationServices.GetRequiredService<IConfiguration>());
-                               app.UseMiddleware<RequestResponseLoggingMiddleware>();
-                               app.UseOcelot().Wait();
-                           });
         #endregion
     }
 }

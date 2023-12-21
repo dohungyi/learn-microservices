@@ -14,10 +14,10 @@ namespace SharedKernel.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            context.Response.Headers.Add("microservices-author", "Do Chi Hung");
-            context.Response.Headers.Add("microservices-facebook", "https://facebook.com/");
-            context.Response.Headers.Add("microservices-email", "dchcgl2002@gmail.com");
-            context.Response.Headers.Add("microservices-contact", "0976580418");
+            context.Response.Headers.Add("learn-microservices-author", "Do Chi Hung");
+            context.Response.Headers.Add("learn-microservices-facebook", "https://www.facebook.com/dohungiy/");
+            context.Response.Headers.Add("learn-microservices-email", "dohung.csharp@gmail.com");
+            context.Response.Headers.Add("learn-microservices-contact", "0976580418");
 
             await _next(context);
         }

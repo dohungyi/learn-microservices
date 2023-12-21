@@ -1,5 +1,6 @@
 using Caching;
 using Catalog.Api.Extensions;
+using Catalog.Application;
 using Catalog.Application.Persistence;
 using Catalog.Infrastructure;
 using Catalog.Infrastructure.Persistence;
@@ -17,9 +18,7 @@ var configuration = builder.Configuration;
 try
 {
     #region Core settings projects
-
-    // CoreSettings.SetEmailConfig(configuration);
-    // CoreSettings.SetS3Config(configuration);
+    
     CoreSettings.SetJwtConfig(configuration);
     CoreSettings.SetConnectionStrings(configuration);
 
@@ -35,8 +34,6 @@ try
     
     services.AddCoreCaching(configuration);
     
-    // services.AddHealthChecks();
-    
     services.Configure<ForwardedHeadersOptions>(o => o.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto);
     
     services.AddCurrentUser();
@@ -47,8 +44,10 @@ try
     {
         options.Filters.Add(new AccessTokenValidatorAsyncFilter());
     });
-
+    
     services.AddInfrastructureServices(configuration);
+    
+    services.AddApplicationServices(configuration);
     
     #endregion
     
