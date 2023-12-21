@@ -181,8 +181,8 @@ namespace SharedKernel.Configure
 
         public static IServiceCollection AddCoreBehaviors(this IServiceCollection services)
         {
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehavior<,>));
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestBehavior<,>));
+            // services.AddTransient(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehavior<,>));
+            // services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestBehavior<,>));
             return services;
         }
         #endregion

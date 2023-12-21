@@ -44,15 +44,15 @@ public class ApplicationDbContextSeed
 
     private async Task TrySeedAsync()
     {
-        if (!_context.WeightCategories.Any())
+        if (!_context.Weights.Any())
         {
-            var weightCategories = new List<WeightCategory>
+            var weightCategories = new List<Weight>
             {
-                new WeightCategory { Code = "G", Description = "Gam" },
-                new WeightCategory { Code = "KG", Description = "Kilogram" },
+                new Weight { Code = "G", Description = "Gam" },
+                new Weight { Code = "KG", Description = "Kilogram" },
             };
 
-            _context.WeightCategories.AddRange(weightCategories);
+            _context.Weights.AddRange(weightCategories);
             await _context.SaveChangesAsync();
         }
     }

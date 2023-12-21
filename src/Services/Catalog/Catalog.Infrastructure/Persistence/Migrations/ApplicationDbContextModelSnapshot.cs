@@ -697,14 +697,17 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("WeightCategoryId")
                         .HasColumnType("char(36)");
 
+                    b.Property<Guid>("WeightId")
+                        .HasColumnType("char(36)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId")
                         .IsUnique();
 
-                    b.HasIndex("WeightCategoryId");
+                    b.HasIndex("WeightId");
 
-                    b.ToTable("Weights");
+                    b.ToTable("product_weights");
                 });
 
             modelBuilder.Entity("Catalog.Domain.Entities.Supplier", b =>
@@ -802,7 +805,7 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                     b.ToTable("suppliers");
                 });
 
-            modelBuilder.Entity("Catalog.Domain.Entities.WeightCategory", b =>
+            modelBuilder.Entity("Catalog.Domain.Entities.Weight", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1013,15 +1016,15 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Catalog.Domain.Entities.WeightCategory", "WeightCategory")
+                    b.HasOne("Catalog.Domain.Entities.Weight", "Weight")
                         .WithMany("ProductWeights")
-                        .HasForeignKey("WeightCategoryId")
+                        .HasForeignKey("WeightId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
 
-                    b.Navigation("WeightCategory");
+                    b.Navigation("Weight");
                 });
 
             modelBuilder.Entity("Catalog.Domain.Entities.Asset", b =>
@@ -1077,7 +1080,7 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                     b.Navigation("ProductSuppliers");
                 });
 
-            modelBuilder.Entity("Catalog.Domain.Entities.WeightCategory", b =>
+            modelBuilder.Entity("Catalog.Domain.Entities.Weight", b =>
                 {
                     b.Navigation("ProductWeights");
                 });

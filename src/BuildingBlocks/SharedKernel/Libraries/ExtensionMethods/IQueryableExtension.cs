@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using SharedKernel.Application;
 
 namespace SharedKernel.Libraries;
@@ -16,10 +17,20 @@ public static class IQueryableExtensions
         return condition ? source.Where(predicate) : source;
     }
     
+    public static async Task<TSource?> FirstOrDefaultIfAsync<TSource>(
+        this IQueryable<TSource> source,
+        bool condition,
+        Expression<Func<TSource, bool>> predicate)
+    {
+        ArgumentNullException.ThrowIfNull((object) source, nameof (source));
+        ArgumentNullException.ThrowIfNull((object) predicate, nameof (predicate));
+        
+        return condition ? await source.FirstOrDefaultAsync(predicate) : default!;
+    }
+    
     public static IQueryable<TEntity> ApplySort<TEntity>(this IQueryable<TEntity> source, List<SortModel> sortModels)
     {
         ArgumentNullException.ThrowIfNull((object) source, nameof (source));
-        ArgumentNullException.ThrowIfNull((object) sortModels, nameof (sortModels));
 
         if (!sortModels.Any()) return source;
         

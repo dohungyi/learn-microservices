@@ -95,7 +95,8 @@ public class EfCoreWriteOnlyRepository<TEntity,TDbContext>
             entities.ForEach(entity =>
             {
                 entity.Id = Guid.NewGuid();
-                entity.CreatedBy = _currentUser.Context.OwnerId;
+                // entity.CreatedBy = _currentUser.Context.OwnerId;
+                entity.CreatedBy = Guid.NewGuid();
                 entity.CreatedDate = DateHelper.Now;
                 entity.LastModifiedDate = null;
                 entity.LastModifiedBy = null;

@@ -1,5 +1,7 @@
 ﻿using Catalog.Application.Persistence;
+using Catalog.Application.Repositories;
 using Catalog.Infrastructure.Persistence;
+using Catalog.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +31,11 @@ public static class ConfigureServices
         // Base
         services.AddScoped(typeof(IEfCoreReadOnlyRepository<,>), typeof(EfCoreReadOnlyRepository<,>));
         services.AddScoped(typeof(IEfCoreWriteOnlyRepository<,>), typeof(EfCoreWriteOnlyRepository<,>));
+        
+        // Supplier
+        services.AddScoped<ISupplierWriteOnlyRepository, SupplierWriteOnlyRepository>();
+        services.AddScoped<ISupplierReadOnlyRepository, SupplierReadOnlyRepository>();
+       
 
         return services;
     }

@@ -5,12 +5,10 @@ namespace SharedKernel.Application
     public abstract class BaseCommandHandler
     {
         protected readonly IServiceProvider _provider;
-        protected readonly IAuthService _authService;
 
-        public BaseCommandHandler(IServiceProvider provider, IAuthService authService)
+        public BaseCommandHandler(IServiceProvider provider)
         {
             _provider = provider;
-            _authService = authService;
         }
     }
 }

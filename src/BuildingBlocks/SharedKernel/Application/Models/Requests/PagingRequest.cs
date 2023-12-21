@@ -63,12 +63,19 @@ namespace SharedKernel.Application
 
         public Filter Filter { get; set; }
 
+        public string SearchString { get; set; } = string.Empty;
+        
         public List<SortModel> Sorts { get; set; } = new List<SortModel>();
 
         public PagingRequest(int page, int size)
         {
             Page = page;
             Size = size;
+        }
+
+        public PagingRequest()
+        {
+            
         }
     }
 }

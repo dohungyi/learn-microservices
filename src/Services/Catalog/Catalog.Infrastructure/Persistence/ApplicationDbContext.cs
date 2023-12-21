@@ -43,7 +43,7 @@ public class ApplicationDbContext : AppDbContext, IApplicationDbContext
     public DbSet<ProductVariant> ProductVariants { get; set; }
     public DbSet<ProductVariantAttribute> ProductVariantAttributes { get; set; }
     public DbSet<ProductVariantSpecification> ProductVariantSpecifications { get; set; }
-    public DbSet<ProductWeight> Weights { get; set; }
+    public DbSet<ProductWeight> ProductWeights { get; set; }
     
     #endregion
 
@@ -57,7 +57,7 @@ public class ApplicationDbContext : AppDbContext, IApplicationDbContext
 
     #region Weight
     
-    public DbSet<WeightCategory> WeightCategories { get; set; }
+    public DbSet<Weight> Weights { get; set; }
     
     #endregion
     

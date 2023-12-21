@@ -4,7 +4,7 @@ using SharedKernel.Libraries;
 
 namespace Catalog.Application.Features.VersionOne;
 
-// [AuthorizationRequest(new ActionExponent[] { ActionExponent.Admin })]
+[AuthorizationRequest(new ActionExponent[] { ActionExponent.Supplier })]
 public class CreateSupplierCommand : BaseInsertCommand<SupplierDto>
 {
     public CreateSupplierDto CreateSupplierDto { get; init; }

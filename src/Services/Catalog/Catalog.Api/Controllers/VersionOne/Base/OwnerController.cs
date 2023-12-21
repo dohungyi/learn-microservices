@@ -4,6 +4,7 @@ using SharedKernel.Application;
 
 namespace Catalog.Api.Controllers.VersionOne;
 
+[ApiVersion("1.0")]
 public class OwnerController : BaseController
 {
     [AllowAnonymous]

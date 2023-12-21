@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Catalog.Infrastructure.Persistence.Configurations;
 
-public class WeightCategoryConfiguration : BaseEntityConfiguration<WeightCategory>
+public class WeightCategoryConfiguration : BaseEntityConfiguration<Weight>
 {
-    public override void Configure(EntityTypeBuilder<WeightCategory> builder)
+    public override void Configure(EntityTypeBuilder<Weight> builder)
     {
         base.Configure(builder);
 
@@ -21,7 +21,7 @@ public class WeightCategoryConfiguration : BaseEntityConfiguration<WeightCategor
         
         builder
             .HasMany(e => e.ProductWeights)
-            .WithOne(e => e.WeightCategory)
+            .WithOne(e => e.Weight)
             .HasForeignKey(e => e.WeightCategoryId)
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired(false);

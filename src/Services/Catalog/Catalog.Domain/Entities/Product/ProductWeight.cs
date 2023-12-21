@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations.Schema;
+using Catalog.Domain.Constants;
 using SharedKernel.Domain;
 
 namespace Catalog.Domain.Entities;
 
+[Table(TableName.ProductWeight)]
 public class ProductWeight : Entity
 {
     public decimal Value { get; set; }
@@ -18,7 +21,7 @@ public class ProductWeight : Entity
     #region Navigations
     
     public virtual Product Product { get; set; }
-    public virtual WeightCategory WeightCategory { get; set; }
+    public virtual Weight Weight { get; set; }
     
     #endregion
 }

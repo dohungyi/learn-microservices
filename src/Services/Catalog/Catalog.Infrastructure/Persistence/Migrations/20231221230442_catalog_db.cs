@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Catalog.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class initcatalogdb : Migration
+    public partial class catalogdb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -71,6 +71,10 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Code = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Alias = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Description = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Level = table.Column<int>(type: "int", nullable: false),
@@ -105,8 +109,6 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    TaxCateCode = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     HomeFlag = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     HotFlag = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     IsBestSelling = table.Column<bool>(type: "tinyint(1)", nullable: false),
@@ -139,6 +141,8 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                     Code = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Alias = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Description = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -180,7 +184,7 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "WeightCategories",
+                name: "weights",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -198,7 +202,7 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WeightCategories", x => x.Id);
+                    table.PrimaryKey("PK_weights", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -338,7 +342,11 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Code = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Alias = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     BriefDescription = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -404,7 +412,7 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Weights",
+                name: "product_weights",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -415,21 +423,22 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ProductId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     WeightCategoryId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    WeightId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Weights", x => x.Id);
+                    table.PrimaryKey("PK_product_weights", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Weights_WeightCategories_WeightCategoryId",
-                        column: x => x.WeightCategoryId,
-                        principalTable: "WeightCategories",
+                        name: "FK_product_weights_products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Weights_products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "products",
+                        name: "FK_product_weights_weights_WeightId",
+                        column: x => x.WeightId,
+                        principalTable: "weights",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -639,15 +648,15 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Weights_ProductId",
-                table: "Weights",
+                name: "IX_product_weights_ProductId",
+                table: "product_weights",
                 column: "ProductId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Weights_WeightCategoryId",
-                table: "Weights",
-                column: "WeightCategoryId");
+                name: "IX_product_weights_WeightId",
+                table: "product_weights",
+                column: "WeightId");
         }
 
         /// <inheritdoc />
@@ -681,7 +690,7 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                 name: "product_variant_specifications");
 
             migrationBuilder.DropTable(
-                name: "Weights");
+                name: "product_weights");
 
             migrationBuilder.DropTable(
                 name: "assets");
@@ -699,7 +708,7 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                 name: "product_variants");
 
             migrationBuilder.DropTable(
-                name: "WeightCategories");
+                name: "weights");
 
             migrationBuilder.DropTable(
                 name: "products");

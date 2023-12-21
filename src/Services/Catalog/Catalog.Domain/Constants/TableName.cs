@@ -22,6 +22,7 @@ public static class TableName
     public const string ProductPricing = "product_pricing";
     public const string ProductSupplier = "product_suppliers";
     public const string ProductCategory = "product_categories";
+    public const string ProductWeight = "product_weights";
     
     #endregion
     
@@ -32,9 +33,9 @@ public static class TableName
     
     #endregion
 
-    #region Weight Category
+    #region Weight
 
-    public const string WeightCategory = "weights";
+    public const string Weight = "weights";
 
     #endregion
 }
