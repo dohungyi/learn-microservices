@@ -7,5 +7,5 @@ namespace Catalog.Application.Repositories;
 
 public interface ISupplierWriteOnlyRepository : IEfCoreWriteOnlyRepository<Supplier, IApplicationDbContext>
 {
-    
+    Task<Guid> DeleteSupplierAsync(Supplier supplier, CancellationToken cancellationToken = default);
 }

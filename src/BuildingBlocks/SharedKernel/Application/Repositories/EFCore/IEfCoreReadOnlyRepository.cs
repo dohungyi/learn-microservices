@@ -14,7 +14,7 @@ public interface IEfCoreReadOnlyRepository<TEntity, TDbContext>
     
     Task<List<TEntity>> GetAllCacheAsync(CancellationToken cancellationToken = default);
 
-    Task<TEntity> GetByIdCacheAsync(object id, CancellationToken cancellationToken);
+    Task<TEntity?> GetByIdCacheAsync(object id, CancellationToken cancellationToken);
 
     #endregion
     

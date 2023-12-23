@@ -20,12 +20,13 @@ public static class IQueryableExtensions
     public static async Task<TSource?> FirstOrDefaultIfAsync<TSource>(
         this IQueryable<TSource> source,
         bool condition,
-        Expression<Func<TSource, bool>> predicate)
+        Expression<Func<TSource, bool>> predicate,
+        CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull((object) source, nameof (source));
         ArgumentNullException.ThrowIfNull((object) predicate, nameof (predicate));
         
-        return condition ? await source.FirstOrDefaultAsync(predicate) : default!;
+        return condition ? await source.FirstOrDefaultAsync(predicate, cancellationToken) : default!;
     }
     
     public static IQueryable<TEntity> ApplySort<TEntity>(this IQueryable<TEntity> source, List<SortModel> sortModels)

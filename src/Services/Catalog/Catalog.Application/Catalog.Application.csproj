@@ -9,9 +9,6 @@
     <ItemGroup>
       <Folder Include="Behaviors\" />
       <Folder Include="Enums\" />
-      <Folder Include="Features\VersionOne\Supplier\Command\DeleteMultiple\" />
-      <Folder Include="Features\VersionOne\Supplier\Command\Delete\" />
-      <Folder Include="Features\VersionOne\Supplier\Command\Update\" />
       <Folder Include="Services\" />
     </ItemGroup>
 

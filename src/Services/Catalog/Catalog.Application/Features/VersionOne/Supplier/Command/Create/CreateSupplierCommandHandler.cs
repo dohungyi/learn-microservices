@@ -6,26 +6,43 @@ using Catalog.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using SharedKernel.Application;
+using SharedKernel.Libraries;
+using SharedKernel.Runtime.Exceptions;
 
 namespace Catalog.Application.Features.VersionOne;
 
 public class CreateSupplierCommandHandler : BaseCommandHandler, IRequestHandler<CreateSupplierCommand, SupplierDto>
 {
     private readonly ISupplierWriteOnlyRepository _supplierWriteOnlyRepository;
+    private readonly ISupplierReadOnlyRepository _supplierReadOnlyRepository;
+    private readonly IStringLocalizer<Resources> _localizer;
     private readonly IMapper _mapper;
     
     public CreateSupplierCommandHandler(
         IServiceProvider provider,
         ISupplierWriteOnlyRepository supplierWriteOnlyRepository,
+        ISupplierReadOnlyRepository supplierReadOnlyRepository,
+        IStringLocalizer<Resources> localizer,
         IMapper mapper
         ) : base(provider)
     {
         _supplierWriteOnlyRepository = supplierWriteOnlyRepository;
+        _supplierReadOnlyRepository = supplierReadOnlyRepository;
+        _localizer = localizer;
         _mapper = mapper;
     }
 
     public async Task<SupplierDto> Handle(CreateSupplierCommand request, CancellationToken cancellationToken)
     {
+        request.CreateSupplierDto.Alias = request.CreateSupplierDto.Name.ToUnsignString();
+        
+        var codeDuplicate = await _supplierReadOnlyRepository.IsDuplicate(request.CreateSupplierDto.Name, request.CreateSupplierDto.Name, cancellationToken);
+
+        if (!string.IsNullOrWhiteSpace(codeDuplicate))
+        {
+            throw new BadRequestException(_localizer[codeDuplicate].Value);
+        }
+        
         var supplier = _mapper.Map<Supplier>(request.CreateSupplierDto);
         
         await _supplierWriteOnlyRepository.InsertAsync(supplier, cancellationToken);

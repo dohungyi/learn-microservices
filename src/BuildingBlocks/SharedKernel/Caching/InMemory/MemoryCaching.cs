@@ -96,7 +96,7 @@ public class MemoryCaching : IMemoryCaching
         return true;
     }
 
-    public async Task<T> GetAsync<T>(string key)
+    public async Task<T?> GetAsync<T>(string key)
     {
         if (string.IsNullOrWhiteSpace(key))
         {
@@ -112,7 +112,7 @@ public class MemoryCaching : IMemoryCaching
         return JsonConvert.DeserializeObject<T>(resultRaw);
     }
 
-    public async Task<string> GetStringAsync(string key)
+    public async Task<string?> GetStringAsync(string key)
     {
         if (key is null)
         {

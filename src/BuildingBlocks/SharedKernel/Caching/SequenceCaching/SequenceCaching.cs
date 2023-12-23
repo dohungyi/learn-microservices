@@ -13,7 +13,7 @@ public class SequenceCaching : ISequenceCaching
     
     public TimeSpan DefaultAbsoluteExpireTime => TimeSpan.FromHours(2);
     
-    public async Task<object> GetAsync(string key, CachingType type = CachingType.Couple, CancellationToken cancellationToken = default)
+    public async Task<object?> GetAsync(string key, CachingType type = CachingType.Couple, CancellationToken cancellationToken = default)
     {
         switch (type)
         {
@@ -36,7 +36,7 @@ public class SequenceCaching : ISequenceCaching
         throw new Exception("The caching type is invalid. Please re-check!!!");
     }
 
-    public async Task<T> GetAsync<T>(string key, CachingType type = CachingType.Couple, CancellationToken cancellationToken = default)
+    public async Task<T?> GetAsync<T>(string key, CachingType type = CachingType.Couple, CancellationToken cancellationToken = default)
     {
         switch (type)
         {
@@ -59,7 +59,7 @@ public class SequenceCaching : ISequenceCaching
         throw new Exception("The caching type is invalid. Please re-check!!!");
     }
 
-    public async Task<string> GetStringAsync(string key, CachingType type = CachingType.Couple, CancellationToken cancellationToken = default)
+    public async Task<string?> GetStringAsync(string key, CachingType type = CachingType.Couple, CancellationToken cancellationToken = default)
     {
         switch (type)
         {

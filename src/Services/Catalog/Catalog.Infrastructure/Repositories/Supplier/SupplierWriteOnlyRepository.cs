@@ -16,4 +16,13 @@ public class SupplierWriteOnlyRepository : BaseWriteOnlyRepository<Supplier>, IS
     {
         
     }
+    public async Task<Guid> DeleteSupplierAsync(Supplier supplier, CancellationToken cancellationToken = default)
+    {
+        await DeleteAsync(supplier, cancellationToken);
+        
+        string key = BaseCacheKeys.GetSystemRecordByIdKey(_tableName, supplier.Alias);
+        await _sequenceCaching.RemoveAsync(key, cancellationToken: cancellationToken);
+
+        return supplier.Id;
+    }
 }

@@ -14,4 +14,10 @@
     <data name="supplier_does_not_exist" xml:space="preserve">
         <value>Nhà cung cấp không tồn tại</value>
     </data>
+    <data name="supplier_is_duplicate_code" xml:space="preserve">
+        <value>Mã nhà cung cấp đã tồn tại</value>
+    </data>
+    <data name="supplier_is_duplicate_name" xml:space="preserve">
+        <value>Tên nhà cung cấp đã tồn tại</value>
+    </data>
 </root>

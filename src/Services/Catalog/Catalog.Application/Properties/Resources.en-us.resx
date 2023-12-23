@@ -14,4 +14,10 @@
     <data name="supplier_does_not_exist" xml:space="preserve">
         <value>Supplier does not exist</value>
     </data>
+    <data name="supplier_is_duplicate_code" xml:space="preserve">
+        <value>Supplier with this code already exists</value>
+    </data>
+    <data name="supplier_is_duplicate_name" xml:space="preserve">
+        <value>Supplier with this name already exists</value>
+    </data>
 </root>

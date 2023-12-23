@@ -21,4 +21,64 @@
     <data name="supplier_does_not_exist" xml:space="preserve">
         <value />
     </data>
+    <data name="supplier_is_duplicate_code" xml:space="preserve">
+        <value />
+    </data>
+    <data name="supplier_is_duplicate_name" xml:space="preserve">
+        <value />
+    </data>
+    <data name="supplier_code_required" xml:space="preserve">
+        <value />
+    </data>
+    <data name="supplier_code_max_length_50" xml:space="preserve">
+        <value />
+    </data>
+    <data name="supplier_name_required" xml:space="preserve">
+        <value />
+    </data>
+    <data name="supplier_name_max_length_255" xml:space="preserve">
+        <value />
+    </data>
+    <data name="supplier_delegate_required" xml:space="preserve">
+        <value />
+    </data>
+    <data name="supplier_delegate_max_length_50" xml:space="preserve">
+        <value />
+    </data>
+    <data name="supplier_bank_max_length_50" xml:space="preserve">
+        <value />
+    </data>
+    <data name="account_number_max_length_50" xml:space="preserve">
+        <value />
+    </data>
+    <data name="bank_max_length_50" xml:space="preserve">
+        <value />
+    </data>
+    <data name="bank_address_max_length_255" xml:space="preserve">
+        <value />
+    </data>
+    <data name="supplier_address_required" xml:space="preserve">
+        <value />
+    </data>
+    <data name="supplier_address_max_length_255" xml:space="preserve">
+        <value />
+    </data>
+    <data name="phone_required" xml:space="preserve">
+        <value />
+    </data>
+    <data name="phone_max_length_20" xml:space="preserve">
+        <value />
+    </data>
+    <data name="fax_max_length_50" xml:space="preserve">
+        <value />
+    </data>
+    <data name="nation_code_max_length_10" xml:space="preserve">
+        <value />
+    </data>
+    <data name="province_code_max_length_10" xml:space="preserve">
+        <value />
+    </data>
+    <data name="district_code_max_length_10" xml:space="preserve">
+        <value />
+    </data>
 </root>

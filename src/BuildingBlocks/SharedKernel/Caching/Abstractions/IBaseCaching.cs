@@ -14,9 +14,9 @@ public interface IBaseCaching
     
     Task<bool> DeleteByPatternAsync(string pattern);
     
-    Task<T> GetAsync<T>(string key);
+    Task<T?> GetAsync<T>(string key);
     
-    Task<string> GetStringAsync(string key);
+    Task<string?> GetStringAsync(string key);
     
     Task<bool> ReplaceAsync(string key, object value);
 }

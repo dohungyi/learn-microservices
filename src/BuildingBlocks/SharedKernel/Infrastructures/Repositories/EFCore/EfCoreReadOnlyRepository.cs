@@ -103,7 +103,7 @@ public class EfCoreReadOnlyRepository<TEntity, TDbContext> : IEfCoreReadOnlyRepo
         return await _sequenceCaching.GetAsync<List<TEntity>>(key, cancellationToken: cancellationToken);
     }
     
-    public virtual async Task<TEntity> GetByIdCacheAsync(object id, CancellationToken cancellationToken)
+    public virtual async Task<TEntity?> GetByIdCacheAsync(object id, CancellationToken cancellationToken)
     {
         string key = BaseCacheKeys.GetSystemRecordByIdKey(_tableName, id);
         

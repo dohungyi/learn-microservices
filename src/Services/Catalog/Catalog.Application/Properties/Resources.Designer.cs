@@ -62,9 +62,189 @@ namespace Catalog.Application.Properties {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        internal static string account_number_max_length_50 {
+            get {
+                return ResourceManager.GetString("account_number_max_length_50", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string bank_address_max_length_255 {
+            get {
+                return ResourceManager.GetString("bank_address_max_length_255", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string bank_max_length_50 {
+            get {
+                return ResourceManager.GetString("bank_max_length_50", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string district_code_max_length_10 {
+            get {
+                return ResourceManager.GetString("district_code_max_length_10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string fax_max_length_50 {
+            get {
+                return ResourceManager.GetString("fax_max_length_50", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string nation_code_max_length_10 {
+            get {
+                return ResourceManager.GetString("nation_code_max_length_10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string phone_max_length_20 {
+            get {
+                return ResourceManager.GetString("phone_max_length_20", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string phone_required {
+            get {
+                return ResourceManager.GetString("phone_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string province_code_max_length_10 {
+            get {
+                return ResourceManager.GetString("province_code_max_length_10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string supplier_address_max_length_255 {
+            get {
+                return ResourceManager.GetString("supplier_address_max_length_255", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string supplier_address_required {
+            get {
+                return ResourceManager.GetString("supplier_address_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string supplier_bank_max_length_50 {
+            get {
+                return ResourceManager.GetString("supplier_bank_max_length_50", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string supplier_code_max_length_50 {
+            get {
+                return ResourceManager.GetString("supplier_code_max_length_50", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string supplier_code_required {
+            get {
+                return ResourceManager.GetString("supplier_code_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string supplier_delegate_max_length_50 {
+            get {
+                return ResourceManager.GetString("supplier_delegate_max_length_50", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string supplier_delegate_required {
+            get {
+                return ResourceManager.GetString("supplier_delegate_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         internal static string supplier_does_not_exist {
             get {
                 return ResourceManager.GetString("supplier_does_not_exist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string supplier_is_duplicate_code {
+            get {
+                return ResourceManager.GetString("supplier_is_duplicate_code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string supplier_is_duplicate_name {
+            get {
+                return ResourceManager.GetString("supplier_is_duplicate_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string supplier_name_max_length_255 {
+            get {
+                return ResourceManager.GetString("supplier_name_max_length_255", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string supplier_name_required {
+            get {
+                return ResourceManager.GetString("supplier_name_required", resourceCulture);
             }
         }
     }

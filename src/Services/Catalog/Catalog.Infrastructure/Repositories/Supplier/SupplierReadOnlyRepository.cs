@@ -22,6 +22,23 @@ public class SupplierReadOnlyRepository : BaseReadOnlyRepository<Supplier>, ISup
         
     }
 
+    public async Task<string> IsDuplicate(string code, string name, CancellationToken cancellationToken = default)
+    {
+        var duplicateSupplier = await _dbSet.FirstOrDefaultAsync(e => e.Code == code || e.Name == name, cancellationToken);
+
+        if (duplicateSupplier?.Code == code)
+        {
+            return "supplier_is_duplicate_code";
+        }
+        
+        if (duplicateSupplier?.Name == code)
+        {
+            return "supplier_is_duplicate_name";
+        }
+        
+        return "";
+    }
+
     public async Task<IPagedList<SupplierDto>> PagingAllAsync(PagingRequest request, CancellationToken cancellationToken = default)
     {
         var mapper = _provider.GetRequiredService<IMapper>();
@@ -40,13 +57,23 @@ public class SupplierReadOnlyRepository : BaseReadOnlyRepository<Supplier>, ISup
         return result;
     }
 
-    public async Task<Supplier?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Supplier?> GetByAliasWithCachingAsync(string alias, CancellationToken cancellationToken = default)
     {
-        return await GetByIdWithCachingAsync(id, cancellationToken);
-    }
+        string key = BaseCacheKeys.GetSystemRecordByIdKey(_tableName, alias);
+        
+        var cacheResult = await _sequenceCaching.GetAsync<Supplier>(key, cancellationToken: cancellationToken);
+        if (cacheResult is not null)
+        {
+            return cacheResult;
+        }
+        
+        var supplier = await _dbSet.FirstOrDefaultIfAsync(!string.IsNullOrEmpty(alias), e => e.Alias == alias, cancellationToken);
 
-    public async Task<Supplier?> GetByAliasAsync(string alias, CancellationToken cancellationToken = default)
-    {
-        return await _dbSet.FirstOrDefaultIfAsync(!string.IsNullOrEmpty(alias), e => e.Alias == alias);
+        if (supplier is not null)
+        {
+            await _sequenceCaching.SetAsync(key, supplier, cancellationToken: cancellationToken);
+        }
+
+        return supplier;
     }
 }

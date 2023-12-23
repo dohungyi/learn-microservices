@@ -10,7 +10,14 @@ using SharedKernel.Configure;
 using SharedKernel.Core;
 using SharedKernel.Filters;
 
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
+
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Information($"Start {builder.Environment.ApplicationName} up");
 
 var services = builder.Services;
 var configuration = builder.Configuration;
@@ -80,9 +87,12 @@ try
     
     app.Run();
 }
-catch (Exception exception)
+catch (Exception ex)
 {
-    throw exception;
+    string type = ex.GetType().Name;
+    if (type.Equals("StopTheHostException", StringComparison.Ordinal)) throw;
+
+    Log.Fatal(ex, $"Unhandled exception: {ex.Message}");
 }
 finally
 {
