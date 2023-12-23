@@ -9,7 +9,7 @@ public class SupplierConfiguration : BaseEntityConfiguration<Supplier>
     public override void Configure(EntityTypeBuilder<Supplier> builder)
     {
         base.Configure(builder);
-
+        
         #region Indexes
 
         builder

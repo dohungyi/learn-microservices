@@ -36,7 +36,7 @@ public class CreateSupplierCommandHandler : BaseCommandHandler, IRequestHandler<
     {
         request.CreateSupplierDto.Alias = request.CreateSupplierDto.Name.ToUnsignString();
         
-        var codeDuplicate = await _supplierReadOnlyRepository.IsDuplicate(request.CreateSupplierDto.Name, request.CreateSupplierDto.Name, cancellationToken);
+        var codeDuplicate = await _supplierReadOnlyRepository.IsDuplicate(request.CreateSupplierDto.Code, request.CreateSupplierDto.Name, cancellationToken);
 
         if (!string.IsNullOrWhiteSpace(codeDuplicate))
         {

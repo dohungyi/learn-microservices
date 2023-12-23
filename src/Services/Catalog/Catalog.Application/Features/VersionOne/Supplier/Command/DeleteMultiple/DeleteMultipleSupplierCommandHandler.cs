@@ -29,7 +29,6 @@ public class DeleteMultipleSupplierCommandHandler : BaseCommandHandler, IRequest
         var suppliers = await _supplierReadOnlyRepository.GetSupplierByIdsAsync(request.SupplierIds, cancellationToken);
 
         var isMissing = suppliers is null || !suppliers.Any() || request.SupplierIds.Except(suppliers.Select(e => e.Id)).Any();
-        
         if (isMissing)
         {
             throw new BadRequestException(_localizer["supplier_list_id_is_invalid"].Value);

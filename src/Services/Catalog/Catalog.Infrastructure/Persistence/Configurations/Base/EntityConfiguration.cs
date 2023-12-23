@@ -12,5 +12,6 @@ public class EntityConfiguration<TEntity> : IEntityTypeConfiguration<TEntity> wh
             .Property(e => e.IsDeleted)
             .HasDefaultValue(false)
             .IsRequired(false);
+        
     }
 }

@@ -37,7 +37,7 @@ public class SupplierReadOnlyRepository : BaseReadOnlyRepository<Supplier>, ISup
             return "supplier_is_duplicate_code";
         }
         
-        if (duplicateSupplier?.Name == code)
+        if (duplicateSupplier?.Name == name)
         {
             return "supplier_is_duplicate_name";
         }

@@ -1,5 +1,6 @@
 ﻿using Catalog.Application.Persistence;
 using Catalog.Domain.Entities;
+using Catalog.Infrastructure.Persistence.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Catalog.Infrastructure.Persistence;
@@ -62,5 +63,50 @@ public class ApplicationDbContext : AppDbContext, IApplicationDbContext
     #endregion
     
     #endregion
-    
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    { 
+        var modified = ChangeTracker.Entries()
+            .Where(e => e.State == EntityState.Modified ||
+                        e.State == EntityState.Added ||
+                        e.State == EntityState.Deleted);
+
+        foreach (var item in modified)
+        {
+            switch (item.State)
+            {
+                case EntityState.Added:
+                {
+                    break;
+                }
+                case EntityState.Modified:
+                {
+                    Entry(item.Entity).Property("Id").IsModified = false;
+                    break;
+                }
+                case EntityState.Deleted:
+                {
+                    if (item.Entity is IAuditable)
+                    {
+                        item.State = EntityState.Modified;
+                    }
+                    break; 
+                }
+            }
+        }
+
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        var entityTypes = builder.Model.GetEntityTypes();
+        foreach (var entityType in entityTypes)
+        {
+            if (typeof(IBaseEntity).IsAssignableFrom(entityType.ClrType))
+                builder.SetSoftDeleteFilter(entityType.ClrType);
+        }
+        
+        base.OnModelCreating(builder);
+    }
 }

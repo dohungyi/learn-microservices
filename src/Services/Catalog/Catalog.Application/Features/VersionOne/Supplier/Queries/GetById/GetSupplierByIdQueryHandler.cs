@@ -27,7 +27,7 @@ public class GetSupplierByIdQueryHandler : BaseQueryHandler, IRequestHandler<Get
 
     public async Task<SupplierDto> Handle(GetSupplierByIdQuery request, CancellationToken cancellationToken)
     {
-        var supplier = await _supplierReadOnlyRepository.GetByIdCacheAsync(request.SupplierId, cancellationToken);
+        var supplier = await _supplierReadOnlyRepository.GetByIdWithCachingAsync(request.SupplierId, cancellationToken);
         if (supplier is null)
         {
             throw new BadRequestException(_localizer["supplier_does_not_exist"].Value);

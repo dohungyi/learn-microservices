@@ -34,7 +34,8 @@ public class UpdateSupplierCommandHandler : BaseCommandHandler, IRequestHandler<
             throw new BadRequestException(_localizer["supplier_does_not_exist"].Value);
         }
         
-        supplier = _mapper.Map<Supplier>(request.SupplierDto);
+        supplier = _mapper.Map(request.SupplierDto, supplier);
+        supplier.Id = request.SupplierId;
         
         await _supplierWriteOnlyRepository.UpdateSupplierAsync(supplier, cancellationToken);
         await _supplierWriteOnlyRepository.UnitOfWork.CommitAsync(cancellationToken);

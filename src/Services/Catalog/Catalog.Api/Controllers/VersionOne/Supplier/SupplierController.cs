@@ -27,8 +27,8 @@ public class SupplierController : BaseController
     }
     
     [AllowAnonymous]
-    [HttpGet("paging")]
-    public async Task<IActionResult> GetPagingAsync([FromQuery]PagingRequest pagingRequest, CancellationToken cancellationToken = default)
+    [HttpPost("paging")]
+    public async Task<IActionResult> GetPagingAsync([FromBody]PagingRequest pagingRequest, CancellationToken cancellationToken = default)
     {
         var result = await Mediator.Send(new GetSupplierPagingQuery(pagingRequest), cancellationToken);
         return Ok(new ApiSimpleResult(result));

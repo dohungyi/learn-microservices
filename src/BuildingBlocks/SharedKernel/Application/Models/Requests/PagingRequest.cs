@@ -1,4 +1,6 @@
-﻿using SharedKernel.Runtime.Exceptions;
+﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using SharedKernel.Runtime.Exceptions;
 
 namespace SharedKernel.Application
 {
@@ -64,7 +66,6 @@ namespace SharedKernel.Application
         public Filter Filter { get; set; }
 
         public string SearchString { get; set; } = string.Empty;
-        
         public List<SortModel> Sorts { get; set; } = new List<SortModel>();
 
         public PagingRequest(int page, int size)

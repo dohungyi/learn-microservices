@@ -8,13 +8,15 @@ public class BaseEntityConfiguration<TEntity> : IEntityTypeConfiguration<TEntity
 {
     public virtual void Configure(EntityTypeBuilder<TEntity> builder)
     {
+        builder.HasQueryFilter(x => !x.IsDeleted);
+        
         builder
             .HasKey(e => e.Id);
 
         builder
             .Property(e => e.CreatedBy)
             .HasMaxLength(255)
-            .IsRequired();
+            .IsRequired(false);
         
         builder
             .Property(e => e.LastModifiedBy)

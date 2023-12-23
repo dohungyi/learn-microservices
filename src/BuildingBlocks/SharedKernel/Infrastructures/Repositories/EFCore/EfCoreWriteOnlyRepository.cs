@@ -6,6 +6,7 @@ using SharedKernel.Auth;
 using SharedKernel.Domain;
 using SharedKernel.Libraries;
 using SharedKernel.Persistence;
+using SharedKernel.Runtime.Exceptions;
 using SharedKernel.UnitOfWork;
 
 namespace SharedKernel.Infrastructures.Repositories;
@@ -126,6 +127,7 @@ public class EfCoreWriteOnlyRepository<TEntity,TDbContext>
         {
             entity.DeletedDate = DateHelper.Now;
             entity.DeletedBy = _currentUser.Context.OwnerId;
+            entity.IsDeleted = true;
         }
     }
     protected virtual async Task ClearCacheWhenChangesAsync(List<object> ids, CancellationToken cancellationToken = default)
