@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
+using Catalog.Application.Behaviors;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,6 +27,7 @@ public static class ConfigureServices
 
         // Pipelines
         services.AddCoreBehaviors();
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
         
         return services;
     }

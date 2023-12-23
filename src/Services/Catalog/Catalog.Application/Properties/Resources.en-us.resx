@@ -20,4 +20,55 @@
     <data name="supplier_is_duplicate_name" xml:space="preserve">
         <value>Supplier with this name already exists</value>
     </data>
+    <data name="phone_max_length_20" xml:space="preserve">
+        <value>Phone number must not exceed 20 characters</value>
+    </data>
+    <data name="fax_max_length_50" xml:space="preserve">
+        <value>Fax number must not exceed 50 characters</value>
+    </data>
+    <data name="district_code_max_length_10" xml:space="preserve">
+        <value>District code must not exceed 10 characters</value>
+    </data>
+    <data name="bank_max_length_50" xml:space="preserve">
+        <value>Bank name must not exceed 50 characters</value>
+    </data>
+    <data name="bank_address_max_length_255" xml:space="preserve">
+        <value>Bank address must not exceed 255 characters</value>
+    </data>
+    <data name="account_number_max_length_50" xml:space="preserve">
+        <value>Account number must not exceed 50 characters</value>
+    </data>
+    <data name="province_code_max_length_10" xml:space="preserve">
+        <value>Province code must not exceed 10 characters</value>
+    </data>
+    <data name="nation_code_max_length_10" xml:space="preserve">
+        <value>Nation code must not exceed 10 characters</value>
+    </data>
+    <data name="phone_required" xml:space="preserve">
+        <value>Phone number is required</value>
+    </data>
+    <data name="supplier_code_max_length_50" xml:space="preserve">
+        <value>Supplier code must not exceed 50 characters</value>
+    </data>
+    <data name="supplier_address_required" xml:space="preserve">
+        <value>Supplier address is required</value>
+    </data>
+    <data name="supplier_address_max_length_255" xml:space="preserve">
+        <value>Supplier address must not exceed 255 characters</value>
+    </data>
+    <data name="supplier_code_required" xml:space="preserve">
+        <value>Supplier code is required</value>
+    </data>
+    <data name="supplier_delegate_required" xml:space="preserve">
+        <value>Supplier delegate is required</value>
+    </data>
+    <data name="supplier_delegate_max_length_50" xml:space="preserve">
+        <value>Supplier delegate must not exceed 50 characters</value>
+    </data>
+    <data name="supplier_name_required" xml:space="preserve">
+        <value>Supplier name is required</value>
+    </data>
+    <data name="supplier_name_max_length_255" xml:space="preserve">
+        <value>Supplier name must not exceed 255 characters</value>
+    </data>
 </root>

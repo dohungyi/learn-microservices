@@ -45,9 +45,6 @@
     <data name="supplier_delegate_max_length_50" xml:space="preserve">
         <value />
     </data>
-    <data name="supplier_bank_max_length_50" xml:space="preserve">
-        <value />
-    </data>
     <data name="account_number_max_length_50" xml:space="preserve">
         <value />
     </data>

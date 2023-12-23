@@ -161,15 +161,6 @@ namespace Catalog.Application.Properties {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string supplier_bank_max_length_50 {
-            get {
-                return ResourceManager.GetString("supplier_bank_max_length_50", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
         internal static string supplier_code_max_length_50 {
             get {
                 return ResourceManager.GetString("supplier_code_max_length_50", resourceCulture);

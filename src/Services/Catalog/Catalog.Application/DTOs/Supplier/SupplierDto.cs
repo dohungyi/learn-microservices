@@ -24,5 +24,4 @@ public class SupplierDto : IMapFrom<Supplier>
     public string ProvinceCode { get; set; }
     public string DistrictCode { get; set; }
     public bool Status { get; set; }
-    public bool IsDeleted { get; set; }
 }

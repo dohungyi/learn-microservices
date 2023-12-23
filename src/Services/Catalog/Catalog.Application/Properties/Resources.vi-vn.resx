@@ -20,4 +20,55 @@
     <data name="supplier_is_duplicate_name" xml:space="preserve">
         <value>Tên nhà cung cấp đã tồn tại</value>
     </data>
+    <data name="phone_max_length_20" xml:space="preserve">
+        <value>Số điện thoại không vượt quá 20 ký tự</value>
+    </data>
+    <data name="fax_max_length_50" xml:space="preserve">
+        <value>Số fax không vượt quá 50 ký tự</value>
+    </data>
+    <data name="district_code_max_length_10" xml:space="preserve">
+        <value>Mã quận/huyện không vượt quá 10 ký tự</value>
+    </data>
+    <data name="bank_max_length_50" xml:space="preserve">
+        <value>Tên ngân hàng không vượt quá 50 ký tự</value>
+    </data>
+    <data name="bank_address_max_length_255" xml:space="preserve">
+        <value>Địa chỉ ngân hàng không vượt quá 255 ký tự</value>
+    </data>
+    <data name="account_number_max_length_50" xml:space="preserve">
+        <value>Số tài khoản không vượt quá 50 ký tự</value>
+    </data>
+    <data name="province_code_max_length_10" xml:space="preserve">
+        <value>Mã tỉnh/thành phố không vượt quá 10 ký tự</value>
+    </data>
+    <data name="nation_code_max_length_10" xml:space="preserve">
+        <value>Mã quốc gia không vượt quá 10 ký tự</value>
+    </data>
+    <data name="phone_required" xml:space="preserve">
+        <value>Số điện thoại là bắt buộc</value>
+    </data>
+    <data name="supplier_code_max_length_50" xml:space="preserve">
+        <value>Mã nhà cung cấp không vượt quá 50 ký tự</value>
+    </data>
+    <data name="supplier_address_required" xml:space="preserve">
+        <value>Địa chỉ nhà cung cấp là bắt buộc</value>
+    </data>
+    <data name="supplier_address_max_length_255" xml:space="preserve">
+        <value>Địa chỉ nhà cung cấp không vượt quá 255 ký tự</value>
+    </data>
+    <data name="supplier_code_required" xml:space="preserve">
+        <value>Mã nhà cung cấp là bắt buộc</value>
+    </data>
+    <data name="supplier_delegate_required" xml:space="preserve">
+        <value>Tên đại diện nhà cung cấp là bắt buộc</value>
+    </data>
+    <data name="supplier_delegate_max_length_50" xml:space="preserve">
+        <value>Tên đại diện nhà cung cấp không vượt quá 50 ký tự</value>
+    </data>
+    <data name="supplier_name_required" xml:space="preserve">
+        <value>Tên nhà cung cấp là bắt buộc</value>
+    </data>
+    <data name="supplier_name_max_length_255" xml:space="preserve">
+        <value>Tên nhà cung cấp không vượt quá 255 ký tự</value>
+    </data>
 </root>

@@ -1,12 +1,19 @@
 using System.IO.Compression;
+using System.Net;
+using System.Reflection;
+using System.Text.Json;
 using Catalog.Api.ControllerFilters;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using SharedKernel.Application;
 using SharedKernel.Configure;
 using ZymLabs.NSwag.FluentValidation;
 
@@ -66,6 +73,7 @@ public static class ServiceExtensions
                     NamingStrategy = new CamelCaseNamingStrategy()
                 };
             });
+        
         
         services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
         
