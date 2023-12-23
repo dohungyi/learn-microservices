@@ -1,8 +1,10 @@
+using AutoMapper;
 using Catalog.Application.Mappings;
 using Catalog.Application.Properties;
 using Catalog.Domain.Entities;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
+using SharedKernel.Libraries;
 
 namespace Catalog.Application.DTOs;
 
@@ -24,6 +26,12 @@ public class UpdateSupplierDto : IMapFrom<Supplier>
     public string ProvinceCode { get; set; }
     public string DistrictCode { get; set; }
     public bool Status { get; set; } = true;
+
+    public void Mapping(Profile profile)
+    {
+        profile.CreateMap<UpdateSupplierDto, Supplier>()
+            .IgnoreAllNonExisting();
+    }
 }
 
 public class UpdateSupplierDtoValidator : AbstractValidator<UpdateSupplierDto>

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections;
+using AutoMapper;
 using Caching;
 using Catalog.Application.DTOs;
 using Catalog.Application.Repositories;
@@ -20,6 +21,11 @@ public class SupplierReadOnlyRepository : BaseReadOnlyRepository<Supplier>, ISup
         ) : base(dbContext, currentUser, sequenceCaching, provider)
     {
         
+    }
+
+    public async Task<IList<Supplier>> GetSupplierByIdsAsync(IList<Guid> supplierIds, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet.Where(e => supplierIds.Contains(e.Id)).ToListAsync(cancellationToken);
     }
 
     public async Task<string> IsDuplicate(string code, string name, CancellationToken cancellationToken = default)

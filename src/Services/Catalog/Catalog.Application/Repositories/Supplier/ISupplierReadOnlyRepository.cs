@@ -1,3 +1,4 @@
+using System.Collections;
 using Catalog.Application.DTOs;
 using Catalog.Application.Persistence;
 using Catalog.Domain.Entities;
@@ -8,6 +9,8 @@ namespace Catalog.Application.Repositories;
 
 public interface ISupplierReadOnlyRepository :  IEfCoreReadOnlyRepository<Supplier, IApplicationDbContext>
 {
+    Task<IList<Supplier>> GetSupplierByIdsAsync(IList<Guid> supplierIds, CancellationToken cancellationToken = default);
+    
     Task<string> IsDuplicate(string code, string name, CancellationToken cancellationToken = default);
     
     Task<IPagedList<SupplierDto>> PagingAllAsync(PagingRequest request, CancellationToken cancellationToken = default);

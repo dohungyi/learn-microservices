@@ -12,5 +12,7 @@ public interface ISequenceCaching
 
     Task SetAsync(string key, object value, TimeSpan? absoluteExpireTime = null,  bool keepTtl = false, CachingType onlyUseType = CachingType.Couple, CancellationToken cancellationToken = default);
 
-    Task RemoveAsync(string key, CachingType type = CachingType.Couple, CancellationToken cancellationToken = default);
+    Task DeleteAsync(string key, CachingType type = CachingType.Couple, CancellationToken cancellationToken = default);
+
+    Task DeleteByPatternAsync(string pattern, CachingType type = CachingType.Couple, CancellationToken cancellationToken = default);
 }

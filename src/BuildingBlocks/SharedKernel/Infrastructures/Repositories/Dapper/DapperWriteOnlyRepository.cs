@@ -235,14 +235,14 @@ namespace SharedKernel.Infrastructures
         {
             var tasks = new List<Task>();
             var fullRecordKey = BaseCacheKeys.GetSystemFullRecordsKey(_tableName);
-            tasks.Add(_sequenceCaching.RemoveAsync(fullRecordKey, cancellationToken: cancellationToken));
+            tasks.Add(_sequenceCaching.DeleteAsync(fullRecordKey, cancellationToken: cancellationToken));
 
             if (ids != null && ids.Any())
             {
                 foreach (var id in ids)
                 {
                     var recordByIdKey = BaseCacheKeys.GetSystemRecordByIdKey(_tableName, id);
-                    tasks.Add(_sequenceCaching.RemoveAsync(recordByIdKey, cancellationToken: cancellationToken));
+                    tasks.Add(_sequenceCaching.DeleteAsync(recordByIdKey, cancellationToken: cancellationToken));
                 }
             }
             await Task.WhenAll(tasks);

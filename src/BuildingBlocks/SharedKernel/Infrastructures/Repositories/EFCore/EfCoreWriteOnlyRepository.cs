@@ -131,15 +131,15 @@ public class EfCoreWriteOnlyRepository<TEntity,TDbContext>
     protected virtual async Task ClearCacheWhenChangesAsync(List<object> ids, CancellationToken cancellationToken = default)
     {
         var tasks = new List<Task>();
-        var fullRecordKey = BaseCacheKeys.GetSystemFullRecordsKey(nameof(TEntity));
-        tasks.Add(_sequenceCaching.RemoveAsync(fullRecordKey, cancellationToken: cancellationToken));
+        var fullRecordKey = BaseCacheKeys.GetSystemFullRecordsKey(_tableName);
+        tasks.Add(_sequenceCaching.DeleteAsync(fullRecordKey, cancellationToken: cancellationToken));
 
         if (ids is not null && ids.Any())
         {
             foreach (var id in ids)
             {
                 var recordByIdKey = BaseCacheKeys.GetSystemRecordByIdKey(_tableName, id);
-                tasks.Add(_sequenceCaching.RemoveAsync(recordByIdKey, cancellationToken: cancellationToken));
+                tasks.Add(_sequenceCaching.DeleteAsync(recordByIdKey, cancellationToken: cancellationToken));
             }
         }
         

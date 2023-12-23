@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Catalog.Application.DTOs;
 using Catalog.Application.Features.VersionOne;
 using Microsoft.AspNetCore.Authorization;
@@ -10,7 +11,7 @@ namespace Catalog.Api.Controllers.VersionOne;
 public class SupplierController : BaseController
 {
     [AllowAnonymous]
-    [HttpGet("get-by-id/{id}")]
+    [HttpGet("get-by-id/{id:guid}")]
     public async Task<IActionResult> GetByIdAsync([FromRoute(Name = "id")]Guid supplierId, CancellationToken cancellationToken = default)
     {
         var result = await Mediator.Send(new GetSupplierByIdQuery(supplierId), cancellationToken);
@@ -34,10 +35,34 @@ public class SupplierController : BaseController
     }
     
     [AllowAnonymous]
-    [HttpPost("create-supplier")]
+    [HttpPost("create")]
     public async Task<IActionResult> CreateAsync([FromBody]CreateSupplierDto supplierDto, CancellationToken cancellationToken = default)
     {
         var result = await Mediator.Send(new CreateSupplierCommand(supplierDto), cancellationToken);
+        return Ok(new ApiSimpleResult(result));
+    }
+    
+    [AllowAnonymous]
+    [HttpPut("update/{id:guid}")]
+    public async Task<IActionResult> UpdateAsync([FromRoute(Name = "id")]Guid supplierId, [FromBody]UpdateSupplierDto supplierDto, CancellationToken cancellationToken = default)
+    {
+        var result = await Mediator.Send(new UpdateSupplierCommand(supplierDto, supplierId), cancellationToken);
+        return Ok(new ApiSimpleResult(result));
+    }
+    
+    [AllowAnonymous]
+    [HttpDelete("delete/{id:guid}")]
+    public async Task<IActionResult> DeleteAsync([FromRoute(Name = "id")]Guid supplierId, CancellationToken cancellationToken = default)
+    {
+        var result = await Mediator.Send(new DeleteSupplierCommand(supplierId), cancellationToken);
+        return Ok(new ApiSimpleResult(result));
+    }
+    
+    [AllowAnonymous]
+    [HttpDelete("delete-multiple")]
+    public async Task<IActionResult> DeleteMultipleAsync([FromBody]IList<Guid> supplierIds, CancellationToken cancellationToken = default)
+    {
+        var result = await Mediator.Send(new DeleteMultipleSupplierCommand(supplierIds), cancellationToken);
         return Ok(new ApiSimpleResult(result));
     }
     

@@ -99,8 +99,26 @@ public class SequenceCaching : ISequenceCaching
         }
         throw new Exception("The caching type is invalid. Please re-check!!!");
     }
+    
+    public async Task DeleteByPatternAsync(string pattern, CachingType type = CachingType.Couple, CancellationToken cancellationToken = default)
+    {
+        switch (type)
+        {
+            case CachingType.Couple:
+                await _memCaching.DeleteByPatternAsync(pattern);
+                await _redisCaching.DeleteByPatternAsync(pattern);
+                return;
+            case CachingType.Memory:
+                await _memCaching.DeleteByPatternAsync(pattern);
+                return;
+            case CachingType.Redis:
+                await _redisCaching.DeleteByPatternAsync(pattern);
+                return;
+        }
+        throw new Exception("The caching type is invalid. Please re-check!!!");
+    }
 
-    public async Task RemoveAsync(string key, CachingType type = CachingType.Couple, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(string key, CachingType type = CachingType.Couple, CancellationToken cancellationToken = default)
     {
         switch (type)
         {

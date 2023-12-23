@@ -31,9 +31,9 @@ public class DeleteSupplierCommandHandler : BaseCommandHandler, IRequestHandler<
             throw new BadRequestException(_localizer["supplier_does_not_exist"].Value);
         }
 
-        var result = await _supplierWriteOnlyRepository.DeleteSupplierAsync(supplier, cancellationToken);
+        await _supplierWriteOnlyRepository.DeleteSupplierAsync(supplier, cancellationToken);
         await _supplierWriteOnlyRepository.UnitOfWork.CommitAsync(cancellationToken);
 
-        return result;
+        return request.SupplierId;
     }
 }
