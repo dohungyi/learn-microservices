@@ -7,7 +7,7 @@ namespace Catalog.Application.Features.VersionOne;
 [AuthorizationRequest(new ActionExponent[] { ActionExponent.AllowAnonymous })]
 public class DeleteSupplierCommand : BaseDeleteCommand<object>
 {
-    public Guid SupplierId { get; init; }
+    public string SupplierId { get; init; }
 
-    public DeleteSupplierCommand(Guid supplierId) => SupplierId = supplierId;
+    public DeleteSupplierCommand(string supplierId) => SupplierId = supplierId;
 }

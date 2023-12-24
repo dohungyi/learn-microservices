@@ -27,10 +27,15 @@ public class GetSupplierByIdQueryHandler : BaseQueryHandler, IRequestHandler<Get
 
     public async Task<SupplierDto> Handle(GetSupplierByIdQuery request, CancellationToken cancellationToken)
     {
-        var supplier = await _supplierReadOnlyRepository.GetByIdWithCachingAsync(request.SupplierId, cancellationToken);
+        if (!Guid.TryParse(request.SupplierId, out var supplierId))
+        {
+            throw new BadRequestException(_localizer["supplier_id_is_invalid"]);
+        }
+        
+        var supplier = await _supplierReadOnlyRepository.GetByIdWithCachingAsync(supplierId, cancellationToken);
         if (supplier is null)
         {
-            throw new BadRequestException(_localizer["supplier_does_not_exist"].Value);
+            throw new BadRequestException(_localizer["supplier_does_not_exist_or_was_deleted"].Value);
         }
 
         var supplierDto = _mapper.Map<SupplierDto>(supplier);

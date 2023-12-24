@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq.Expressions;
 using AutoMapper;
 using Caching;
 using Catalog.Application.DTOs;
@@ -28,21 +29,26 @@ public class SupplierReadOnlyRepository : BaseReadOnlyRepository<Supplier>, ISup
         return await _dbSet.Where(e => supplierIds.Contains(e.Id)).ToListAsync(cancellationToken);
     }
 
-    public async Task<string> IsDuplicate(string code, string name, CancellationToken cancellationToken = default)
+    public async Task<string> IsDuplicate(Guid? id, string code, string name, CancellationToken cancellationToken = default)
     {
-        var duplicateSupplier = await _dbSet.FirstOrDefaultAsync(e => e.Code == code || e.Name == name, cancellationToken);
+        var duplicateSupplier = await _dbSet.FirstOrDefaultAsync(e => (id == null || e.Id != id) && (e.Code == code || e.Name == name), cancellationToken);
 
-        if (duplicateSupplier?.Code == code)
+        if (duplicateSupplier is null)
+        {
+            return string.Empty;
+        }
+        
+        if (duplicateSupplier.Code == code)
         {
             return "supplier_is_duplicate_code";
         }
         
-        if (duplicateSupplier?.Name == name)
+        if (duplicateSupplier.Name == name)
         {
             return "supplier_is_duplicate_name";
         }
         
-        return "";
+        return string.Empty;;
     }
 
     public async Task<IPagedList<SupplierDto>> PagingAllAsync(PagingRequest request, CancellationToken cancellationToken = default)

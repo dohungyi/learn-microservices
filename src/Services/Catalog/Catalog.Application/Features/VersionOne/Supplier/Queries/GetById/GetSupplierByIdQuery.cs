@@ -8,7 +8,7 @@ namespace Catalog.Application.Features.VersionOne;
 [AuthorizationRequest(new ActionExponent[] { ActionExponent.AllowAnonymous })]
 public class GetSupplierByIdQuery : BaseQuery<SupplierDto>
 {
-    public Guid SupplierId { get; init; }
+    public string SupplierId { get; init; }
 
-    public GetSupplierByIdQuery(Guid supplierId) => SupplierId = supplierId;
+    public GetSupplierByIdQuery(string supplierId) => SupplierId = supplierId;
 }

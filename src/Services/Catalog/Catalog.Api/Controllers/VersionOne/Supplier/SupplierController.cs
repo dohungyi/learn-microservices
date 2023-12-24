@@ -11,8 +11,8 @@ namespace Catalog.Api.Controllers.VersionOne;
 public class SupplierController : BaseController
 {
     [AllowAnonymous]
-    [HttpGet("get-by-id/{id:guid}")]
-    public async Task<IActionResult> GetByIdAsync([FromRoute(Name = "id")]Guid supplierId, CancellationToken cancellationToken = default)
+    [HttpGet("get-by-id/{id}")]
+    public async Task<IActionResult> GetByIdAsync([FromRoute(Name = "id")]string supplierId, CancellationToken cancellationToken = default)
     {
         var result = await Mediator.Send(new GetSupplierByIdQuery(supplierId), cancellationToken);
         return Ok(new ApiSimpleResult(result));
@@ -36,23 +36,27 @@ public class SupplierController : BaseController
     
     [AllowAnonymous]
     [HttpPost("create")]
-    public async Task<IActionResult> CreateAsync([FromBody]CreateSupplierDto supplierDto, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> CreateAsync([FromBody]CreateSupplierCommand command, CancellationToken cancellationToken = default)
     {
-        var result = await Mediator.Send(new CreateSupplierCommand(supplierDto), cancellationToken);
+        var result = await Mediator.Send(command, cancellationToken);
         return Ok(new ApiSimpleResult(result));
     }
     
     [AllowAnonymous]
     [HttpPut("update/{id:guid}")]
-    public async Task<IActionResult> UpdateAsync([FromRoute(Name = "id")]Guid supplierId, [FromBody]UpdateSupplierDto supplierDto, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> UpdateAsync([FromRoute(Name = "id")]Guid supplierId, [FromBody]UpdateSupplierCommand command, CancellationToken cancellationToken = default)
     {
-        var result = await Mediator.Send(new UpdateSupplierCommand(supplierDto, supplierId), cancellationToken);
+        if (supplierId != command.Id)
+        {
+            return BadRequest();
+        }
+        var result = await Mediator.Send(command, cancellationToken);
         return Ok(new ApiSimpleResult(result));
     }
     
     [AllowAnonymous]
-    [HttpDelete("delete/{id:guid}")]
-    public async Task<IActionResult> DeleteAsync([FromRoute(Name = "id")]Guid supplierId, CancellationToken cancellationToken = default)
+    [HttpDelete("delete/{id}")]
+    public async Task<IActionResult> DeleteAsync([FromRoute(Name = "id")]string supplierId, CancellationToken cancellationToken = default)
     {
         var result = await Mediator.Send(new DeleteSupplierCommand(supplierId), cancellationToken);
         return Ok(new ApiSimpleResult(result));

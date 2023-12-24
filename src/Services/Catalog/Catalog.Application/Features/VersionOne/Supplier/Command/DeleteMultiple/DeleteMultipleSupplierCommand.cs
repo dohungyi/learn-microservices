@@ -7,8 +7,8 @@ namespace Catalog.Application.Features.VersionOne;
 [AuthorizationRequest(new ActionExponent[] { ActionExponent.AllowAnonymous })]
 public class DeleteMultipleSupplierCommand : BaseDeleteCommand<IList<Guid>>
 {
-    public IList<Guid> SupplierIds { get; init; }
+    public IList<Guid> Ids { get; init; }
 
-    public DeleteMultipleSupplierCommand(IList<Guid> supplierIds) => SupplierIds = supplierIds;
+    public DeleteMultipleSupplierCommand(IList<Guid> ids) => Ids = ids;
     
 }

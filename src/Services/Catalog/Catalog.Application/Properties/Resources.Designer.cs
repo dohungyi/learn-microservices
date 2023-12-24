@@ -89,6 +89,33 @@ namespace Catalog.Application.Properties {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        internal static string common_data_does_not_exist_or_was_deleted {
+            get {
+                return ResourceManager.GetString("common_data_does_not_exist_or_was_deleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string common_list_id_must_not_be_empty {
+            get {
+                return ResourceManager.GetString("common_list_id_must_not_be_empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string common_payload_is_not_valid {
+            get {
+                return ResourceManager.GetString("common_payload_is_not_valid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         internal static string district_code_max_length_10 {
             get {
                 return ResourceManager.GetString("district_code_max_length_10", resourceCulture);
@@ -197,9 +224,27 @@ namespace Catalog.Application.Properties {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string supplier_does_not_exist {
+        internal static string supplier_does_not_exist_or_was_deleted {
             get {
-                return ResourceManager.GetString("supplier_does_not_exist", resourceCulture);
+                return ResourceManager.GetString("supplier_does_not_exist_or_was_deleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string supplier_id_is_invalid {
+            get {
+                return ResourceManager.GetString("supplier_id_is_invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string supplier_ids_is_valid {
+            get {
+                return ResourceManager.GetString("supplier_ids_is_valid", resourceCulture);
             }
         }
         

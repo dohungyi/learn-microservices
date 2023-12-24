@@ -29,7 +29,7 @@ public class GetSupplierByAliasQueryHandler : BaseQueryHandler, IRequestHandler<
         var supplier = await _supplierReadOnlyRepository.GetByAliasWithCachingAsync(request.Alias, cancellationToken);
         if (supplier is null)
         {
-            throw new BadRequestException(_localizer["supplier_does_not_exist"].Value);
+            throw new BadRequestException(_localizer["supplier_does_not_exist_or_was_deleted"].Value);
         }
 
         var supplierDto = _mapper.Map<SupplierDto>(supplier);

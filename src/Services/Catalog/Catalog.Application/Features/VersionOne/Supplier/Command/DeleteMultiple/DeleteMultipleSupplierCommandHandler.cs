@@ -26,17 +26,22 @@ public class DeleteMultipleSupplierCommandHandler : BaseCommandHandler, IRequest
 
     public async Task<IList<Guid>> Handle(DeleteMultipleSupplierCommand request, CancellationToken cancellationToken)
     {
-        var suppliers = await _supplierReadOnlyRepository.GetSupplierByIdsAsync(request.SupplierIds, cancellationToken);
+        if (request.Ids is null || !request.Ids.Any())
+        {
+            throw new BadRequestException(_localizer["common_list_id_must_not_be_empty"]);
+        }
+        
+        var suppliers = await _supplierReadOnlyRepository.GetSupplierByIdsAsync(request.Ids, cancellationToken);
 
-        var isMissing = suppliers is null || !suppliers.Any() || request.SupplierIds.Except(suppliers.Select(e => e.Id)).Any();
+        var isMissing = suppliers is null || !suppliers.Any() || request.Ids.Except(suppliers.Select(e => e.Id)).Any();
         if (isMissing)
         {
-            throw new BadRequestException(_localizer["supplier_list_id_is_invalid"].Value);
+            throw new BadRequestException(_localizer["supplier_ids_is_valid"].Value);
         }
         
         await _supplierWriteOnlyRepository.DeleteMultipleSupplierAsync(suppliers, cancellationToken);
         await _supplierWriteOnlyRepository.UnitOfWork.CommitAsync(cancellationToken);
 
-        return request.SupplierIds;
+        return request.Ids;
     }
 }

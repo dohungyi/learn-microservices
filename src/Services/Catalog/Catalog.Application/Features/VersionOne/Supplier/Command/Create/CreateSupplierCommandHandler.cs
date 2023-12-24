@@ -34,16 +34,15 @@ public class CreateSupplierCommandHandler : BaseCommandHandler, IRequestHandler<
 
     public async Task<SupplierDto> Handle(CreateSupplierCommand request, CancellationToken cancellationToken)
     {
-        request.CreateSupplierDto.Alias = request.CreateSupplierDto.Name.ToUnsignString();
+        request.Alias = request.Name.ToUnsignString();
         
-        var codeDuplicate = await _supplierReadOnlyRepository.IsDuplicate(request.CreateSupplierDto.Code, request.CreateSupplierDto.Name, cancellationToken);
-
+        var codeDuplicate = await _supplierReadOnlyRepository.IsDuplicate(null, request.Code, request.Name, cancellationToken);
         if (!string.IsNullOrWhiteSpace(codeDuplicate))
         {
             throw new BadRequestException(_localizer[codeDuplicate].Value);
         }
         
-        var supplier = _mapper.Map<Supplier>(request.CreateSupplierDto);
+        var supplier = _mapper.Map<Supplier>(request);
         
         await _supplierWriteOnlyRepository.InsertAsync(supplier, cancellationToken);
         await _supplierWriteOnlyRepository.UnitOfWork.CommitAsync(cancellationToken);

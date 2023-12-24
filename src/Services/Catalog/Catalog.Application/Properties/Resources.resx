@@ -18,7 +18,7 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="supplier_does_not_exist" xml:space="preserve">
+    <data name="supplier_does_not_exist_or_was_deleted" xml:space="preserve">
         <value />
     </data>
     <data name="supplier_is_duplicate_code" xml:space="preserve">
@@ -76,6 +76,21 @@
         <value />
     </data>
     <data name="district_code_max_length_10" xml:space="preserve">
+        <value />
+    </data>
+    <data name="common_data_does_not_exist_or_was_deleted" xml:space="preserve">
+        <value />
+    </data>
+    <data name="common_list_id_must_not_be_empty" xml:space="preserve">
+        <value />
+    </data>
+    <data name="common_payload_is_not_valid" xml:space="preserve">
+        <value />
+    </data>
+    <data name="supplier_id_is_invalid" xml:space="preserve">
+        <value />
+    </data>
+    <data name="supplier_ids_is_valid" xml:space="preserve">
         <value />
     </data>
 </root>

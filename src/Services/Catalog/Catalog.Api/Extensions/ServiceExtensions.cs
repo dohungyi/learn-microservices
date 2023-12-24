@@ -74,7 +74,6 @@ public static class ServiceExtensions
                 };
             });
         
-        
         services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
         
         services.AddScoped<FluentValidationSchemaProcessor>(provider =>

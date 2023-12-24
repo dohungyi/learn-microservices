@@ -25,10 +25,15 @@ public class DeleteSupplierCommandHandler : BaseCommandHandler, IRequestHandler<
 
     public async Task<object> Handle(DeleteSupplierCommand request, CancellationToken cancellationToken)
     {
-        var supplier = await _supplierWriteOnlyRepository.GetByIdAsync(request.SupplierId, cancellationToken);
+        if (!Guid.TryParse(request.SupplierId, out var supplierId))
+        {
+            throw new BadRequestException(_localizer["supplier_id_is_invalid"]);
+        }
+        
+        var supplier = await _supplierWriteOnlyRepository.GetByIdAsync(supplierId, cancellationToken);
         if (supplier is null)
         {
-            throw new BadRequestException(_localizer["supplier_does_not_exist"].Value);
+            throw new BadRequestException(_localizer["supplier_does_not_exist_or_was_deleted"].Value);
         }
 
         await _supplierWriteOnlyRepository.DeleteSupplierAsync(supplier, cancellationToken);
