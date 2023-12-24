@@ -103,7 +103,8 @@ namespace SharedKernel.Application
             Import = 5,
             Upload = 6,
             Download = 7,
-            Supplier
+            Supplier = 8,
+            Category = 9
         }
 
         public enum FileType

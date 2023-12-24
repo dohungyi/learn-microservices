@@ -1,5 +1,7 @@
 ﻿using Catalog.Application.DTOs;
+using Catalog.Application.Mappings;
 using Catalog.Application.Properties;
+using Catalog.Domain.Entities;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 using SharedKernel.Application;
@@ -8,7 +10,7 @@ using SharedKernel.Libraries;
 namespace Catalog.Application.Features.VersionOne;
 
 [AuthorizationRequest(new ActionExponent[] { ActionExponent.Supplier })]
-public class CreateSupplierCommand : BaseInsertCommand<SupplierDto>
+public class CreateSupplierCommand : BaseInsertCommand<SupplierDto>, IMapFrom<Supplier>
 {
     public string Code { get; init; }
     public string Name { get; init; }

@@ -20,7 +20,7 @@ public class GetSupplierPagingQueryHandler : BaseQueryHandler, IRequestHandler<G
 
     public async Task<IPagedList<SupplierDto>> Handle(GetSupplierPagingQuery request, CancellationToken cancellationToken)
     {
-        var result = await _supplierReadOnlyRepository.PagingAllAsync(request.PagingRequest, cancellationToken);
+        var result = await _supplierReadOnlyRepository.GetPagingResultAsync(request.PagingRequest, cancellationToken);
         return result;
     }
 }

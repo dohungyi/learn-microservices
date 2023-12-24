@@ -24,7 +24,7 @@ public class SupplierReadOnlyRepository : BaseReadOnlyRepository<Supplier>, ISup
         
     }
 
-    public async Task<IList<Supplier>> GetSupplierByIdsAsync(IList<Guid> supplierIds, CancellationToken cancellationToken = default)
+    public async Task<IList<Supplier>> GetListSupplierByIdsAsync(IList<Guid> supplierIds, CancellationToken cancellationToken = default)
     {
         return await _dbSet.Where(e => supplierIds.Contains(e.Id)).ToListAsync(cancellationToken);
     }
@@ -48,10 +48,10 @@ public class SupplierReadOnlyRepository : BaseReadOnlyRepository<Supplier>, ISup
             return "supplier_is_duplicate_name";
         }
         
-        return string.Empty;;
+        return string.Empty;
     }
 
-    public async Task<IPagedList<SupplierDto>> PagingAllAsync(PagingRequest request, CancellationToken cancellationToken = default)
+    public async Task<IPagedList<SupplierDto>> GetPagingResultAsync(PagingRequest request, CancellationToken cancellationToken = default)
     {
         var mapper = _provider.GetRequiredService<IMapper>();
         
@@ -69,7 +69,7 @@ public class SupplierReadOnlyRepository : BaseReadOnlyRepository<Supplier>, ISup
         return result;
     }
 
-    public async Task<Supplier?> GetByAliasWithCachingAsync(string alias, CancellationToken cancellationToken = default)
+    public async Task<Supplier?> GetSupplierByAliasWithCachingAsync(string alias, CancellationToken cancellationToken = default)
     {
         string key = BaseCacheKeys.GetSystemRecordByIdKey(_tableName, alias);
         

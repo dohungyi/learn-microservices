@@ -1,8 +1,12 @@
-namespace Catalog.Application.DTOs;
+using Catalog.Application.DTOs;
+using SharedKernel.Application;
+using SharedKernel.Libraries;
 
-public class CategoryDto
+namespace Catalog.Application.Features.VersionOne;
+
+[AuthorizationRequest(new ActionExponent[] { ActionExponent.Supplier })]
+public class CreateCategoryCommand : BaseInsertCommand<CategoryDto>
 {
-    public Guid Id { get; set; }
     public string Code { get; set; }
     public string Name { get; set; }
     public string Alias  { get; set; }

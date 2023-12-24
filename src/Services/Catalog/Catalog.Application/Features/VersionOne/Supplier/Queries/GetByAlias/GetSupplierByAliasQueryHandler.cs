@@ -26,7 +26,7 @@ public class GetSupplierByAliasQueryHandler : BaseQueryHandler, IRequestHandler<
 
     public async Task<SupplierDto> Handle(GetSupplierByAliasQuery request, CancellationToken cancellationToken)
     {
-        var supplier = await _supplierReadOnlyRepository.GetByAliasWithCachingAsync(request.Alias, cancellationToken);
+        var supplier = await _supplierReadOnlyRepository.GetSupplierByAliasWithCachingAsync(request.Alias, cancellationToken);
         if (supplier is null)
         {
             throw new BadRequestException(_localizer["supplier_does_not_exist_or_was_deleted"].Value);
