@@ -35,7 +35,10 @@ public static class ConfigureServices
         // Supplier
         services.AddScoped<ISupplierWriteOnlyRepository, SupplierWriteOnlyRepository>();
         services.AddScoped<ISupplierReadOnlyRepository, SupplierReadOnlyRepository>();
-       
+        
+        // Category
+        services.AddScoped<ICategoryWriteOnlyRepository, CategoryWriteOnlyRepository>();
+        services.AddScoped<ICategoryReadOnlyRepository, ICategoryReadOnlyRepository>();
 
         return services;
     }

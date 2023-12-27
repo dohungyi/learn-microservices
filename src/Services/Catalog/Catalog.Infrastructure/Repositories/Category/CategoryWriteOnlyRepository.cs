@@ -15,27 +15,34 @@ public class CategoryWriteOnlyRepository : BaseWriteOnlyRepository<Category>, IC
     ) : base(dbContext, currentUser, sequenceCaching, provider)
     {
     }
-
-    public async Task UpdateCategoryAsync(Category supplier, CancellationToken cancellationToken = default)
+    
+    public async Task<Category> CreateCategoryAsync(Category category, CancellationToken cancellationToken = default)
     {
-        string key = BaseCacheKeys.GetSystemRecordByIdKey(_tableName, supplier.Alias);
+         var entity = await InsertAsync(category, cancellationToken);
+         
+         return entity;
+    }
+
+    public async Task UpdateCategoryAsync(Category category, CancellationToken cancellationToken = default)
+    {
+        string key = BaseCacheKeys.GetSystemRecordByIdKey(_tableName, category.Alias);
         await Task.WhenAll(new List<Task>()
         {
-            UpdateAsync(supplier, cancellationToken),
+            UpdateAsync(category, cancellationToken),
             _sequenceCaching.DeleteAsync(key, cancellationToken: cancellationToken)
         });
     }
 
-    public async Task<Guid> DeleteCategoryAsync(Category supplier, CancellationToken cancellationToken = default)
+    public async Task<Guid> DeleteCategoryAsync(Category category, CancellationToken cancellationToken = default)
     {
-        string key = BaseCacheKeys.GetSystemRecordByIdKey(_tableName, supplier.Alias);
+        string key = BaseCacheKeys.GetSystemRecordByIdKey(_tableName, category.Alias);
         await Task.WhenAll(new List<Task>()
         {
-            DeleteAsync(supplier, cancellationToken),
+            DeleteAsync(category, cancellationToken),
             _sequenceCaching.DeleteAsync(key, cancellationToken: cancellationToken)
         });
 
-        return supplier.Id;
+        return category.Id;
     }
 
     public async Task DeleteMultipleSupplierAsync(IList<Category> categories,

@@ -81,13 +81,16 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
 
         return categoryHierarchyDto;
     }
-
-
-
+    
     public async Task<IList<Category>> GetListCategoryByIdsAsync(IList<Guid> categoryIds,
         CancellationToken cancellationToken = default)
     {
         return await _dbSet.Where(e => categoryIds.Contains(e.Id)).ToListAsync(cancellationToken);
+    }
+
+    public async Task<Category?> GetCategoryByIdAsync(object categoryId, CancellationToken cancellationToken = default)
+    {
+        return await GetByIdWithCachingAsync(categoryId, cancellationToken);
     }
 
     public async Task<string> IsDuplicate(Guid? categoryId, string code, string name,
@@ -112,7 +115,16 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
         }
 
         return string.Empty;
-        ;
+    }
+
+    public async Task<bool> IsParentCategoryAsync(Guid categoryId, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet.AnyAsync(e => e.ParentId == categoryId, cancellationToken);
+    }
+
+    public async Task<bool> HasProductCategoriesAsync(Guid categoryId, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.ProductCategories.AnyAsync(e => e.CategoryId == categoryId, cancellationToken);
     }
 
     public async Task<IPagedList<CategoryDto>> GetPagingResultAsync(PagingRequest request,
@@ -134,8 +146,7 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
         return result;
     }
 
-    public async Task<Category?> GetCategoryByAliasWithCachingAsync(string alias,
-        CancellationToken cancellationToken = default)
+    public async Task<Category?> GetCategoryByAliasAsync(string alias, CancellationToken cancellationToken = default)
     {
         string key = BaseCacheKeys.GetSystemRecordByIdKey(_tableName, alias);
 

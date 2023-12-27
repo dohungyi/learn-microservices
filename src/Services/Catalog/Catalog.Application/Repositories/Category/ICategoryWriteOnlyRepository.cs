@@ -7,9 +7,11 @@ namespace Catalog.Application.Repositories;
 
 public interface ICategoryWriteOnlyRepository : IEfCoreWriteOnlyRepository<Category, IApplicationDbContext>
 {
-    Task UpdateCategoryAsync(Category supplier, CancellationToken cancellationToken = default);
+    Task<Category> CreateCategoryAsync(Category category, CancellationToken cancellationToken = default);
     
-    Task<Guid> DeleteCategoryAsync(Category supplier, CancellationToken cancellationToken = default);
+    Task UpdateCategoryAsync(Category category, CancellationToken cancellationToken = default);
+    
+    Task<Guid> DeleteCategoryAsync(Category category, CancellationToken cancellationToken = default);
 
     Task DeleteMultipleSupplierAsync(IList<Category> categories, CancellationToken cancellationToken = default);
     

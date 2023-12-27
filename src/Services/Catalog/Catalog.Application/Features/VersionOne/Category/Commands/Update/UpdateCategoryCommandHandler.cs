@@ -11,17 +11,17 @@ using SharedKernel.Runtime.Exceptions;
 
 namespace Catalog.Application.Features.VersionOne;
 
-public class CreateCategoryCommandHandler : BaseCommandHandler, IRequestHandler<CreateCategoryCommand, CategoryDto>
+public class UpdateCategoryCommandHandler : BaseCommandHandler, IRequestHandler<UpdateCategoryCommand, Unit>
 {
     private readonly ICategoryReadOnlyRepository _categoryReadOnlyRepository;
     private readonly ICategoryWriteOnlyRepository _categoryWriteOnlyRepository;
     private readonly IStringLocalizer<Resources> _localizer;
     private readonly IMapper _mapper;
-    
-    public CreateCategoryCommandHandler(IServiceProvider provider, 
-        ICategoryReadOnlyRepository categoryReadOnlyRepository, 
+
+    public UpdateCategoryCommandHandler(IServiceProvider provider,
+        ICategoryReadOnlyRepository categoryReadOnlyRepository,
         ICategoryWriteOnlyRepository categoryWriteOnlyRepository,
-        IStringLocalizer<Resources> localizer, 
+        IStringLocalizer<Resources> localizer,
         IMapper mapper) : base(provider)
     {
         _categoryReadOnlyRepository = categoryReadOnlyRepository;
@@ -30,26 +30,34 @@ public class CreateCategoryCommandHandler : BaseCommandHandler, IRequestHandler<
         _mapper = mapper;
     }
 
-    public async Task<CategoryDto> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken = default)
     {
         request.Alias = request.Name.ToUnsignString();
+        
+        var codeDuplicate = await _categoryReadOnlyRepository.IsDuplicate(request.Id, request.Code, request.Name, cancellationToken);
+        if (!string.IsNullOrWhiteSpace(codeDuplicate))
+        {
+            throw new BadRequestException(_localizer[codeDuplicate].Value);
+        }
 
-        await ValidateDuplicateAsync(request.Code, request.Name, cancellationToken);
+        var category = await _categoryReadOnlyRepository.GetCategoryByIdAsync(request.Id, cancellationToken);
+        if (category is null)
+        {
+            throw new BadRequestException(_localizer["category_does_not_exist_or_was_deleted"].Value);
+        }
         
         var parent = await GetAndValidateParentAsync(request.ParentId, cancellationToken);
-        
-        var entity = _mapper.Map<Category>(request);
-        
-        var category = await _categoryWriteOnlyRepository.CreateCategoryAsync(entity, cancellationToken);
+
+        category = _mapper.Map(request, category);
         UpdateLevelAndPath(category, parent);
+        
+        await _categoryWriteOnlyRepository.UpdateCategoryAsync(category, cancellationToken);
         await _categoryWriteOnlyRepository.UnitOfWork.CommitAsync(cancellationToken);
-
-        var categoryDto = _mapper.Map<CategoryDto>(category);
-
-        return categoryDto;
+        
+        return Unit.Value;
     }
     
-    private async Task<Category?> GetAndValidateParentAsync(Guid? parentId, CancellationToken cancellationToken)
+    private async Task<Category?> GetAndValidateParentAsync(Guid? parentId, CancellationToken cancellationToken = default)
     {
         if (parentId == null || parentId == Guid.Empty)
             return null;
@@ -62,16 +70,7 @@ public class CreateCategoryCommandHandler : BaseCommandHandler, IRequestHandler<
 
         return parent;
     }
-
-    private async Task ValidateDuplicateAsync(string code, string name, CancellationToken cancellationToken)
-    {
-        var codeDuplicate = await _categoryReadOnlyRepository.IsDuplicate(null, code, name, cancellationToken);
-        if (!string.IsNullOrWhiteSpace(codeDuplicate))
-        {
-            throw new BadRequestException(_localizer[codeDuplicate].Value);
-        }
-    }
-
+    
     private void UpdateLevelAndPath(Category category, Category? parent)
     {
         if (parent == null)
