@@ -65,7 +65,7 @@ public class UpdateCategoryCommandHandler : BaseCommandHandler, IRequestHandler<
         var parent = await _categoryReadOnlyRepository.GetCategoryByIdAsync(parentId.Value, cancellationToken);
         if (parent is null)
         {
-            throw new BadRequestException(_localizer["category_parent_invalid"].Value);
+            throw new BadRequestException(_localizer["category_parent_id_is_invalid"].Value);
         }
 
         return parent;

@@ -18,9 +18,13 @@ public class CategoryWriteOnlyRepository : BaseWriteOnlyRepository<Category>, IC
     
     public async Task<Category> CreateCategoryAsync(Category category, CancellationToken cancellationToken = default)
     {
-         var entity = await InsertAsync(category, cancellationToken);
-         
-         return entity;
+         string key = BaseCacheKeys.GetSystemFullRecordsKey(_tableName);
+         await Task.WhenAll(new List<Task>()
+         {
+             InsertAsync(category, cancellationToken),
+             _sequenceCaching.DeleteAsync(key, CachingType.Redis,cancellationToken: cancellationToken)
+         });
+         return category;
     }
 
     public async Task UpdateCategoryAsync(Category category, CancellationToken cancellationToken = default)

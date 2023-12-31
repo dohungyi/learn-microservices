@@ -9,10 +9,6 @@
     <ItemGroup>
       <Folder Include="Constants\" />
       <Folder Include="Enums\" />
-      <Folder Include="Features\VersionOne\Category\Queries\GetByAlias\" />
-      <Folder Include="Features\VersionOne\Category\Queries\GetById\" />
-      <Folder Include="Features\VersionOne\Category\Queries\GetWithHierarchyById\" />
-      <Folder Include="Features\VersionOne\Category\Queries\Paging\" />
       <Folder Include="Services\" />
     </ItemGroup>
 

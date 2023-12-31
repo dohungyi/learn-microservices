@@ -26,8 +26,6 @@ public class DeleteCategoryCommandHandler : BaseCommandHandler, IRequestHandler<
         _localizer = localizer;
     }
     
-   
-
     public async Task<object> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
     {
         if (!Guid.TryParse(request.CategoryId, out var categoryId))

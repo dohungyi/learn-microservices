@@ -6,7 +6,7 @@ using SharedKernel.Libraries;
 
 namespace Catalog.Application.Features.VersionOne;
 
-[AuthorizationRequest(new ActionExponent[] { ActionExponent.Supplier })]
+[AuthorizationRequest(new ActionExponent[] { ActionExponent.Category })]
 public class CreateCategoryCommand : BaseInsertCommand<CategoryDto>, IMapFrom<Category>
 {
     public string Code { get; set; }

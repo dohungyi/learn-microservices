@@ -1,4 +1,5 @@
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Caching;
 using Catalog.Application.DTOs;
 using Catalog.Application.Repositories;
@@ -23,69 +24,15 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
     {
     }
 
-    public async Task<CategoryHierarchyDto?> GetCategoryHierarchyByIdAsync(Guid categoryId, CancellationToken cancellationToken = default)
+    public async Task<IList<CategorySummaryDto>> GetCategoryHierarchyByIdAsync(Guid categoryId, CancellationToken cancellationToken = default)
     {
-        var categoryHierarchyDto = await _dbSet
-            .Where(e => e.Id == categoryId)
-            .Select(e => new CategoryHierarchyDto
-            {
-                CurrentCategory = new CategoryDto
-                {
-                    Code = e.Code,
-                    Name = e.Name,
-                    Alias = e.Alias,
-                    Description = e.Description,
-                    Level = e.Level,
-                    FileName = e.FileName,
-                    OrderNumber = e.OrderNumber,
-                    Status = e.Status,
-                    Path = e.Path,
-                    ParentId = e.ParentId
-                },
-                ChildCategories = _dbSet
-                    .Where(child => child.ParentId == e.Id)
-                    .Select(child => new CategoryDto
-                    {
-                        Code = child.Code,
-                        Name = child.Name,
-                        Alias = child.Alias,
-                        Description = child.Description,
-                        Level = child.Level,
-                        FileName = child.FileName,
-                        OrderNumber = child.OrderNumber,
-                        Status = child.Status,
-                        Path = child.Path,
-                        ParentId = child.ParentId
-                    })
-                    .ToList(),
-                AncestorCategories = e.ParentId != null
-                    ? _dbSet
-                        .Where(ancestor => e.Path.Substring(0, e.Path.LastIndexOf('/')).StartsWith(ancestor.Path))
-                        .Select(ancestor => new CategoryDto
-                        {
-                            Code = ancestor.Code,
-                            Name = ancestor.Name,
-                            Alias = ancestor.Alias,
-                            Description = ancestor.Description,
-                            Level = ancestor.Level,
-                            FileName = ancestor.FileName,
-                            OrderNumber = ancestor.OrderNumber,
-                            Status = ancestor.Status,
-                            Path = ancestor.Path,
-                            ParentId = ancestor.ParentId
-                        })
-                        .ToList()
-                    : default!
-            })
-            .FirstOrDefaultAsync(cancellationToken);
-
-        return categoryHierarchyDto;
+        return default;
     }
     
     public async Task<IList<Category>> GetListCategoryByIdsAsync(IList<Guid> categoryIds,
         CancellationToken cancellationToken = default)
     {
-        return await _dbSet.Where(e => categoryIds.Contains(e.Id)).ToListAsync(cancellationToken);
+        return await _dbSet.Where(e => categoryIds.Contains(e.Id) && e.Status).ToListAsync(cancellationToken);
     }
 
     public async Task<Category?> GetCategoryByIdAsync(object categoryId, CancellationToken cancellationToken = default)
@@ -97,7 +44,7 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
         CancellationToken cancellationToken = default)
     {
         var duplicateSupplier = await _dbSet.FirstOrDefaultAsync(
-            e => (categoryId == null || e.Id != categoryId) && (e.Code == code || e.Name == name), cancellationToken);
+            e => (categoryId == null || e.Id != categoryId) && (e.Code == code || e.Name == name) && e.Status, cancellationToken);
 
         if (duplicateSupplier is null)
         {
@@ -119,7 +66,7 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
 
     public async Task<bool> IsParentCategoryAsync(Guid categoryId, CancellationToken cancellationToken = default)
     {
-        return await _dbSet.AnyAsync(e => e.ParentId == categoryId, cancellationToken);
+        return await _dbSet.AnyAsync(e => e.ParentId == categoryId && e.Status, cancellationToken);
     }
 
     public async Task<bool> HasProductCategoriesAsync(Guid categoryId, CancellationToken cancellationToken = default)
@@ -157,7 +104,7 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
         }
 
         var supplier =
-            await _dbSet.FirstOrDefaultIfAsync(!string.IsNullOrEmpty(alias), e => e.Alias == alias, cancellationToken);
+            await _dbSet.FirstOrDefaultIfAsync(!string.IsNullOrEmpty(alias), e => e.Alias == alias && e.Status, cancellationToken);
 
         if (supplier is not null)
         {
@@ -165,5 +112,74 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
         }
 
         return supplier;
+    }
+
+    public async Task<IList<CategoryNavigationDto>> GetCategoryNavigationAsync(CancellationToken cancellationToken = default)
+    {
+        string key = BaseCacheKeys.GetSystemFullRecordsKey(_tableName);
+        var categoryNavigationDtos = await _sequenceCaching.GetAsync<IList<CategoryNavigationDto>>(key, CachingType.Redis, cancellationToken: cancellationToken);
+
+        if (categoryNavigationDtos != null)
+        {
+            return categoryNavigationDtos;
+        }
+        
+        var roots = _dbSet.Where(x => !x.ParentId.HasValue && x.Status)
+            .OrderBy(x => x.OrderNumber);
+        
+        var hasRoots = await roots.AnyAsync(cancellationToken);
+        if(hasRoots)
+        {
+            return default!;
+        }
+
+        categoryNavigationDtos = await roots.Select(root => new CategoryNavigationDto
+            {
+               Children = _dbSet.Where(x => x.ParentId.Equals(root.Id) && x.Status)
+                   .OrderBy(x => x.OrderNumber)
+                   .Select(child => new CategoryNavigationDto
+                   {
+                       Id = child.Id,
+                       ParentId = child.ParentId,
+                       Name = child.Name,
+                       Alias = child.Alias,
+                       Description = child.Description,
+                       Level = child.Level,
+                       FileName = child.FileName,
+                       OrderNumber = child.OrderNumber,
+                       Status = child.Status,
+                       Path = child.Path,
+                       Children = BuildCategoryChildren(child.Id, cancellationToken)
+                   })
+                   .ToList()
+            })
+            .ToListAsync(cancellationToken);
+        
+        await _sequenceCaching.SetAsync(key, categoryNavigationDtos, cancellationToken: cancellationToken);
+        
+        return categoryNavigationDtos;
+    }
+    
+    private IList<CategoryNavigationDto> BuildCategoryChildren(Guid parentId, CancellationToken cancellationToken)
+    {
+        var children = _dbSet.Where(x => x.ParentId.Equals(parentId) && x.Status)
+            .OrderBy(x => x.OrderNumber)
+            .Select(child => new CategoryNavigationDto
+            {
+                Id = child.Id,
+                ParentId = child.ParentId,
+                Name = child.Name,
+                Alias = child.Alias,
+                Description = child.Description,
+                Level = child.Level,
+                FileName = child.FileName,
+                OrderNumber = child.OrderNumber,
+                Status = child.Status,
+                Path = child.Path,
+                Children = BuildCategoryChildren(child.Id, cancellationToken)
+            })
+            .ToList();
+
+        return children;
     }
 }
