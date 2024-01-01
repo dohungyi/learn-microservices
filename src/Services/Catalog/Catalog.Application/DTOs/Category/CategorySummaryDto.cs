@@ -7,7 +7,8 @@ public class CategorySummaryDto
     public string Name { get; set; }
     public string Alias  { get; set; }
     public string Description { get; set; }
+    public int OrderNumber { get; set; }
     public int Level { get; set; }
-    
+    public Guid? ParentId { get; set; }
     public bool IsSelected { get; set; }
 }

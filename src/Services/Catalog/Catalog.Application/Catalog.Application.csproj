@@ -9,6 +9,13 @@
     <ItemGroup>
       <Folder Include="Constants\" />
       <Folder Include="Enums\" />
+      <Folder Include="Features\VersionOne\Attribute\Commands\Create\" />
+      <Folder Include="Features\VersionOne\Attribute\Commands\Delete\" />
+      <Folder Include="Features\VersionOne\Attribute\Commands\Update\" />
+      <Folder Include="Features\VersionOne\Attribute\Queries\GetAll\" />
+      <Folder Include="Features\VersionOne\Attribute\Queries\GetById\" />
+      <Folder Include="Features\VersionOne\Product\Commands\" />
+      <Folder Include="Features\VersionOne\Product\Queries\" />
       <Folder Include="Services\" />
     </ItemGroup>
 

@@ -12,47 +12,48 @@ public class CategoryController : BaseController
     [HttpGet("get-navigation")]
     public async Task<IActionResult> GetCategoryNavigationAsync(CancellationToken cancellationToken = default)
     {
-        return Ok(new ApiSimpleResult());
+        var result = await Mediator.Send(new GetCategoryNavigationQuery(), cancellationToken);
+        return Ok(new ApiSimpleResult(result));
     }
     
     [AllowAnonymous]
     [HttpGet("get-hierarchy-by-id/{id}")]
-    public async Task<IActionResult> GetCategoryWithHierarchyByIdAsync([FromRoute(Name = "id")]string categoryId, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetCategoryWithHierarchyByIdAsync([FromRoute(Name = "id")]Guid categoryId, CancellationToken cancellationToken = default)
     {
-        return Ok(new ApiSimpleResult());
+        var result = await Mediator.Send(new GetCategoryWithHierarchyByIdQuery(categoryId), cancellationToken);
+        return Ok(new ApiSimpleResult(result));
     }
     
     [AllowAnonymous]
     [HttpGet("get-by-id/{id}")]
-    public async Task<IActionResult> GetByIdAsync([FromRoute(Name = "id")]string categoryId, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetByIdAsync([FromRoute(Name = "id")]Guid categoryId, CancellationToken cancellationToken = default)
     {
-       //  var result = await Mediator.Send(new GetSupplierByIdQuery(supplierId), cancellationToken);
-        return Ok(new ApiSimpleResult());
+        var result = await Mediator.Send(new GetCategoryByIdQuery(categoryId), cancellationToken);
+        return Ok(new ApiSimpleResult(result));
     }
     
     [AllowAnonymous]
     [HttpGet("get-by-alias/{alias}")]
     public async Task<IActionResult> GetByAliasAsync([FromRoute(Name = "alias")]string alias, CancellationToken cancellationToken = default)
     {
-        // Handler 
-        return Ok(new ApiSimpleResult());
+        var result = await Mediator.Send(new GetCategoryByAliasQuery(alias), cancellationToken);
+        return Ok(new ApiSimpleResult(result));
     }
     
     [AllowAnonymous]
     [HttpPost("get-paging")]
     public async Task<IActionResult> GetPagingAsync([FromBody]PagingRequest pagingRequest, CancellationToken cancellationToken = default)
     {
-        // Handler 
-        return Ok(new ApiSimpleResult());
+        var result = await Mediator.Send(new GetCategoryPagingQuery(pagingRequest), cancellationToken);
+        return Ok(new ApiSimpleResult(result));
     }
     
     [AllowAnonymous]
     [HttpPost("create")]
     public async Task<IActionResult> CreateAsync([FromBody]CreateCategoryCommand command, CancellationToken cancellationToken = default)
     {
-        // Handler 
-
-        return Ok(new ApiSimpleResult());
+        var result = await Mediator.Send(command, cancellationToken);
+        return Ok(new ApiSimpleResult(result));
     }
     
     [AllowAnonymous]
@@ -63,16 +64,17 @@ public class CategoryController : BaseController
         {
             return BadRequest();
         }
-        // Handler 
-        return Ok(new ApiSimpleResult());
+        
+        var result = await Mediator.Send(command, cancellationToken);
+        return Ok(new ApiSimpleResult(result));
     }
     
     [AllowAnonymous]
     [HttpDelete("delete/{id}")]
     public async Task<IActionResult> DeleteAsync([FromRoute(Name = "id")]string categoryId, CancellationToken cancellationToken = default)
     {
-        // Handler 
-        return Ok(new ApiSimpleResult());
+        var result = await Mediator.Send(new DeleteCategoryCommand(categoryId), cancellationToken);
+        return Ok(new ApiSimpleResult(result));
     }
     
 }

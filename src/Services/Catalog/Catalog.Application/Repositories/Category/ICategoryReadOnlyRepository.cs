@@ -9,7 +9,7 @@ namespace Catalog.Application.Repositories;
 
 public interface ICategoryReadOnlyRepository :  IEfCoreReadOnlyRepository<Category, IApplicationDbContext>
 {
-    Task<IList<CategorySummaryDto>> GetCategoryHierarchyByIdAsync(Guid categoryId, CancellationToken cancellationToken = default);
+    Task<IList<CategorySummaryDto>> GetCategoryHierarchyAsync(Category category, CancellationToken cancellationToken = default);
     
     Task<IList<Category>> GetListCategoryByIdsAsync(IList<Guid> categoryIds, CancellationToken cancellationToken = default);
 

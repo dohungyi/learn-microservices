@@ -24,9 +24,25 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
     {
     }
 
-    public async Task<IList<CategorySummaryDto>> GetCategoryHierarchyByIdAsync(Guid categoryId, CancellationToken cancellationToken = default)
+    public async Task<IList<CategorySummaryDto>> GetCategoryHierarchyAsync(Category category, CancellationToken cancellationToken = default)
     {
-        return default;
+        var categories = await _dbSet.Where(e => e.Path.StartsWith(category.Path) && e.Status)
+            .OrderBy(e => e.OrderNumber)
+            .Select(e => new CategorySummaryDto()
+            {
+                Id = e.Id,
+                Code = e.Code,
+                Name = e.Name,
+                Alias = e.Alias,
+                Description = e.Description,
+                OrderNumber = e.OrderNumber,
+                Level = e.Level,
+                ParentId = e.ParentId,
+                IsSelected = e.ParentId != category.Id
+            })
+            .ToListAsync(cancellationToken);
+        
+        return categories;
     }
     
     public async Task<IList<Category>> GetListCategoryByIdsAsync(IList<Guid> categoryIds,
@@ -81,7 +97,7 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
 
         var result = await _dbSet
             .WhereIf(!string.IsNullOrEmpty(request.SearchString),
-                e => e.Name.Contains(request.SearchString) || e.Description.Contains(request.SearchString))
+                e => e.Code.Contains(request.SearchString) || e.Name.Contains(request.SearchString) || e.Description.Contains(request.SearchString))
             .ApplySort(request.Sorts)
             .ToPagedListAsync<Category, CategoryDto>(
                 mapper,
@@ -117,11 +133,11 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
     public async Task<IList<CategoryNavigationDto>> GetCategoryNavigationAsync(CancellationToken cancellationToken = default)
     {
         string key = BaseCacheKeys.GetSystemFullRecordsKey(_tableName);
-        var categoryNavigationDtos = await _sequenceCaching.GetAsync<IList<CategoryNavigationDto>>(key, CachingType.Redis, cancellationToken: cancellationToken);
+        var navigations = await _sequenceCaching.GetAsync<IList<CategoryNavigationDto>>(key, cancellationToken: cancellationToken);
 
-        if (categoryNavigationDtos != null)
+        if (navigations != null)
         {
-            return categoryNavigationDtos;
+            return navigations;
         }
         
         var roots = _dbSet.Where(x => !x.ParentId.HasValue && x.Status)
@@ -133,7 +149,7 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
             return default!;
         }
 
-        categoryNavigationDtos = await roots.Select(root => new CategoryNavigationDto
+        navigations = await roots.Select(root => new CategoryNavigationDto
             {
                Children = _dbSet.Where(x => x.ParentId.Equals(root.Id) && x.Status)
                    .OrderBy(x => x.OrderNumber)
@@ -155,9 +171,9 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
             })
             .ToListAsync(cancellationToken);
         
-        await _sequenceCaching.SetAsync(key, categoryNavigationDtos, cancellationToken: cancellationToken);
+        await _sequenceCaching.SetAsync(key, navigations, onlyUseType: CachingType.Redis, cancellationToken: cancellationToken);
         
-        return categoryNavigationDtos;
+        return navigations;
     }
     
     private IList<CategoryNavigationDto> BuildCategoryChildren(Guid parentId, CancellationToken cancellationToken)
