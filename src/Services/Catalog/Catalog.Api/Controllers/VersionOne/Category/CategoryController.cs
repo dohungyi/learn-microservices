@@ -76,5 +76,4 @@ public class CategoryController : BaseController
         var result = await Mediator.Send(new DeleteCategoryCommand(categoryId), cancellationToken);
         return Ok(new ApiSimpleResult(result));
     }
-    
 }

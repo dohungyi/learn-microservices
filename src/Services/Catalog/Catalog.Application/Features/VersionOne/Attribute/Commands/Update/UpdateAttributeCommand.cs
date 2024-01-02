@@ -1,4 +1,4 @@
-﻿namespace Catalog.Application.Features.VersionOne.Attribute.Commands.Update;
+﻿namespace Catalog.Application.Features.VersionOne;
 
 public class UpdateAttributeCommand
 {

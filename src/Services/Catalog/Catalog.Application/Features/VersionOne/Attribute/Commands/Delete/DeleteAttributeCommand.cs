@@ -1,4 +1,4 @@
-﻿namespace Catalog.Application.Features.VersionOne.Attribute.Commands.Delete;
+﻿namespace Catalog.Application.Features.VersionOne;
 
 public class DeleteAttributeCommand
 {

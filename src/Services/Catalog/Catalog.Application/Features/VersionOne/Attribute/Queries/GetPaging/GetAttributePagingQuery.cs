@@ -1,4 +1,4 @@
-﻿namespace Catalog.Application.Features.VersionOne.Attribute.Queries.GetPaging;
+﻿namespace Catalog.Application.Features.VersionOne;
 
 public class GetAttributePagingQuery
 {
