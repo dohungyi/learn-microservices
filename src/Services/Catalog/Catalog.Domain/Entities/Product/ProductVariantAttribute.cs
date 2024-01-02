@@ -7,11 +7,13 @@ namespace Catalog.Domain.Entities;
 [Table(TableName.ProductVariantAttribute)]
 public class ProductVariantAttribute : Entity
 {
+    public string Value { get; set; }
+    
     #region Relationships
 
     public Guid ProductVariantId { get; set; }
     public Guid AttributeId { get; set; }
-
+    
     #endregion
     
     #region Navigations

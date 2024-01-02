@@ -15,6 +15,10 @@ public class ProductVariantAttributeConfiguration : EntityConfiguration<ProductV
         builder
             .HasKey(sc => new { sc.ProductVariantId, sc.AttributeId});
 
+        builder
+            .Property(e => e.Value)
+            .HasMaxLength(255);
+
         #endregion
     }
 }

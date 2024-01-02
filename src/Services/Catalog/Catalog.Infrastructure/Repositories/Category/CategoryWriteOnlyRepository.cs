@@ -22,7 +22,7 @@ public class CategoryWriteOnlyRepository : BaseWriteOnlyRepository<Category>, IC
          await Task.WhenAll(new List<Task>()
          {
              InsertAsync(category, cancellationToken),
-             _sequenceCaching.DeleteAsync(key, CachingType.Redis,cancellationToken: cancellationToken)
+             _sequenceCaching.DeleteAsync(key, cancellationToken: cancellationToken)
          });
          return category;
     }

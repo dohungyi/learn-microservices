@@ -7,7 +7,7 @@ using SharedKernel.Application.Repositories;
 namespace Catalog.Application.Repositories;
 
 
-public interface ICategoryReadOnlyRepository :  IEfCoreReadOnlyRepository<Category, IApplicationDbContext>
+public interface ICategoryReadOnlyRepository : IEfCoreReadOnlyRepository<Category, IApplicationDbContext>
 {
     Task<IList<CategorySummaryDto>> GetCategoryHierarchyAsync(Category category, CancellationToken cancellationToken = default);
     
