@@ -1,6 +1,10 @@
+using AutoMapper;
+using Catalog.Application.Mappings;
+using Catalog.Domain.Entities;
+
 namespace Catalog.Application.DTOs;
 
-public class CategorySummaryDto
+public class CategorySummaryDto : IMapFrom<Category>
 {
     public Guid Id { get; set; }
     public string Code { get; set; }
@@ -11,4 +15,11 @@ public class CategorySummaryDto
     public int Level { get; set; }
     public Guid? ParentId { get; set; }
     public bool IsSelected { get; set; }
+    
+    public CategorySummaryDto Parent { get; set; }
+    
+    public void Mapping(Profile profile)
+    {
+        profile.CreateMap<CategorySummaryDto, Category>().ReverseMap();
+    }
 }

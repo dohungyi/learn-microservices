@@ -1,6 +1,10 @@
+using AutoMapper;
+using Catalog.Application.Mappings;
+using Catalog.Domain.Entities;
+
 namespace Catalog.Application.DTOs;
 
-public class CategoryNavigationDto
+public class CategoryNavigationDto : IMapFrom<Category>
 {
     public Guid Id { get; set; }
     public string Code { get; set; }
@@ -22,4 +26,9 @@ public class CategoryNavigationDto
         }
     }
     public IEnumerable<CategoryNavigationDto> Children { get; set; } = new List<CategoryNavigationDto>();
+    
+    public void Mapping(Profile profile)
+    {
+        profile.CreateMap<CategoryNavigationDto, Category>().ReverseMap();
+    }
 }

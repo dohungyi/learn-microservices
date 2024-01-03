@@ -24,10 +24,11 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
     {
     }
 
-    public async Task<IList<CategorySummaryDto>> GetCategoryHierarchyAsync(Category category, CancellationToken cancellationToken = default)
+    public async Task<IList<CategorySummaryDto>> GetCategoryHierarchyAsync(Category category,
+        CancellationToken cancellationToken = default)
     {
-        var categories = await _dbSet.Where(e => e.Path.StartsWith(category.Path) && e.Status)
-            .OrderBy(e => e.OrderNumber)
+        var categories = await _dbSet.Where(e => category.Path.StartsWith(e.Path) && e.Status)
+            .OrderBy(e => e.Level)
             .Select(e => new CategorySummaryDto()
             {
                 Id = e.Id,
@@ -38,13 +39,13 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
                 OrderNumber = e.OrderNumber,
                 Level = e.Level,
                 ParentId = e.ParentId,
-                IsSelected = e.ParentId != category.Id
+                IsSelected = e.Id != category.Id
             })
             .ToListAsync(cancellationToken);
-        
+
         return categories;
     }
-    
+
     public async Task<IList<Category>> GetListCategoryByIdsAsync(IList<Guid> categoryIds,
         CancellationToken cancellationToken = default)
     {
@@ -60,7 +61,8 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
         CancellationToken cancellationToken = default)
     {
         var duplicateSupplier = await _dbSet.FirstOrDefaultAsync(
-            e => (categoryId == null || e.Id != categoryId) && (e.Code == code || e.Name == name) && e.Status, cancellationToken);
+            e => (categoryId == null || e.Id != categoryId) && (e.Code == code || e.Name == name) && e.Status,
+            cancellationToken);
 
         if (duplicateSupplier is null)
         {
@@ -97,7 +99,8 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
 
         var result = await _dbSet
             .WhereIf(!string.IsNullOrEmpty(request.SearchString),
-                e => e.Code.Contains(request.SearchString) || e.Name.Contains(request.SearchString) || e.Description.Contains(request.SearchString))
+                e => e.Code.Contains(request.SearchString) || e.Name.Contains(request.SearchString) ||
+                     e.Description.Contains(request.SearchString))
             .ApplySort(request.Sorts)
             .ToPagedListAsync<Category, CategoryDto>(
                 mapper,
@@ -120,7 +123,8 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
         }
 
         var supplier =
-            await _dbSet.FirstOrDefaultIfAsync(!string.IsNullOrEmpty(alias), e => e.Alias == alias && e.Status, cancellationToken);
+            await _dbSet.FirstOrDefaultIfAsync(!string.IsNullOrEmpty(alias), e => e.Alias == alias && e.Status,
+                cancellationToken);
 
         if (supplier is not null)
         {
@@ -133,69 +137,49 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
     public async Task<IList<CategoryNavigationDto>> GetCategoryNavigationAsync(CancellationToken cancellationToken = default)
     {
         string key = BaseCacheKeys.GetSystemFullRecordsKey(_tableName);
-        var navigations = await _sequenceCaching.GetAsync<IList<CategoryNavigationDto>>(key, cancellationToken: cancellationToken);
+        var navigations =
+            await _sequenceCaching.GetAsync<IList<CategoryNavigationDto>>(key, cancellationToken: cancellationToken);
 
         if (navigations != null)
         {
             return navigations;
         }
-        
-        var roots = _dbSet.Where(x => !x.ParentId.HasValue && x.Status)
-            .OrderBy(x => x.OrderNumber);
-        
-        var hasRoots = await roots.AnyAsync(cancellationToken);
-        if(hasRoots)
+
+        var allCategories = await _dbSet.Where(x => x.Status).ToListAsync(cancellationToken);
+        var roots = allCategories.Where(x => !x.ParentId.HasValue)
+            .OrderBy(x => x.OrderNumber).ToList();
+
+        if (!roots.Any())
         {
-            return default!;
+            return new List<CategoryNavigationDto>();
         }
 
-        navigations = await roots.Select(root => new CategoryNavigationDto
-            {
-               Children = _dbSet.Where(x => x.ParentId.Equals(root.Id) && x.Status)
-                   .OrderBy(x => x.OrderNumber)
-                   .Select(child => new CategoryNavigationDto
-                   {
-                       Id = child.Id,
-                       ParentId = child.ParentId,
-                       Name = child.Name,
-                       Alias = child.Alias,
-                       Description = child.Description,
-                       Level = child.Level,
-                       FileName = child.FileName,
-                       OrderNumber = child.OrderNumber,
-                       Status = child.Status,
-                       Path = child.Path,
-                       Children = BuildCategoryChildren(child.Id, cancellationToken)
-                   })
-                   .ToList()
-            })
-            .ToListAsync(cancellationToken);
-        
-        await _sequenceCaching.SetAsync(key, navigations, onlyUseType: CachingType.Redis, cancellationToken: cancellationToken);
-        
+        navigations = roots.Select(root => MapCategoryToDto(root, allCategories)).ToList();
+
+        await _sequenceCaching.SetAsync(key, navigations, onlyUseType: CachingType.Redis,
+            cancellationToken: cancellationToken);
+
         return navigations;
     }
-    
-    private IList<CategoryNavigationDto> BuildCategoryChildren(Guid parentId, CancellationToken cancellationToken)
-    {
-        var children = _dbSet.Where(x => x.ParentId.Equals(parentId) && x.Status)
-            .OrderBy(x => x.OrderNumber)
-            .Select(child => new CategoryNavigationDto
-            {
-                Id = child.Id,
-                ParentId = child.ParentId,
-                Name = child.Name,
-                Alias = child.Alias,
-                Description = child.Description,
-                Level = child.Level,
-                FileName = child.FileName,
-                OrderNumber = child.OrderNumber,
-                Status = child.Status,
-                Path = child.Path,
-                Children = BuildCategoryChildren(child.Id, cancellationToken)
-            })
-            .ToList();
 
-        return children;
+    private CategoryNavigationDto MapCategoryToDto(Category category, IEnumerable<Category> allCategories)
+    {
+        var childrenCategories = allCategories.Where(x => x.ParentId == category.Id).OrderBy(x => x.OrderNumber);
+        var childrenDtos = childrenCategories.Select(child => MapCategoryToDto(child, allCategories)).ToList();
+
+        return new CategoryNavigationDto
+        {
+            Id = category.Id,
+            ParentId = category.ParentId,
+            Name = category.Name,
+            Alias = category.Alias,
+            Description = category.Description,
+            Level = category.Level,
+            FileName = category.FileName,
+            OrderNumber = category.OrderNumber,
+            Status = category.Status,
+            Path = category.Path,
+            Children = childrenDtos
+        };
     }
 }

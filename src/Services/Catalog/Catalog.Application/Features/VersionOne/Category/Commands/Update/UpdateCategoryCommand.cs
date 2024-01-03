@@ -5,7 +5,7 @@ using SharedKernel.Application;
 
 namespace Catalog.Application.Features.VersionOne;
 
-public class UpdateCategoryCommand : BaseUpdateCommand<Unit>, IMapFrom<Supplier>
+public class UpdateCategoryCommand : BaseUpdateCommand<Unit>, IMapFrom<Category>
 {
     public Guid Id { get; set; }
     public string Code { get; set; }
