@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Catalog.Application.DTOs;
 using Catalog.Application.Properties;
 using Catalog.Application.Repositories;
@@ -9,11 +9,11 @@ using SharedKernel.Runtime.Exceptions;
 
 namespace Catalog.Application.Features.VersionOne;
 
-public class GetAllDistrictsByProvinceIdQueryHandler : BaseQueryHandler, IRequestHandler<GetAllDistrictsByProvinceIdQuery, IList<LocationDistrictDto>>
+public class GetAllWardsByDistrictCodeQueryHandler : BaseQueryHandler, IRequestHandler<GetAllWardsByDistrictCodeQuery, IList<LocationWardDto>>
 {
     private readonly ILocationReadOnlyRepository _locationReadOnlyRepository;
     private readonly IStringLocalizer<Resources> _localizer;
-    public GetAllDistrictsByProvinceIdQueryHandler(
+    public GetAllWardsByDistrictCodeQueryHandler(
         IMapper mapper,
         ILocationReadOnlyRepository locationReadOnlyRepository,
         IStringLocalizer<Resources> localizer
@@ -23,14 +23,14 @@ public class GetAllDistrictsByProvinceIdQueryHandler : BaseQueryHandler, IReques
         _localizer = localizer;
     }
 
-    public async Task<IList<LocationDistrictDto>> Handle(GetAllDistrictsByProvinceIdQuery request, CancellationToken cancellationToken)
+    public async Task<IList<LocationWardDto>> Handle(GetAllWardsByDistrictCodeQuery request, CancellationToken cancellationToken)
     {
-        var province = await _locationReadOnlyRepository.GetProvinceByIdAsync(request.ProvinceId, cancellationToken);
-        if (province == null)
+        var district = await _locationReadOnlyRepository.GetDistrictByCodeAsync(request.DistrictCode, cancellationToken);
+        if (district == null)
         {
-            throw new BadRequestException(_localizer["province_does_not_exist_or_was_deleted"].Value);
+            throw new BadRequestException(_localizer["common_data_does_not_exist_or_was_deleted"].Value);
         }
         
-        return await _locationReadOnlyRepository.GetAllDistrictsByProvinceIdAsync(request.ProvinceId, cancellationToken);
+        return await _locationReadOnlyRepository.GetAllWardsByDistrictCodeAsync(request.DistrictCode, cancellationToken);
     }
 }

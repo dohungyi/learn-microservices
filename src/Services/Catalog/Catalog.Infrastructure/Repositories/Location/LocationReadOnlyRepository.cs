@@ -26,7 +26,7 @@ public class LocationReadOnlyRepository : ILocationReadOnlyRepository
         _caching = caching;
     }
 
-    public async Task<LocationProvince> GetProvinceByIdAsync(Guid provinceId, CancellationToken cancellationToken = default)
+    public async Task<LocationProvince?> GetProvinceByIdAsync(Guid provinceId, CancellationToken cancellationToken = default)
     {
         var tableName = ((LocationProvince)Activator.CreateInstance(typeof(LocationProvince))).GetTableName();
         string key = BaseCacheKeys.GetSystemRecordByIdKey(tableName, provinceId);
@@ -46,7 +46,7 @@ public class LocationReadOnlyRepository : ILocationReadOnlyRepository
         return province;
     }
 
-    public async Task<LocationDistrict> GetDistrictByIdAsync(Guid districtId, CancellationToken cancellationToken = default)
+    public async Task<LocationDistrict?> GetDistrictByIdAsync(Guid districtId, CancellationToken cancellationToken = default)
     {
         var tableName = ((LocationDistrict)Activator.CreateInstance(typeof(LocationDistrict))).GetTableName();
         string key = BaseCacheKeys.GetSystemRecordByIdKey(tableName, districtId);
@@ -58,6 +58,46 @@ public class LocationReadOnlyRepository : ILocationReadOnlyRepository
         }
 
         district = await _context.Districts.FirstOrDefaultAsync(e => e.Id == districtId, cancellationToken);
+        if (district != null)
+        {
+            await _caching.SetAsync(key, district, TimeSpan.FromDays(30), onlyUseType: CachingType.Redis, cancellationToken: cancellationToken);
+        }
+
+        return district;
+    }
+
+    public async Task<LocationProvince?> GetProvinceByCodeAsync(string provinceCode, CancellationToken cancellationToken = default)
+    {
+        var tableName = ((LocationProvince)Activator.CreateInstance(typeof(LocationProvince))).GetTableName();
+        string key = BaseCacheKeys.GetSystemRecordByIdKey(tableName, provinceCode);
+        
+        var province = await _caching.GetAsync<LocationProvince>(key, cancellationToken: cancellationToken);
+        if (province != null)
+        {
+            return province;
+        }
+
+        province = await _context.Provinces.FirstOrDefaultAsync(e => e.Code == provinceCode, cancellationToken);
+        if (province != null)
+        {
+            await _caching.SetAsync(key, province, TimeSpan.FromDays(30), onlyUseType: CachingType.Redis, cancellationToken: cancellationToken);
+        }
+
+        return province;
+    }
+
+    public async Task<LocationDistrict?> GetDistrictByCodeAsync(string districtCode, CancellationToken cancellationToken = default)
+    {
+        var tableName = ((LocationDistrict)Activator.CreateInstance(typeof(LocationDistrict))).GetTableName();
+        string key = BaseCacheKeys.GetSystemRecordByIdKey(tableName, districtCode);
+        
+        var district = await _caching.GetAsync<LocationDistrict>(key, cancellationToken: cancellationToken);
+        if (district != null)
+        {
+            return district;
+        }
+
+        district = await _context.Districts.FirstOrDefaultAsync(e => e.Code == districtCode, cancellationToken);
         if (district != null)
         {
             await _caching.SetAsync(key, district, TimeSpan.FromDays(30), onlyUseType: CachingType.Redis, cancellationToken: cancellationToken);
@@ -137,5 +177,52 @@ public class LocationReadOnlyRepository : ILocationReadOnlyRepository
 
         return wards;
     }
-    
+
+    public async Task<IList<LocationDistrictDto>> GetAllDistrictsByProvinceCodeAsync(string provinceCode, CancellationToken cancellationToken = default)
+    {
+        var tableName = ((LocationDistrict)Activator.CreateInstance(typeof(LocationDistrict))).GetTableName();
+        string key = BaseCacheKeys.GetSystemFullRecordsKey(tableName);
+
+        var districts = await _caching.GetAsync<IList<LocationDistrictDto>>(key, cancellationToken: cancellationToken);
+        if (districts != null)
+        {
+            return districts;
+        }
+
+        districts = await _context.Districts
+            .Where(e => e.Province.Code == provinceCode)
+            .ProjectTo<LocationDistrictDto>(_mapper.ConfigurationProvider, cancellationToken)
+            .ToListAsync(cancellationToken);
+
+        if (districts != null)
+        {
+            await _caching.SetAsync(key, districts, TimeSpan.FromDays(30), onlyUseType: CachingType.Redis, cancellationToken: cancellationToken);
+        }
+
+        return districts;
+    }
+
+    public async Task<IList<LocationWardDto>> GetAllWardsByDistrictCodeAsync(string districtCode, CancellationToken cancellationToken = default)
+    {
+        var tableName = ((LocationWard)Activator.CreateInstance(typeof(LocationWard))).GetTableName();
+        string key = BaseCacheKeys.GetSystemFullRecordsKey(tableName);
+
+        var wards = await _caching.GetAsync<IList<LocationWardDto>>(key, cancellationToken: cancellationToken);
+        if (wards != null)
+        {
+            return wards;
+        }
+
+        wards = await _context.Wards
+            .Where(e => e.District.Code == districtCode)
+            .ProjectTo<LocationWardDto>(_mapper.ConfigurationProvider, cancellationToken)
+            .ToListAsync(cancellationToken);
+
+        if (wards != null)
+        {
+            await _caching.SetAsync(key, wards, TimeSpan.FromDays(30), onlyUseType: CachingType.Redis, cancellationToken: cancellationToken);
+        }
+
+        return wards;
+    }
 }
