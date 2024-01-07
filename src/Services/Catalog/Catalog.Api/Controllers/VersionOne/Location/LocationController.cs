@@ -32,19 +32,19 @@ public class LocationController : BaseController
         return Ok(new ApiSimpleResult(provinces));
     }
     
-    // [AllowAnonymous]
-    // [HttpGet("provinces/{code}/districts")]
-    // public async Task<IActionResult> GetAllDistrictByProvinceCodeAsync([FromRoute(Name = "code")]string provinceCode, CancellationToken cancellationToken = default)
-    // {
-    //     var provinces = await Mediator.Send(new GetAllProvincesQuery(), cancellationToken);
-    //     return Ok(new ApiSimpleResult(provinces));
-    // }
-    //
-    // [AllowAnonymous]
-    // [HttpGet("districts/{code}/wards")]
-    // public async Task<IActionResult> GetAllWardsByDistrictCodeAsync([FromRoute(Name = "id")]Guid districtId, CancellationToken cancellationToken = default)
-    // {
-    //     var provinces = await Mediator.Send(new GetAllWardByDistrictIdQuery(districtId), cancellationToken);
-    //     return Ok(new ApiSimpleResult(provinces));
-    // }
+    [AllowAnonymous]
+    [HttpGet("provinces/{code}/districts")]
+    public async Task<IActionResult> GetAllDistrictByProvinceCodeAsync([FromRoute(Name = "code")]string provinceCode, CancellationToken cancellationToken = default)
+    {
+        var provinces = await Mediator.Send(new GetAllProvincesQuery(), cancellationToken);
+        return Ok(new ApiSimpleResult(provinces));
+    }
+    
+    [AllowAnonymous]
+    [HttpGet("districts/{code}/wards")]
+    public async Task<IActionResult> GetAllWardsByDistrictCodeAsync([FromRoute(Name = "code")]Guid districtCode, CancellationToken cancellationToken = default)
+    {
+        var provinces = await Mediator.Send(new GetAllProvincesQuery(), cancellationToken);
+        return Ok(new ApiSimpleResult(provinces));
+    }
 }

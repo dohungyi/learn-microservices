@@ -23,7 +23,7 @@ namespace SharedKernel.Application
                 {
                     throw new BadRequestException("Page must be greater than or equal 0");
                 }
-                _page = IndexFrom > Page ? _indexFrom : value;
+                _page = value;
             }
         }
 
@@ -53,7 +53,7 @@ namespace SharedKernel.Application
 
             set
             {
-                if (value <= 0 || value > 1000)
+                if (value < 0 || value > 1000)
                 {
                     throw new BadRequestException("Size should be between 1 and 1000");
                 }
@@ -63,7 +63,7 @@ namespace SharedKernel.Application
 
         public int Offset => (_page - _indexFrom) * _size;
 
-        public Filter Filter { get; set; }
+        public Filter Filter { get; set; } = new Filter();
 
         public string SearchString { get; set; } = string.Empty;
         public List<SortModel> Sorts { get; set; } = new List<SortModel>();
