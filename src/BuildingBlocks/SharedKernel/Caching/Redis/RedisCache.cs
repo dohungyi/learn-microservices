@@ -45,9 +45,11 @@ public class RedisCache : IRedisCache
         {
             throw new ArgumentNullException(nameof(value));
         }
+        
+        var absoluteExpireTime = expiry ?? DefaultAbsoluteExpireTime;
 
         var valueString = JsonConvert.SerializeObject(value);
-        return await RunWithPolicyAsync(async () => await SetStringAsync(key, valueString, expiry, keepTtl));
+        return await RunWithPolicyAsync(async () => await SetStringAsync(key, valueString, absoluteExpireTime, keepTtl));
     }
 
     public async Task<bool> SetStringAsync(string key, string value, TimeSpan? expiry = null, bool keepTtl = false)
@@ -57,8 +59,9 @@ public class RedisCache : IRedisCache
             throw new ArgumentNullException(nameof(key));
         }
         
+        var absoluteExpireTime = expiry ?? DefaultAbsoluteExpireTime;
         return await RunWithPolicyAsync(async () =>
-            await _cache.StringSetAsync(key, Encoding.UTF8.GetBytes(value), expiry, keepTtl));
+            await _cache.StringSetAsync(key, Encoding.UTF8.GetBytes(value), absoluteExpireTime, keepTtl));
     }
 
     public async Task<bool> DeleteAsync(string key)

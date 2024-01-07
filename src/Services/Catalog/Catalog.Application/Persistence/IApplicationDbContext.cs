@@ -55,6 +55,15 @@ public interface IApplicationDbContext : IAppDbContext
     public DbSet<Weight> Weights { get; }
     
     #endregion
+
+    #region Location
+
+    public DbSet<LocationProvince> Provinces { get; set; }
+    public DbSet<LocationDistrict> Districts { get; set; }
+    public DbSet<LocationWard> Wards { get; set; }
+
+
+    #endregion
     
     #endregion
 }

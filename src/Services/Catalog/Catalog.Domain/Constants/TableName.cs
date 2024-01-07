@@ -38,4 +38,14 @@ public static class TableName
     public const string Weight = "weights";
 
     #endregion
+
+    #region Location
+
+    public const string Provinces = "provinces";
+    
+    public const string Districts = "districts";
+
+    public const string Wards = "wards";
+
+    #endregion
 }

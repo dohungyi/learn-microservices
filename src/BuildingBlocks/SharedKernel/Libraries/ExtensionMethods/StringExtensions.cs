@@ -241,7 +241,7 @@ public static class StringExtensions
         {
             str2 = str2.Replace("--", "-").ToLower();
         }
-        return str2;
+        return str2.ToLower();
     }
     
     #endregion

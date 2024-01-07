@@ -39,6 +39,9 @@ public static class ConfigureServices
         // Category
         services.AddScoped<ICategoryWriteOnlyRepository, CategoryWriteOnlyRepository>();
         services.AddScoped<ICategoryReadOnlyRepository, CategoryReadOnlyRepository>();
+        
+        // Location
+        services.AddScoped<ILocationReadOnlyRepository, LocationReadOnlyRepository>();
 
         return services;
     }

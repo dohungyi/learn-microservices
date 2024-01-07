@@ -32,7 +32,7 @@ public class ApplicationDbContext : AppDbContext, IApplicationDbContext
 
     #endregion
     
-    #region Products
+    #region Product
 
     public DbSet<Attribute> Attributes { get; set; }
     public DbSet<Product> Products { get;  }
@@ -59,6 +59,14 @@ public class ApplicationDbContext : AppDbContext, IApplicationDbContext
     #region Weight
     
     public DbSet<Weight> Weights { get; set; }
+    
+    #endregion
+
+    #region Location
+
+    public DbSet<LocationProvince> Provinces { get; set; }
+    public DbSet<LocationDistrict> Districts { get; set; }
+    public DbSet<LocationWard> Wards { get; set; }
     
     #endregion
     

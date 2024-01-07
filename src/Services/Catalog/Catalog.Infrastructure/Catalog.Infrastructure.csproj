@@ -19,4 +19,10 @@
       </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+        <None Update="Excels\province-district-ward.xlsx">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
 </Project>
