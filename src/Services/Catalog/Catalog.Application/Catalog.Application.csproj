@@ -16,7 +16,6 @@
       <Folder Include="Features\VersionOne\Attribute\Queries\GetById\" />
       <Folder Include="Features\VersionOne\Product\Commands\" />
       <Folder Include="Features\VersionOne\Product\Queries\" />
-      <Folder Include="Services\" />
     </ItemGroup>
 
     <ItemGroup>

@@ -152,19 +152,17 @@ public class MemoryCaching : IMemoryCaching
     private List<string> GetAllCacheKeys()
     {
         const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
-        // var entries = _cache.GetType()?.GetField("_entries", flags)?.GetValue(_cache);
-        // var cacheItems = entries as IDictionary;
         var typeOfCache = _caching.GetType();
         var fieldEntries = typeOfCache?.GetField("_entries", flags);
         var entriesValue = fieldEntries?.GetValue(_caching);
         var cacheItems = entriesValue as IDictionary;
 
+        var keys = new List<string>();
         if (cacheItems is null || cacheItems.Count <= 0)
         {
-            return default!;
+            return keys;
         }
         
-        var keys = new List<string>();
         foreach (DictionaryEntry cacheItem in cacheItems)
         {
             keys.Add(cacheItem.Key.ToString());
