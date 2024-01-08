@@ -26,7 +26,7 @@ public class LocationReadOnlyRepository : ILocationReadOnlyRepository
         _caching = caching;
     }
 
-    public async Task<LocationProvince?> GetProvinceByIdAsync(Guid provinceId, CancellationToken cancellationToken = default)
+    public async Task<LocationProvince?> GetProvinceByIdAsync(long provinceId, CancellationToken cancellationToken = default)
     {
         var tableName = ((LocationProvince)Activator.CreateInstance(typeof(LocationProvince))).GetTableName();
         string key = BaseCacheKeys.GetSystemRecordByIdKey(tableName, provinceId);
@@ -46,7 +46,7 @@ public class LocationReadOnlyRepository : ILocationReadOnlyRepository
         return province;
     }
 
-    public async Task<LocationDistrict?> GetDistrictByIdAsync(Guid districtId, CancellationToken cancellationToken = default)
+    public async Task<LocationDistrict?> GetDistrictByIdAsync(long districtId, CancellationToken cancellationToken = default)
     {
         var tableName = ((LocationDistrict)Activator.CreateInstance(typeof(LocationDistrict))).GetTableName();
         string key = BaseCacheKeys.GetSystemRecordByIdKey(tableName, districtId);
@@ -130,7 +130,7 @@ public class LocationReadOnlyRepository : ILocationReadOnlyRepository
 
     }
     
-    public async Task<IList<LocationDistrictDto>> GetAllDistrictsByProvinceIdAsync(Guid provinceId, CancellationToken cancellationToken = default)
+    public async Task<IList<LocationDistrictDto>> GetAllDistrictsByProvinceIdAsync(long provinceId, CancellationToken cancellationToken = default)
     {
         var tableName = ((LocationDistrict)Activator.CreateInstance(typeof(LocationDistrict))).GetTableName();
         string key = BaseCacheKeys.GetSystemFullRecordsKey(tableName);
@@ -154,7 +154,7 @@ public class LocationReadOnlyRepository : ILocationReadOnlyRepository
         return districts;
     }
 
-    public async Task<IList<LocationWardDto>> GetAllWardsByDistrictIdAsync(Guid districtId, CancellationToken cancellationToken = default)
+    public async Task<IList<LocationWardDto>> GetAllWardsByDistrictIdAsync(long districtId, CancellationToken cancellationToken = default)
     {
         var tableName = ((LocationWard)Activator.CreateInstance(typeof(LocationWard))).GetTableName();
         string key = BaseCacheKeys.GetSystemFullRecordsKey(tableName);

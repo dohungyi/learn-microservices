@@ -9,13 +9,11 @@ namespace Catalog.Domain.Entities;
 public class Asset : BaseEntity
 {
     public string FileName { get; set; }
-    
-    public string Description { get; set; }
-    
-    public string Path { get; set; }
-    
+    public string OriginalFileName { get; set; }
+    public string? Description { get; set; }
+    public string FileExtension { get; set; }
+    public string Url { get; set; }
     public SharedKernel.Application.Enum.FileType Type { get; set; }
-    
     public long Size { get; set; }
     
     #region Navigations

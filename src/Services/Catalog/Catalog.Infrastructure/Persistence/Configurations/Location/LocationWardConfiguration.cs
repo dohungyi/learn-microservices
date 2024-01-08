@@ -4,10 +4,25 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Catalog.Infrastructure.Persistence.Configurations;
 
-public class LocationWardConfiguration : BaseEntityConfiguration<LocationWard>
+public class LocationWardConfiguration : IEntityTypeConfiguration<LocationWard>
 {
     public void Configure(EntityTypeBuilder<LocationWard> builder)
     {
+        #region Indexes
+
+        builder
+            .HasIndex(e => e.Code)
+            .IsUnique();
+
+        #endregion
+
+        #region Columns
         
+        builder.HasQueryFilter(x => !x.IsDeleted);
+        
+        builder
+            .HasKey(e => e.Id);
+        
+        #endregion
     }
 }

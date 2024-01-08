@@ -1,14 +1,10 @@
 ﻿using System.Reflection;
 using Catalog.Application.Behaviors;
-using Catalog.Application.Services.Implements;
-using Catalog.Application.Services.Interfaces;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SharedKernel.Configure;
-using SharedKernel.Infrastructures;
 
 namespace Catalog.Application;
 
@@ -30,8 +26,6 @@ public static class ConfigureServices
         // Pipelines
         services.AddCoreBehaviors();
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
-
-        services.AddTransient<ICachingService, CachingService>();
         
         return services;
     }

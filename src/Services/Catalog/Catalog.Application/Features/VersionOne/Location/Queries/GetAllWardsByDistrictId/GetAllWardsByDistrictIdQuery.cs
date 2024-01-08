@@ -6,7 +6,7 @@ namespace Catalog.Application.Features.VersionOne;
 
 public class GetAllWardsByDistrictIdQuery : BaseAllowAnonymousQuery<IList<LocationWardDto>>
 {
-    public Guid DistrictId { get; init; }
+    public long DistrictId { get; init; }
 
-    public GetAllWardsByDistrictIdQuery(Guid districtId) => DistrictId = districtId;
+    public GetAllWardsByDistrictIdQuery(long districtId) => DistrictId = districtId;
 }

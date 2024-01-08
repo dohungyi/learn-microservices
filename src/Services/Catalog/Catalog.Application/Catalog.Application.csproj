@@ -38,4 +38,8 @@
       </Compile>
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="FirebaseAdmin" Version="2.4.0" />
+    </ItemGroup>
+
 </Project>

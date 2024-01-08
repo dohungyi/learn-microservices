@@ -1,7 +1,10 @@
 ﻿using Catalog.Application.Persistence;
 using Catalog.Application.Repositories;
+using Catalog.Application.Services;
+using Catalog.Infrastructure.Configs;
 using Catalog.Infrastructure.Persistence;
 using Catalog.Infrastructure.Repositories;
+using Catalog.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +15,13 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
+        
+        #region Core settings projects
+        
+        FirebaseConfig.SetConfig(configuration);
+        
+        #endregion
+        
         services.AddDbContextPool<ApplicationDbContext>((provider, options) =>
         {
             options.UseMySql(
@@ -27,6 +37,12 @@ public static class ConfigureServices
         services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
         
         services.AddScoped<ApplicationDbContextSeed>();
+
+        #region Services
+
+        services.AddTransient<ICachingService, CachingService>();
+
+        #endregion
         
         // Base
         services.AddScoped(typeof(IEfCoreReadOnlyRepository<,>), typeof(EfCoreReadOnlyRepository<,>));
@@ -42,6 +58,10 @@ public static class ConfigureServices
         
         // Location
         services.AddScoped<ILocationReadOnlyRepository, LocationReadOnlyRepository>();
+        
+        // Asset
+        services.AddScoped<IAssetReadOnlyRepository, AssetReadOnlyRepository>();
+        services.AddScoped<IAssetWriteOnlyRepository, IAssetWriteOnlyRepository>();
 
         return services;
     }

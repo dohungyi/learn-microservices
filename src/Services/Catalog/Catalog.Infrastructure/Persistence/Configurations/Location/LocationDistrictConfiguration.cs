@@ -5,11 +5,10 @@ using Enum = System.Enum;
 
 namespace Catalog.Infrastructure.Persistence.Configurations;
 
-public class LocationDistrictConfiguration : BaseEntityConfiguration<LocationDistrict>
+public class LocationDistrictConfiguration : IEntityTypeConfiguration<LocationDistrict>
 {
     public void Configure(EntityTypeBuilder<LocationDistrict> builder)
     {
-        base.Configure(builder);
         
         #region Indexes
 
@@ -20,6 +19,11 @@ public class LocationDistrictConfiguration : BaseEntityConfiguration<LocationDis
         #endregion
 
         #region Columns
+        
+        builder.HasQueryFilter(x => !x.IsDeleted);
+        
+        builder
+            .HasKey(e => e.Id);
 
         builder.HasMany(e => e.Wards)
             .WithOne(e => e.District)

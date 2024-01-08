@@ -6,7 +6,13 @@ namespace Catalog.Api.Controllers.VersionOne;
 public class UploadController : BaseController
 {
     [HttpPost("upload")]
-    public async Task<IActionResult> UploadFile([FromForm]IFormFile file)
+    public async Task<IActionResult> UploadFileAsync([FromForm]IFormFile file)
+    {
+        return Ok();
+    }
+    
+    [HttpPost("uploads")]
+    public async Task<IActionResult> UploadFileMultipleAsync([FromForm]IList<IFormFile> file)
     {
         return Ok();
     }

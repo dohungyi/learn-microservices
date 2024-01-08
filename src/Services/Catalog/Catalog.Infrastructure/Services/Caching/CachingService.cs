@@ -1,7 +1,7 @@
-﻿using Caching;
-using Catalog.Application.Services.Interfaces;
+using Caching;
+using Catalog.Application.Services;
 
-namespace Catalog.Application.Services.Implements;
+namespace Catalog.Infrastructure.Services;
 
 public class CachingService : ICachingService
 {

@@ -1,6 +1,36 @@
-﻿namespace Catalog.Infrastructure.Repositories;
+﻿using Caching;
+using Catalog.Application.Repositories;
+using Catalog.Domain.Entities;
+using Catalog.Infrastructure.Persistence;
 
-public class AssetWriteOnlyRepository
+namespace Catalog.Infrastructure.Repositories;
+
+public class AssetWriteOnlyRepository : BaseWriteOnlyRepository<Asset>, IAssetWriteOnlyRepository
 {
-    
+    public AssetWriteOnlyRepository(
+        ApplicationDbContext dbContext, 
+        ICurrentUser currentUser, 
+        ISequenceCaching sequenceCaching, 
+        IServiceProvider provider
+        ) : base(dbContext, currentUser, sequenceCaching, provider)
+    {
+    }
+
+    public async Task<Asset> CreateAssetAsync(Asset asset, CancellationToken cancellationToken = default)
+    {
+        await InsertAsync(asset, cancellationToken);
+        return asset;
+    }
+
+    public async Task<Asset> UpdateAssetAsync(Asset asset, CancellationToken cancellationToken = default)
+    {
+        await UpdateAsync(asset, cancellationToken);
+        return asset;
+    }
+
+    public async Task<bool> DeleteAssetAsync(Asset asset, CancellationToken cancellationToken = default)
+    {
+        await DeleteAsync(asset, cancellationToken);
+        return true;
+    }
 }

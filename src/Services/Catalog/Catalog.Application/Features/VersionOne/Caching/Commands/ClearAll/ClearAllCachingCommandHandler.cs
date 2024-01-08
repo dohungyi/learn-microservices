@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Catalog.Application.Services.Interfaces;
+using Catalog.Application.Services;
 using MediatR;
 using SharedKernel.Application;
 

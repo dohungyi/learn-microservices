@@ -18,7 +18,7 @@ public class LocationController : BaseController
     
     // [AllowAnonymous]
     // [HttpGet("provinces/{id:guid}/districts")]
-    // public async Task<IActionResult> GetAllDistrictByProvinceIdAsync([FromRoute(Name = "id")]Guid provinceId, CancellationToken cancellationToken = default)
+    // public async Task<IActionResult> GetAllDistrictByProvinceIdAsync([FromRoute(Name = "id")]long provinceId, CancellationToken cancellationToken = default)
     // {
     //     var provinces = await Mediator.Send(new GetAllDistrictsByProvinceIdQuery(provinceId), cancellationToken);
     //     return Ok(new ApiSimpleResult(provinces));
@@ -26,7 +26,7 @@ public class LocationController : BaseController
     //
     // [AllowAnonymous]
     // [HttpGet("districts/{id:guid}/wards")]
-    // public async Task<IActionResult> GetAllWardsByDistrictIdAsync([FromRoute(Name = "id")]Guid districtId, CancellationToken cancellationToken = default)
+    // public async Task<IActionResult> GetAllWardsByDistrictIdAsync([FromRoute(Name = "id")]long districtId, CancellationToken cancellationToken = default)
     // {
     //     var provinces = await Mediator.Send(new GetAllWardsByDistrictIdQuery(districtId), cancellationToken);
     //     return Ok(new ApiSimpleResult(provinces));

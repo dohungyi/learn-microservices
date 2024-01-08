@@ -13,7 +13,13 @@ public class AssetConfiguration : BaseEntityConfiguration<Asset>
 
         #region Indexes
 
+        builder
+            .HasIndex(e => e.FileName)
+            .IsUnique();
         
+        builder
+            .HasIndex(e => e.OriginalFileName)
+            .IsUnique();
 
         #endregion
 
@@ -21,14 +27,14 @@ public class AssetConfiguration : BaseEntityConfiguration<Asset>
 
         builder
             .Property(e => e.FileName)
-            .HasMaxLength(255);
+            .HasMaxLength(256);
+        
+        builder
+            .Property(e => e.OriginalFileName)
+            .HasMaxLength(512);
 
         builder
             .Property(e => e.Description)
-            .IsRequired(false);
-
-        builder
-            .Property(e => e.Path)
             .IsRequired(false);
         
         builder.Property(cd => cd.Type)

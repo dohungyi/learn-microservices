@@ -8,7 +8,7 @@ public class LocationDistrict : BaseLocation
 {
     #region Relationships
 
-    public Guid ProvinceId { get; set; }
+    public long ProvinceId { get; set; }
 
     #endregion
 

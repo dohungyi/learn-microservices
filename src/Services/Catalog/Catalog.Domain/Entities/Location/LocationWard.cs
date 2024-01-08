@@ -8,7 +8,7 @@ public class LocationWard : BaseLocation
 {
     #region Relationships
     
-    public Guid DistrictId { get; set; }
+    public long DistrictId { get; set; }
 
     #endregion
     

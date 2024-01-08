@@ -38,6 +38,9 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("FileExtension")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -54,7 +57,7 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Path")
+                    b.Property<string>("OriginalFileName")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -63,6 +66,10 @@ namespace Catalog.Infrastructure.Persistence.Migrations
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -246,41 +253,23 @@ namespace Catalog.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Catalog.Domain.Entities.LocationDistrict", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<Guid?>("DeletedBy")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<Guid?>("LastModifiedBy")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<Guid>("ProvinceId")
-                        .HasColumnType("char(36)");
+                    b.Property<long>("ProvinceId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Slug")
                         .IsRequired()
@@ -293,39 +282,21 @@ namespace Catalog.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ProvinceId");
 
-                    b.ToTable("Districts");
+                    b.ToTable("districts");
                 });
 
             modelBuilder.Entity("Catalog.Domain.Entities.LocationProvince", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<Guid?>("DeletedBy")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<Guid?>("LastModifiedBy")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -340,42 +311,24 @@ namespace Catalog.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Provinces");
+                    b.ToTable("provinces");
                 });
 
             modelBuilder.Entity("Catalog.Domain.Entities.LocationWard", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<Guid?>("DeletedBy")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<Guid>("DistrictId")
-                        .HasColumnType("char(36)");
+                    b.Property<long>("DistrictId")
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<Guid?>("LastModifiedBy")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -392,7 +345,7 @@ namespace Catalog.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("DistrictId");
 
-                    b.ToTable("Wards");
+                    b.ToTable("wards");
                 });
 
             modelBuilder.Entity("Catalog.Domain.Entities.Product", b =>
