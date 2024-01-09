@@ -12,7 +12,6 @@ public class Asset : BaseEntity
     public string OriginalFileName { get; set; }
     public string? Description { get; set; }
     public string FileExtension { get; set; }
-    public string Url { get; set; }
     public SharedKernel.Application.Enum.FileType Type { get; set; }
     public long Size { get; set; }
     

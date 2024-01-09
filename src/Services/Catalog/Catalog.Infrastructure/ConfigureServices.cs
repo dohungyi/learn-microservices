@@ -40,7 +40,9 @@ public static class ConfigureServices
 
         #region Services
 
-        services.AddTransient<ICachingService, CachingService>();
+        services.AddScoped<ICachingService, CachingService>();
+        services.AddSingleton<IFileService, FileService>();
+        services.AddScoped<IFirebaseStorageService, FirebaseStorageService>();
 
         #endregion
         
@@ -61,7 +63,7 @@ public static class ConfigureServices
         
         // Asset
         services.AddScoped<IAssetReadOnlyRepository, AssetReadOnlyRepository>();
-        services.AddScoped<IAssetWriteOnlyRepository, IAssetWriteOnlyRepository>();
+        services.AddScoped<IAssetWriteOnlyRepository, AssetWriteOnlyRepository>();
 
         return services;
     }

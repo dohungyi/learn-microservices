@@ -28,8 +28,6 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     FileExtension = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Url = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Type = table.Column<int>(type: "int", nullable: false),
                     Size = table.Column<long>(type: "bigint", nullable: false),
                     IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),

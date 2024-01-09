@@ -1,8 +1,9 @@
 using Catalog.Application.Services;
 using Catalog.Infrastructure.Configs;
 using Google.Apis.Auth.OAuth2;
-using Google.Apis.Storage.v1.Data;
 using Google.Cloud.Storage.V1;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using SharedKernel.Log;
 using SharedKernel.Providers;
 using Object = Google.Apis.Storage.v1.Data.Object;
@@ -12,9 +13,9 @@ namespace Catalog.Infrastructure.Services;
 public class FirebaseStorageService : IFirebaseStorageService
 {
     private readonly StorageClient _storageClient;
-    public FirebaseStorageService()
+    public FirebaseStorageService(IConfiguration configuration)
     {
-        GoogleCredential credential = GoogleCredential.FromJson(FirebaseConfig.FirebaseConfigToJson());
+        GoogleCredential credential = GoogleCredential.FromFile("e-commerce-3f9f0-firebase-adminsdk-my54u-4515f2bcf9.json");
         _storageClient = StorageClient.Create(credential);
     }
     
@@ -24,8 +25,8 @@ public class FirebaseStorageService : IFirebaseStorageService
         {
             var currentFileName = $"{Guid.NewGuid()}{model.FileExtension}";
             var filePath = string.IsNullOrEmpty(model.Prefix) 
-                ? $"{DefaultS3Config.Root}/{currentFileName}" 
-                : $"{DefaultS3Config.Root}/{model.Prefix}/{currentFileName}";
+                ? $"{FirebaseConfig.Root}/{currentFileName}" 
+                : $"{FirebaseConfig.Root}/{model.Prefix}/{currentFileName}";
             
             var request = new Object()
             {

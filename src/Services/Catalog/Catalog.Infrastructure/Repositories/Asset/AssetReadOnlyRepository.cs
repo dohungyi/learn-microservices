@@ -27,7 +27,6 @@ public class AssetReadOnlyRepository : BaseReadOnlyRepository<Asset>, IAssetRead
                 Id = e.Id,
                 FileName = e.FileName,
                 OriginalFileName = e.OriginalFileName,
-                Url = e.Url,
                 Size = e.Size,
                 FileExtension = e.FileExtension,
                 Description = e.Description
@@ -43,7 +42,6 @@ public class AssetReadOnlyRepository : BaseReadOnlyRepository<Asset>, IAssetRead
                 Id = e.Id,
                 FileName = e.FileName,
                 OriginalFileName = e.OriginalFileName,
-                Url = e.Url,
                 Size = e.Size,
                 FileExtension = e.FileExtension,
                 Description = e.Description

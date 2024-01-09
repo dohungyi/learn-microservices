@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Catalog.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240108141935_init_catalog_db")]
+    [Migration("20240109134044_init_catalog_db")]
     partial class initcatalogdb
     {
         /// <inheritdoc />
@@ -69,10 +69,6 @@ namespace Catalog.Infrastructure.Persistence.Migrations
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
