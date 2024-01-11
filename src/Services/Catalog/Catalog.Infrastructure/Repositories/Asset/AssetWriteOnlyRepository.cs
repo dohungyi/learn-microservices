@@ -21,6 +21,12 @@ public class AssetWriteOnlyRepository : BaseWriteOnlyRepository<Asset>, IAssetWr
         await InsertAsync(asset, cancellationToken);
         return asset;
     }
+    
+    public async Task<IList<Asset>> CreateAssetAsync(IList<Asset> assets, CancellationToken cancellationToken = default)
+    {
+        await InsertAsync(assets, cancellationToken);
+        return assets;
+    }
 
     public async Task<Asset> UpdateAssetAsync(Asset asset, CancellationToken cancellationToken = default)
     {

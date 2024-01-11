@@ -25,7 +25,19 @@ public class UploadCloudFileCommandValidator : AbstractValidator<UploadCloudFile
         RuleFor(x => x.File)
             .NotNull()
             .WithMessage(localizer["file_is_required"].Value)
-            ;
+            .MustAsync(async (file, cancellationToken) =>
+            {
+                try
+                {
+                    await fileService.CheckAcceptFileExtensionAndThrow(file);
+                    return true;
+                }
+                catch (BadRequestException)
+                {
+                    return false;
+                }
+            })
+            .WithMessage(localizer["file_extension_is_not_valid"].Value);
         
 
         RuleFor(x => x.File.Length)

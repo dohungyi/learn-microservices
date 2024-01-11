@@ -16,8 +16,10 @@ public class AssetDto : IMapFrom<Asset>
     
     public string FileExtension { get; set; }
     
-    public string Url { get; set; }
+    public string Url { get; set; } 
     public long Size { get; set; }
     
     public FileType FileType => FileHelper.IsImage(FileName) ? FileType.Image : FileHelper.IsVideo(FileName) ? FileType.Video : FileType.Other;
+    
+    
 }

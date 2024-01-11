@@ -17,4 +17,8 @@
       <ProjectReference Include="..\Catalog.Infrastructure\Catalog.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Controllers\VersionOne\Cloud\Directory\" />
+    </ItemGroup>
+
 </Project>

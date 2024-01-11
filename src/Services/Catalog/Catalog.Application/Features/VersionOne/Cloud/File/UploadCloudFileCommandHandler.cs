@@ -43,7 +43,7 @@ public class UploadCloudFileCommandHandler : BaseCommandHandler, IRequestHandler
 
     public async Task<AssetDto> Handle(UploadCloudFileCommand request, CancellationToken cancellationToken)
     {
-        await _fileService.CheckAcceptFileExtensionAndThrow(request.File);
+        // await _fileService.CheckAcceptFileExtensionAndThrow(request.File);
         
         // Đẩy files lên s3
         var uploadRequest =  new UploadRequest
@@ -59,7 +59,7 @@ public class UploadCloudFileCommandHandler : BaseCommandHandler, IRequestHandler
         // Đẩy files failed
         if (!response.Success)
         {
-            throw new CatchableException(_localizer["cloud_upload_failed"]);
+            throw new CatchableException(_localizer["cloud_upload_failed"].Value);
         }
 
         var files = new Asset()
