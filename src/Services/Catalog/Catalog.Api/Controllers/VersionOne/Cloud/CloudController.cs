@@ -5,7 +5,7 @@ using SharedKernel.Application;
 namespace Catalog.Api.Controllers.VersionOne;
 
 [ApiVersion("1.0")]
-public class FileController : BaseController
+public class CloudController : BaseController
 {
     [DisableRequestSizeLimit]
     [HttpPost("upload")]
