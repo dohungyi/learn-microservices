@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Caching;
 using Catalog.Application.DTOs;
 using Catalog.Application.Repositories;
+using Catalog.Application.Services;
 using Catalog.Domain.Entities;
 using Catalog.Infrastructure.Persistence;
 using MassTransit.Initializers;
@@ -15,19 +16,22 @@ namespace Catalog.Infrastructure.Repositories;
 
 public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICategoryReadOnlyRepository
 {
+    private readonly IFileService _fileService;
     public CategoryReadOnlyRepository(
         ApplicationDbContext dbContext,
         ICurrentUser currentUser,
         ISequenceCaching sequenceCaching,
-        IServiceProvider provider
+        IServiceProvider provider,
+        IFileService fileService
     ) : base(dbContext, currentUser, sequenceCaching, provider)
     {
+        _fileService = fileService;
     }
 
     public async Task<IList<CategorySummaryDto>> GetCategoryHierarchyAsync(Category category,
         CancellationToken cancellationToken = default)
     {
-        var categories = await _dbSet.Where(e => category.Path.StartsWith(e.Path) && e.Status)
+        var categories = await _dbSet.Where(e => (e.Path.StartsWith(category.Path) || category.Path.StartsWith(e.Path)) && e.Status)
             .OrderBy(e => e.Level)
             .Select(e => new CategorySummaryDto()
             {
@@ -36,6 +40,8 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
                 Name = e.Name,
                 Alias = e.Alias,
                 Description = e.Description,
+                FileName = e.FileName,
+                Url = _fileService.GetFileUrl(e.FileName),
                 OrderNumber = e.OrderNumber,
                 Level = e.Level,
                 ParentId = e.ParentId,
@@ -171,6 +177,7 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
         {
             Id = category.Id,
             ParentId = category.ParentId,
+            Code = category.Code,
             Name = category.Name,
             Alias = category.Alias,
             Description = category.Description,

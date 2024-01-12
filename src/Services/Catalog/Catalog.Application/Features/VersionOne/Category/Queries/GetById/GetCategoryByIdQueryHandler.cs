@@ -2,6 +2,7 @@ using AutoMapper;
 using Catalog.Application.DTOs;
 using Catalog.Application.Properties;
 using Catalog.Application.Repositories;
+using Catalog.Application.Services;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
@@ -15,11 +16,16 @@ public class GetCategoryByIdQueryHandler : BaseQueryHandler, IRequestHandler<Get
     
     private readonly ICategoryReadOnlyRepository _categoryReadOnlyRepository;
     private readonly IStringLocalizer<Resources> _localizer;
+    private readonly IFileService _fileService;
     private readonly IMapper _mapper;
     
-    public GetCategoryByIdQueryHandler(IMapper mapper, ICategoryReadOnlyRepository categoryReadOnlyRepository, IStringLocalizer<Resources> localizer) : base(mapper)
+    public GetCategoryByIdQueryHandler(IMapper mapper, 
+        ICategoryReadOnlyRepository categoryReadOnlyRepository, 
+        IFileService fileService,
+        IStringLocalizer<Resources> localizer) : base(mapper)
     {
         _categoryReadOnlyRepository = categoryReadOnlyRepository;
+        _fileService = fileService;
         _localizer = localizer;
         _mapper = mapper;
     }
@@ -34,6 +40,7 @@ public class GetCategoryByIdQueryHandler : BaseQueryHandler, IRequestHandler<Get
         }
         
         var categoryDto = _mapper.Map<CategoryDto>(category);
+        categoryDto.Url = _fileService.GetFileUrl(categoryDto.Url);
         
         return categoryDto;
     }

@@ -37,6 +37,8 @@ public class EfCoreWriteOnlyRepository<TEntity,TDbContext>
         
         await _dbSet.AddAsync(entity, cancellationToken);
         
+        await ClearCacheWhenChangesAsync(null, cancellationToken);
+        
         return entity;
     }
 
@@ -45,6 +47,8 @@ public class EfCoreWriteOnlyRepository<TEntity,TDbContext>
         BeforeInsert(entities);
         
         await _dbSet.AddRangeAsync(entities, cancellationToken);
+        
+        await ClearCacheWhenChangesAsync(null, cancellationToken);
         
         return entities;
     }

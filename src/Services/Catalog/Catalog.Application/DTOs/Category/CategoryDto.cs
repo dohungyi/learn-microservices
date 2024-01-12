@@ -13,6 +13,7 @@ public class CategoryDto : IMapFrom<Category>
     public string Description { get; set; }
     public int Level { get; set; }
     public string FileName { get; set; }
+    public string Url { get; set; }
     public int OrderNumber { get; set; }
     public bool Status { get; set; }
     public string Path { get; set; }
