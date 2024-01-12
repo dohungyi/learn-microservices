@@ -87,7 +87,7 @@ public class SequenceCaching : ISequenceCaching
         switch (onlyUseType)
         {
             case CachingType.Couple:
-                await _memCaching.SetAsync(key, value, absoluteExpireTime, keepTtl);
+                var a = await _memCaching.SetAsync(key, value, absoluteExpireTime, keepTtl);
                 await _redisCaching.SetAsync(key, value, absoluteExpireTime, keepTtl);
                 return;
             case CachingType.Memory:

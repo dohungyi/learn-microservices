@@ -71,6 +71,24 @@ namespace Catalog.Application.Properties {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        internal static string attribute_is_duplicate_key {
+            get {
+                return ResourceManager.GetString("attribute_is_duplicate_key", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string attribute_is_duplicate_value {
+            get {
+                return ResourceManager.GetString("attribute_is_duplicate_value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         internal static string bank_address_max_length_255 {
             get {
                 return ResourceManager.GetString("bank_address_max_length_255", resourceCulture);
@@ -83,6 +101,87 @@ namespace Catalog.Application.Properties {
         internal static string bank_max_length_50 {
             get {
                 return ResourceManager.GetString("bank_max_length_50", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string category_code_max_length_50 {
+            get {
+                return ResourceManager.GetString("category_code_max_length_50", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string category_code_required {
+            get {
+                return ResourceManager.GetString("category_code_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string category_image_max_length_255 {
+            get {
+                return ResourceManager.GetString("category_image_max_length_255", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string category_image_required {
+            get {
+                return ResourceManager.GetString("category_image_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string category_name_max_length_255 {
+            get {
+                return ResourceManager.GetString("category_name_max_length_255", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string category_name_required {
+            get {
+                return ResourceManager.GetString("category_name_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string category_order_number_must_be_greater_than_0 {
+            get {
+                return ResourceManager.GetString("category_order_number_must_be_greater_than_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string category_parent_id_is_invalid {
+            get {
+                return ResourceManager.GetString("category_parent_id_is_invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string category_parent_invalid {
+            get {
+                return ResourceManager.GetString("category_parent_invalid", resourceCulture);
             }
         }
         
@@ -128,6 +227,33 @@ namespace Catalog.Application.Properties {
         internal static string fax_max_length_50 {
             get {
                 return ResourceManager.GetString("fax_max_length_50", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string file_extension_is_not_valid {
+            get {
+                return ResourceManager.GetString("file_extension_is_not_valid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string file_is_required {
+            get {
+                return ResourceManager.GetString("file_is_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string file_must_be_smaller_than_4_MB {
+            get {
+                return ResourceManager.GetString("file_must_be_smaller_than_4_MB", resourceCulture);
             }
         }
         
@@ -281,6 +407,15 @@ namespace Catalog.Application.Properties {
         internal static string supplier_name_required {
             get {
                 return ResourceManager.GetString("supplier_name_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string upload_image_failed {
+            get {
+                return ResourceManager.GetString("upload_image_failed", resourceCulture);
             }
         }
     }

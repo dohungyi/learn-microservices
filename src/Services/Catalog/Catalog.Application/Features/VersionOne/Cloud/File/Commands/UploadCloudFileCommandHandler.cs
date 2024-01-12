@@ -59,7 +59,7 @@ public class UploadCloudFileCommandHandler : BaseCommandHandler, IRequestHandler
         // Đẩy files failed
         if (!response.Success)
         {
-            throw new CatchableException(_localizer["cloud_upload_failed"].Value);
+            throw new CatchableException(_localizer["upload_image_failed"].Value);
         }
 
         var files = new Asset()

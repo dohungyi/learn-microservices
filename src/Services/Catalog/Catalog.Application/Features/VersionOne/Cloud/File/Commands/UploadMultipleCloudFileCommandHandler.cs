@@ -58,7 +58,7 @@ public class UploadMultipleCloudFileCommandHandler : BaseCommandHandler, IReques
         // Đẩy files failed
         if (!successFiles.Any())
         {
-            throw new CatchableException(_localizer["cloud_upload_failed"].Value);
+            throw new CatchableException(_localizer["upload_image_failed"].Value);
         }
 
         var files = successFiles.Select(f => new Asset()
@@ -71,7 +71,7 @@ public class UploadMultipleCloudFileCommandHandler : BaseCommandHandler, IReques
             Size = f.Size
         }).ToList();
 
-        var fileResults = await _assetWriteOnlyRepository.CreateAssetAsync(files, cancellationToken);
+        var fileResults = await _assetWriteOnlyRepository.InsertAsync(files, cancellationToken);
         await _assetWriteOnlyRepository.UnitOfWork.CommitAsync(cancellationToken: cancellationToken);
 
         var assetDtos = _mapper.Map<IList<AssetDto>>(fileResults).Select(assetDto =>

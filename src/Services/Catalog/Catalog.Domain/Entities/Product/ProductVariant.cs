@@ -23,7 +23,7 @@ public class ProductVariant : Entity
     public int RestockThreshold { get; set; } // Available stock at which we should reorder
 
     public string Sets { get; set; }
-    public string Status { get; set; }
+    public bool Status { get; set; }
     public string RelatedType { get; set; }
 
     public string WarrantyInfo { get; set; }

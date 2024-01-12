@@ -14,6 +14,9 @@
       <Folder Include="Features\VersionOne\Attribute\Commands\Update\" />
       <Folder Include="Features\VersionOne\Attribute\Queries\GetAll\" />
       <Folder Include="Features\VersionOne\Attribute\Queries\GetById\" />
+      <Folder Include="Features\VersionOne\Cloud\AuthCloud\" />
+      <Folder Include="Features\VersionOne\Cloud\Directory\" />
+      <Folder Include="Features\VersionOne\Cloud\File\Queries\" />
       <Folder Include="Features\VersionOne\Product\Commands\" />
       <Folder Include="Features\VersionOne\Product\Queries\" />
     </ItemGroup>

@@ -82,7 +82,7 @@ public class CreateCategoryCommandHandler : BaseCommandHandler, IRequestHandler<
         else
         {
             category.Level = parent.Level + 1;
-            category.Path = $"{parent.Path}/{category.Id}";
+            category.Path = $"{parent.Path}/{category.Alias}";
         }
     }
 }

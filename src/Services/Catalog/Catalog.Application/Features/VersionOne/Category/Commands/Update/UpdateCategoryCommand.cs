@@ -1,6 +1,9 @@
 using Catalog.Application.Mappings;
+using Catalog.Application.Properties;
 using Catalog.Domain.Entities;
+using FluentValidation;
 using MediatR;
+using Microsoft.Extensions.Localization;
 using SharedKernel.Application;
 
 namespace Catalog.Application.Features.VersionOne;
@@ -17,4 +20,34 @@ public class UpdateCategoryCommand : BaseUpdateCommand<Unit>, IMapFrom<Category>
     public int OrderNumber { get; set; }
     public bool Status { get; set; }
     public Guid? ParentId { get; set; }
+}
+
+public class UpdateCategoryCommandValidator : AbstractValidator<UpdateCategoryCommand>
+{
+    public UpdateCategoryCommandValidator(IStringLocalizer<Resources> localizer)
+    {
+        RuleFor(x => x.Code)
+            .NotEmpty().WithMessage(localizer["category_code_required"].Value)
+            .MaximumLength(50).WithMessage(localizer["category_code_max_length_50"].Value);
+
+        // Tên nhà cung cấp
+        RuleFor(x => x.Name)
+            .NotEmpty().WithMessage(localizer["category_name_required"].Value)
+            .MaximumLength(255).WithMessage(localizer["category_name_max_length_255"].Value);
+        
+        RuleFor(e => e.FileName)
+            .NotEmpty()
+            .WithMessage(localizer["category_image_required"].Value)
+            .MaximumLength(255)
+            .WithMessage(localizer["category_image_max_length_255"].Value);
+        
+        RuleFor(e => e.OrderNumber)
+            .GreaterThan(0)
+            .WithMessage(localizer["category_order_number_must_be_greater_than_0"].Value);
+        
+        RuleFor(e => e.ParentId)
+            .Must(e => e != Guid.Empty)
+            .When(e => e.ParentId.HasValue)
+            .WithMessage(localizer["parent_category_id_is_invalid"].Value);
+    }
 }
