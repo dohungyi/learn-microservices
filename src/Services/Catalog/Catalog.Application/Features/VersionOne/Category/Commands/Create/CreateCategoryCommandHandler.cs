@@ -34,7 +34,7 @@ public class CreateCategoryCommandHandler : BaseCommandHandler, IRequestHandler<
     {
         request.Alias = request.Name.ToUnsignString();
 
-        await ValidateDuplicateAsync(request.Code, request.Name, cancellationToken);
+        await ValidateDuplicateAsync( request.Name, cancellationToken);
         
         var parent = await GetAndValidateParentAsync(request.ParentId, cancellationToken);
         
@@ -63,9 +63,9 @@ public class CreateCategoryCommandHandler : BaseCommandHandler, IRequestHandler<
         return parent;
     }
 
-    private async Task ValidateDuplicateAsync(string code, string name, CancellationToken cancellationToken)
+    private async Task ValidateDuplicateAsync(string name, CancellationToken cancellationToken)
     {
-        var codeDuplicate = await _categoryReadOnlyRepository.IsDuplicate(null, code, name, cancellationToken);
+        var codeDuplicate = await _categoryReadOnlyRepository.IsDuplicate(null, name, cancellationToken);
         if (!string.IsNullOrWhiteSpace(codeDuplicate))
         {
             throw new BadRequestException(_localizer[codeDuplicate].Value);

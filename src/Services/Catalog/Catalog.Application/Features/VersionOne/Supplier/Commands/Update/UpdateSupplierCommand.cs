@@ -19,6 +19,7 @@ public class UpdateSupplierCommand : BaseUpdateCommand, IMapFrom<Supplier>
     public string Alias { get; set; }
     public string Description { get; set; }
     public string Delegate { get; set; }
+    public string Email { get; set; }
     public string Bank { get; set; }
     public string AccountNumber { get; set; }
     public string BankAddress { get; set; }

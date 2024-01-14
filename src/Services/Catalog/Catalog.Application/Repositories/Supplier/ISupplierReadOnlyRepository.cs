@@ -11,7 +11,7 @@ public interface ISupplierReadOnlyRepository :  IEfCoreReadOnlyRepository<Suppli
 {
     Task<IList<Supplier>> GetListSupplierByIdsAsync(IList<Guid> supplierIds, CancellationToken cancellationToken = default);
     
-    Task<string> IsDuplicate(Guid? id, string code, string name, CancellationToken cancellationToken = default);
+    Task<string> IsDuplicate(Guid? id, string email, string phone, string name, CancellationToken cancellationToken = default);
     
     Task<IPagedList<SupplierDto>> GetPagingResultAsync(PagingRequest request, CancellationToken cancellationToken = default);
     

@@ -50,6 +50,7 @@ public static partial class ConfigureExtension
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
+            endpoints.MapRazorPages();
         });
         // app.UseCoreHealthChecks();
     }

@@ -34,7 +34,7 @@ public class UpdateCategoryCommandHandler : BaseCommandHandler, IRequestHandler<
     {
         request.Alias = request.Name.ToUnsignString();
         
-        var codeDuplicate = await _categoryReadOnlyRepository.IsDuplicate(request.Id, request.Code, request.Name, cancellationToken);
+        var codeDuplicate = await _categoryReadOnlyRepository.IsDuplicate(request.Id, request.Name, cancellationToken);
         if (!string.IsNullOrWhiteSpace(codeDuplicate))
         {
             throw new BadRequestException(_localizer[codeDuplicate].Value);

@@ -269,24 +269,6 @@ namespace Catalog.Application.Properties {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string phone_max_length_20 {
-            get {
-                return ResourceManager.GetString("phone_max_length_20", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string phone_required {
-            get {
-                return ResourceManager.GetString("phone_required", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
         internal static string province_code_max_length_10 {
             get {
                 return ResourceManager.GetString("province_code_max_length_10", resourceCulture);
@@ -377,9 +359,9 @@ namespace Catalog.Application.Properties {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string supplier_is_duplicate_code {
+        internal static string supplier_is_duplicate_email {
             get {
-                return ResourceManager.GetString("supplier_is_duplicate_code", resourceCulture);
+                return ResourceManager.GetString("supplier_is_duplicate_email", resourceCulture);
             }
         }
         
@@ -389,6 +371,15 @@ namespace Catalog.Application.Properties {
         internal static string supplier_is_duplicate_name {
             get {
                 return ResourceManager.GetString("supplier_is_duplicate_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string supplier_is_duplicate_phone {
+            get {
+                return ResourceManager.GetString("supplier_is_duplicate_phone", resourceCulture);
             }
         }
         
@@ -407,6 +398,96 @@ namespace Catalog.Application.Properties {
         internal static string supplier_name_required {
             get {
                 return ResourceManager.GetString("supplier_name_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string the_email_is_invalid {
+            get {
+                return ResourceManager.GetString("the_email_is_invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string the_password_is_required {
+            get {
+                return ResourceManager.GetString("the_password_is_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string the_password_must_be_8_30_characters_long {
+            get {
+                return ResourceManager.GetString("the_password_must_be_8_30_characters_long", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string the_password_must_contains_at_least_1_lowercase_character__a_z_ {
+            get {
+                return ResourceManager.GetString("the_password_must_contains_at_least_1_lowercase_character_[a_z]", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string the_password_must_contains_at_least_1_numeric__0_9_ {
+            get {
+                return ResourceManager.GetString("the_password_must_contains_at_least_1_numeric_[0_9]", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string the_password_must_contains_at_least_1_special_character {
+            get {
+                return ResourceManager.GetString("the_password_must_contains_at_least_1_special_character", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string the_password_must_contains_at_least_1_uppercase_character__A_Z_ {
+            get {
+                return ResourceManager.GetString("the_password_must_contains_at_least_1_uppercase_character_[A_Z]", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string the_phone_is_not_valid {
+            get {
+                return ResourceManager.GetString("the_phone_is_not_valid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string the_phone_is_required {
+            get {
+                return ResourceManager.GetString("the_phone_is_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string the_phone_must_be_10_characters_long {
+            get {
+                return ResourceManager.GetString("the_phone_must_be_10_characters_long", resourceCulture);
             }
         }
         

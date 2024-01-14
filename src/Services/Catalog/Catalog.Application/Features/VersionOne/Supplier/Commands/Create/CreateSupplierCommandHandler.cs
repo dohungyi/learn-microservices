@@ -36,7 +36,7 @@ public class CreateSupplierCommandHandler : BaseCommandHandler, IRequestHandler<
     {
         request.Alias = request.Name.ToUnsignString();
         
-        var codeDuplicate = await _supplierReadOnlyRepository.IsDuplicate(null, request.Code, request.Name, cancellationToken);
+        var codeDuplicate = await _supplierReadOnlyRepository.IsDuplicate(null, request.Email, request.Phone, request.Name, cancellationToken);
         if (!string.IsNullOrWhiteSpace(codeDuplicate))
         {
             throw new BadRequestException(_localizer[codeDuplicate].Value);

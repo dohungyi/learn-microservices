@@ -12,14 +12,13 @@ namespace Catalog.Application.Features.VersionOne;
 [AuthorizationRequest(new ActionExponent[] { ActionExponent.Category })]
 public class CreateCategoryCommand : BaseInsertCommand<CategoryDto>, IMapFrom<Category>
 {
-    public string Code { get; set; }
     public string Name { get; set; }
     public string? Alias  { get; set; }
-    public string Description { get; set; }
+    public string? Description { get; set; }
     public int? Level { get; set; }
     public string FileName { get; set; }
     public int OrderNumber { get; set; }
-    public bool Status { get; set; }
+    public bool Status { get; set; } = true;
     public Guid? ParentId { get; set; }
 }
 
@@ -27,10 +26,6 @@ public class CreateCategoryCommandValidator : AbstractValidator<CreateCategoryCo
 {
     public CreateCategoryCommandValidator(IStringLocalizer<Resources> localizer)
     {
-        RuleFor(x => x.Code)
-            .NotEmpty().WithMessage(localizer["category_code_required"].Value)
-            .MaximumLength(50).WithMessage(localizer["category_code_max_length_50"].Value);
-
         // Tên nhà cung cấp
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage(localizer["category_name_required"].Value)

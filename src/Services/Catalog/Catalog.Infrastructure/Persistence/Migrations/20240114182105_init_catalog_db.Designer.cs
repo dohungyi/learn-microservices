@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Catalog.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240109134044_init_catalog_db")]
+    [Migration("20240114182105_init_catalog_db")]
     partial class initcatalogdb
     {
         /// <inheritdoc />
@@ -122,10 +122,6 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Alias")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -701,9 +697,8 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<bool>("Status")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<int>("StockQuantityMinimum")
                         .HasColumnType("int");
@@ -847,10 +842,6 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("char(36)");
 
@@ -872,6 +863,10 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("DistrictCode")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("longtext");
 

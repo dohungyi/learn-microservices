@@ -45,7 +45,7 @@ public class UploadCloudFileCommandHandler : BaseCommandHandler, IRequestHandler
     {
         // await _fileService.CheckAcceptFileExtensionAndThrow(request.File);
         
-        // Đẩy files lên s3
+        // Đẩy files lên firebase
         var uploadRequest =  new UploadRequest
         {
             FileName = request.File.FileName,
@@ -66,7 +66,7 @@ public class UploadCloudFileCommandHandler : BaseCommandHandler, IRequestHandler
         {
             FileName = response.CurrentFileName,
             OriginalFileName = response.OriginalFileName,
-            Description = request.Description,
+            Description = string.Empty,
             FileExtension = response.FileExtension,
             Type = Enum.FileType.Image,
             Size = response.Size

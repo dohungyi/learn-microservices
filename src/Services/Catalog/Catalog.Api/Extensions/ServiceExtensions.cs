@@ -92,6 +92,8 @@ public static class ServiceExtensions
 
         services.AddApiVersioning(configuration);
         
+        services.AddRazorPages();
+        
         return services;
     }
     

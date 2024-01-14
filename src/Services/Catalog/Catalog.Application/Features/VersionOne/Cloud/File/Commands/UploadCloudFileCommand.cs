@@ -12,9 +12,6 @@ namespace Catalog.Application.Features.VersionOne;
 public class UploadCloudFileCommand : BaseInsertCommand<AssetDto>
 {
     public IFormFile File { get; init; }
-
-    public string? Description { get; init; }
-    
 }
 
 public class UploadCloudFileCommandValidator : AbstractValidator<UploadCloudFileCommand>

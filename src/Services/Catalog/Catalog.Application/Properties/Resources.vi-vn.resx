@@ -14,14 +14,8 @@
     <data name="supplier_does_not_exist_or_was_deleted" xml:space="preserve">
         <value>Nhà cung cấp không tồn tại hoặc đã bị xóa</value>
     </data>
-    <data name="supplier_is_duplicate_code" xml:space="preserve">
-        <value>Mã nhà cung cấp đã tồn tại</value>
-    </data>
     <data name="supplier_is_duplicate_name" xml:space="preserve">
         <value>Tên nhà cung cấp đã tồn tại</value>
-    </data>
-    <data name="phone_max_length_20" xml:space="preserve">
-        <value>Số điện thoại không vượt quá 20 ký tự</value>
     </data>
     <data name="fax_max_length_50" xml:space="preserve">
         <value>Số fax không vượt quá 50 ký tự</value>
@@ -43,9 +37,6 @@
     </data>
     <data name="nation_code_max_length_10" xml:space="preserve">
         <value>Mã quốc gia không vượt quá 10 ký tự</value>
-    </data>
-    <data name="phone_required" xml:space="preserve">
-        <value>Số điện thoại là bắt buộc</value>
     </data>
     <data name="supplier_code_max_length_50" xml:space="preserve">
         <value>Mã nhà cung cấp không vượt quá 50 ký tự</value>
@@ -124,5 +115,11 @@
     </data>
     <data name="file_must_be_smaller_than_4_MB" xml:space="preserve">
         <value>Dung lượng tập tin không được quá 4 MB</value>
+    </data>
+    <data name="supplier_is_duplicate_email" xml:space="preserve">
+        <value>Email nhà cung cấp đã tồn tại</value>
+    </data>
+    <data name="supplier_is_duplicate_phone" xml:space="preserve">
+        <value>Số điện thoại nhà cung cấp đã tồn tại</value>
     </data>
 </root>

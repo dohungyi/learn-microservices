@@ -5,8 +5,6 @@ public static class TableName
     public const string Category = "categories";
     
     public const string Supplier = "suppliers";
-
-    public const string Tax = "taxes";
     
     public const string Asset = "assets";
 

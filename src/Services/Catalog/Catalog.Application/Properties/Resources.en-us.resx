@@ -14,14 +14,8 @@
     <data name="supplier_does_not_exist_or_was_deleted" xml:space="preserve">
         <value>Supplier does not exist or was deleted</value>
     </data>
-    <data name="supplier_is_duplicate_code" xml:space="preserve">
-        <value>Supplier with this code already exists</value>
-    </data>
     <data name="supplier_is_duplicate_name" xml:space="preserve">
         <value>Supplier with this name already exists</value>
-    </data>
-    <data name="phone_max_length_20" xml:space="preserve">
-        <value>Phone number must not exceed 20 characters</value>
     </data>
     <data name="fax_max_length_50" xml:space="preserve">
         <value>Fax number must not exceed 50 characters</value>
@@ -43,9 +37,6 @@
     </data>
     <data name="nation_code_max_length_10" xml:space="preserve">
         <value>Nation code must not exceed 10 characters</value>
-    </data>
-    <data name="phone_required" xml:space="preserve">
-        <value>Phone number is required</value>
     </data>
     <data name="supplier_code_max_length_50" xml:space="preserve">
         <value>Supplier code must not exceed 50 characters</value>
@@ -124,5 +115,41 @@
     </data>
     <data name="file_must_be_smaller_than_4_MB" xml:space="preserve">
         <value>File must be smaller than 4 MB</value>
+    </data>
+    <data name="the_password_is_required" xml:space="preserve">
+        <value>The password is required</value>
+    </data>
+    <data name="the_password_must_be_8_30_characters_long" xml:space="preserve">
+        <value>The password must be 8 - 30 characters long</value>
+    </data>
+    <data name="the_password_must_contains_at_least_1_lowercase_character_[a_z]" xml:space="preserve">
+        <value>The password must contains at least 1 lowercase character [a-z]</value>
+    </data>
+    <data name="the_password_must_contains_at_least_1_numeric_[0_9]" xml:space="preserve">
+        <value>The password must contains at least 1 numeric [0-9]</value>
+    </data>
+    <data name="the_password_must_contains_at_least_1_special_character" xml:space="preserve">
+        <value>The password must contains at least 1 special character]</value>
+    </data>
+    <data name="the_password_must_contains_at_least_1_uppercase_character_[A_Z]" xml:space="preserve">
+        <value>The password must contains at least 1 uppercase character [A-Z]</value>
+    </data>
+    <data name="the_phone_is_not_valid" xml:space="preserve">
+        <value>The phone is not valid</value>
+    </data>
+    <data name="the_phone_is_required" xml:space="preserve">
+        <value>The phone is required</value>
+    </data>
+    <data name="the_phone_must_be_10_characters_long" xml:space="preserve">
+        <value>The phone must be 10 characters long</value>
+    </data>
+    <data name="the_email_is_invalid" xml:space="preserve">
+        <value>The email is invalid</value>
+    </data>
+    <data name="supplier_is_duplicate_email" xml:space="preserve">
+        <value>Supplier with this email already exists</value>
+    </data>
+    <data name="supplier_is_duplicate_phone" xml:space="preserve">
+        <value>Supplier with this phone already exists</value>
     </data>
 </root>

@@ -29,23 +29,28 @@ public class SupplierReadOnlyRepository : BaseReadOnlyRepository<Supplier>, ISup
         return await _dbSet.Where(e => supplierIds.Contains(e.Id)).ToListAsync(cancellationToken);
     }
 
-    public async Task<string> IsDuplicate(Guid? id, string code, string name, CancellationToken cancellationToken = default)
+    public async Task<string> IsDuplicate(Guid? id, string email, string phone, string name, CancellationToken cancellationToken = default)
     {
-        var duplicateSupplier = await _dbSet.FirstOrDefaultAsync(e => (id == null || e.Id != id) && (e.Code == code || e.Name == name), cancellationToken);
+        var duplicateSupplier = await _dbSet.FirstOrDefaultAsync(e => (id == null || e.Id != id) && (e.Phone == phone || e.Email == email || e.Name == name), cancellationToken);
 
         if (duplicateSupplier is null)
         {
             return string.Empty;
         }
         
-        if (duplicateSupplier.Code == code)
-        {
-            return "supplier_is_duplicate_code";
-        }
-        
         if (duplicateSupplier.Name == name)
         {
             return "supplier_is_duplicate_name";
+        }
+        
+        if (duplicateSupplier.Email == email)
+        {
+            return "supplier_is_duplicate_email";
+        }
+        
+        if (duplicateSupplier.Phone == phone)
+        {
+            return "supplier_is_duplicate_phone";
         }
         
         return string.Empty;
@@ -57,7 +62,7 @@ public class SupplierReadOnlyRepository : BaseReadOnlyRepository<Supplier>, ISup
         
         var result = await _dbSet
             .WhereIf(!string.IsNullOrEmpty(request.SearchString),
-                e => e.Name.Contains(request.SearchString) || e.Description.Contains(request.SearchString))
+                e => e.Name.Contains(request.SearchString) || e.Email.Contains(request.SearchString) || e.Description.Contains(request.SearchString))
             .ApplySort(request.Sorts)
             .ToPagedListAsync<Supplier, SupplierDto>(
                 mapper,

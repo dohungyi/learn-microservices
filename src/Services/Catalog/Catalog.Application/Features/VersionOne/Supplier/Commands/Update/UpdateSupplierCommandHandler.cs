@@ -32,7 +32,7 @@ public class UpdateSupplierCommandHandler : BaseCommandHandler, IRequestHandler<
 
     public async Task<Unit> Handle(UpdateSupplierCommand request, CancellationToken cancellationToken)
     {
-        var codeDuplicate = await _supplierReadOnlyRepository.IsDuplicate(null, string.Empty, request.Name, cancellationToken);
+        var codeDuplicate = await _supplierReadOnlyRepository.IsDuplicate(null, request.Email, request.Phone, request.Name, cancellationToken);
         if (!string.IsNullOrWhiteSpace(codeDuplicate))
         {
             throw new BadRequestException(_localizer[codeDuplicate].Value);
@@ -45,7 +45,6 @@ public class UpdateSupplierCommandHandler : BaseCommandHandler, IRequestHandler<
         }
         
         supplier = _mapper.Map(request, supplier);
-        supplier.Id = request.Id;
         supplier.Alias = supplier.Name.ToUnsignString();
         
         await _supplierWriteOnlyRepository.UpdateSupplierAsync(supplier, cancellationToken);

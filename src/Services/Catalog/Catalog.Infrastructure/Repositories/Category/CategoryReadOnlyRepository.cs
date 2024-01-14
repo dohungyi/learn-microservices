@@ -36,7 +36,6 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
             .Select(e => new CategorySummaryDto()
             {
                 Id = e.Id,
-                Code = e.Code,
                 Name = e.Name,
                 Alias = e.Alias,
                 Description = e.Description,
@@ -63,21 +62,16 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
         return await GetByIdWithCachingAsync(categoryId, cancellationToken);
     }
 
-    public async Task<string> IsDuplicate(Guid? categoryId, string code, string name,
+    public async Task<string> IsDuplicate(Guid? categoryId, string name,
         CancellationToken cancellationToken = default)
     {
         var duplicateSupplier = await _dbSet.FirstOrDefaultAsync(
-            e => (categoryId == null || e.Id != categoryId) && (e.Code == code || e.Name == name) && e.Status,
+            e => (categoryId == null || e.Id != categoryId) && e.Name == name && e.Status,
             cancellationToken);
 
         if (duplicateSupplier is null)
         {
             return string.Empty;
-        }
-
-        if (duplicateSupplier.Code == code)
-        {
-            return "supplier_is_duplicate_code";
         }
 
         if (duplicateSupplier.Name == name)
@@ -105,8 +99,7 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
 
         var result = await _dbSet
             .WhereIf(!string.IsNullOrEmpty(request.SearchString),
-                e => e.Code.Contains(request.SearchString) || e.Name.Contains(request.SearchString) ||
-                     e.Description.Contains(request.SearchString))
+                e => e.Name.Contains(request.SearchString) || e.Description.Contains(request.SearchString))
             .ApplySort(request.Sorts)
             .ToPagedListAsync<Category, CategoryDto>(
                 mapper,
@@ -177,7 +170,6 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
         {
             Id = category.Id,
             ParentId = category.ParentId,
-            Code = category.Code,
             Name = category.Name,
             Alias = category.Alias,
             Description = category.Description,

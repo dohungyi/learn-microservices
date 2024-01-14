@@ -8,11 +8,11 @@ namespace Catalog.Domain.Entities;
 [Table(TableName.Supplier)]
 public class Supplier : BaseEntity
 {
-    public string Code { get; set; }
     public string Name { get; set; }
     public string Alias  { get; set; }
     public string Description { get; set; }
     public string Delegate { get; set; }
+    public string Email { get; set; }
     public string Bank { get; set; }
     public string AccountNumber { get; set; }
     public string BankAddress { get; set; }

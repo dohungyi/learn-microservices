@@ -11,14 +11,6 @@ public class SupplierConfiguration : BaseEntityConfiguration<Supplier>
         base.Configure(builder);
         
         #region Indexes
-
-        builder
-            .HasIndex(e => e.Code)
-            .IsUnique();
-        
-        builder
-            .HasIndex(e => e.Name)
-            .IsUnique();
         
         builder
             .HasIndex(e => e.Alias)
@@ -27,12 +19,6 @@ public class SupplierConfiguration : BaseEntityConfiguration<Supplier>
         #endregion
 
         #region Columns
-
-        builder
-            .Property(e => e.Code)
-            .HasMaxLength(50)
-            .IsUnicode(false);
-        
         builder
             .Property(e => e.Name)
             .HasMaxLength(255);
@@ -75,6 +61,10 @@ public class SupplierConfiguration : BaseEntityConfiguration<Supplier>
         builder
             .Property(e => e.Phone)
             .HasMaxLength(20);
+        
+        builder
+            .Property(e => e.Email)
+            .HasMaxLength(255);
 
         builder
             .Property(e => e.Fax)

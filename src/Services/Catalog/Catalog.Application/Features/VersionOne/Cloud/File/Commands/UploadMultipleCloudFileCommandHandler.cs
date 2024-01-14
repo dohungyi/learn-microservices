@@ -43,7 +43,7 @@ public class UploadMultipleCloudFileCommandHandler : BaseCommandHandler, IReques
     {
         // await _fileService.CheckAcceptFileExtensionAndThrow(request.File);
         
-        // Đẩy files lên s3
+        // Đẩy files lên firebase
         var uploadRequests = request.Files.Select(file => new UploadRequest
         {
             FileName = file.FileName,

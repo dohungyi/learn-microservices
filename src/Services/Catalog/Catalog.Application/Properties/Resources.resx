@@ -21,7 +21,7 @@
     <data name="supplier_does_not_exist_or_was_deleted" xml:space="preserve">
         <value />
     </data>
-    <data name="supplier_is_duplicate_code" xml:space="preserve">
+    <data name="supplier_is_duplicate_phone" xml:space="preserve">
         <value />
     </data>
     <data name="supplier_is_duplicate_name" xml:space="preserve">
@@ -58,12 +58,6 @@
         <value />
     </data>
     <data name="supplier_address_max_length_255" xml:space="preserve">
-        <value />
-    </data>
-    <data name="phone_required" xml:space="preserve">
-        <value />
-    </data>
-    <data name="phone_max_length_20" xml:space="preserve">
         <value />
     </data>
     <data name="fax_max_length_50" xml:space="preserve">
@@ -136,6 +130,39 @@
         <value />
     </data>
     <data name="attribute_is_duplicate_value" xml:space="preserve">
+        <value />
+    </data>
+    <data name="the_password_must_be_8_30_characters_long" xml:space="preserve">
+        <value />
+    </data>
+    <data name="the_password_is_required" xml:space="preserve">
+        <value />
+    </data>
+    <data name="the_password_must_contains_at_least_1_numeric_[0_9]" xml:space="preserve">
+        <value />
+    </data>
+    <data name="the_password_must_contains_at_least_1_lowercase_character_[a_z]" xml:space="preserve">
+        <value />
+    </data>
+    <data name="the_password_must_contains_at_least_1_uppercase_character_[A_Z]" xml:space="preserve">
+        <value />
+    </data>
+    <data name="the_password_must_contains_at_least_1_special_character" xml:space="preserve">
+        <value />
+    </data>
+    <data name="the_phone_is_required" xml:space="preserve">
+        <value />
+    </data>
+    <data name="the_phone_must_be_10_characters_long" xml:space="preserve">
+        <value />
+    </data>
+    <data name="the_phone_is_not_valid" xml:space="preserve">
+        <value />
+    </data>
+    <data name="the_email_is_invalid" xml:space="preserve">
+        <value />
+    </data>
+    <data name="supplier_is_duplicate_email" xml:space="preserve">
         <value />
     </data>
 </root>

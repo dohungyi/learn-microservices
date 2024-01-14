@@ -15,7 +15,7 @@ public interface ICategoryReadOnlyRepository : IEfCoreReadOnlyRepository<Categor
 
     Task<Category?> GetCategoryByIdAsync(object categoryId, CancellationToken cancellationToken = default);
     
-    Task<string> IsDuplicate(Guid? categoryId, string code, string name, CancellationToken cancellationToken = default);
+    Task<string> IsDuplicate(Guid? categoryId, string name, CancellationToken cancellationToken = default);
 
     Task<bool> IsParentCategoryAsync(Guid categoryId, CancellationToken cancellationToken = default);
     
