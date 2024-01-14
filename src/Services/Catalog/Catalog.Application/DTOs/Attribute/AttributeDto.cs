@@ -1,6 +1,9 @@
-﻿namespace Catalog.Application.DTOs;
+﻿using AutoMapper;
+using Catalog.Application.Mappings;
 
-public class AttributeDto
+namespace Catalog.Application.DTOs;
+
+public class AttributeDto : IMapFrom<Attribute>
 {
     public string Key { get; set; }
     public string Value { get; set; }

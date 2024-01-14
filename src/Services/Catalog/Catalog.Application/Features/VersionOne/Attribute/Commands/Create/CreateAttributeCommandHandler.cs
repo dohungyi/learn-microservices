@@ -30,6 +30,10 @@ public class CreateAttributeCommandHandler : BaseCommandHandler, IRequestHandler
             throw new BadRequestException(_localizer[codeDuplicate].Value);
         }
 
-        return default!;
+        var attribute = _mapper.Map<Attribute>(request);
+        await _attributeWriteOnlyRepository.InsertAsync(attribute, cancellationToken);
+        await _attributeWriteOnlyRepository.UnitOfWork.CommitAsync(cancellationToken);
+
+        return attribute.Id;
     }
 }

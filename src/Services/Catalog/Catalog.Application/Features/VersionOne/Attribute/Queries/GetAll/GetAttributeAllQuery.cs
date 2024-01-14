@@ -1,6 +1,9 @@
-﻿namespace Catalog.Application.Features.VersionOne;
+﻿using Catalog.Application.DTOs;
+using SharedKernel.Application;
 
-public class GetAttributeAllQuery
+namespace Catalog.Application.Features.VersionOne;
+
+public class GetAttributeAllQuery : BaseQuery<IList<AttributeDto>>
 {
     
 }

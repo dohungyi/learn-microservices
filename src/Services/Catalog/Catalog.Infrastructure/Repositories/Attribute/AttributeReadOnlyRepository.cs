@@ -42,7 +42,7 @@ public class AttributeReadOnlyRepository : BaseReadOnlyRepository<Attribute>, IA
         return attributes;
     }
 
-    public async Task<AttributeDto?> GetByIdAsync(Guid attributeId, CancellationToken cancellationToken = default)
+    public async Task<AttributeDto?> GetAttributeByIdAsync(Guid attributeId, CancellationToken cancellationToken = default)
     {
         string key = BaseCacheKeys.GetSystemRecordByIdKey(_tableName, attributeId);
         
@@ -73,8 +73,8 @@ public class AttributeReadOnlyRepository : BaseReadOnlyRepository<Attribute>, IA
     {
         var duplicateSupplier = await _dbSet.FirstOrDefaultAsync(
             e => (attributeId == null || e.Id != attributeId) && (e.Key == key || e.Value == value), cancellationToken);
-
-        if (duplicateSupplier is null)
+        
+        if (duplicateSupplier is null && attributeId != null)
         {
             return string.Empty;
         }

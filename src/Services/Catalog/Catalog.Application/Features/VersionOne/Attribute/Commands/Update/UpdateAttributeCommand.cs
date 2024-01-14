@@ -1,6 +1,12 @@
-﻿namespace Catalog.Application.Features.VersionOne;
+﻿using Catalog.Application.DTOs;
+using Catalog.Application.Mappings;
+using SharedKernel.Application;
 
-public class UpdateAttributeCommand
+namespace Catalog.Application.Features.VersionOne;
+
+public class UpdateAttributeCommand : BaseUpdateCommand<AttributeDto>, IMapFrom<Attribute>
 {
-    
+    public Guid Id { get; init; }
+    public string Key { get; init; }
+    public string Value { get; init; }
 }
