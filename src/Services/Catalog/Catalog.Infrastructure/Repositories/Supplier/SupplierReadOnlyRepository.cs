@@ -31,7 +31,8 @@ public class SupplierReadOnlyRepository : BaseReadOnlyRepository<Supplier>, ISup
 
     public async Task<string> IsDuplicate(Guid? id, string email, string phone, string name, CancellationToken cancellationToken = default)
     {
-        var duplicateSupplier = await _dbSet.FirstOrDefaultAsync(e => (id == null || e.Id != id) && (e.Phone == phone || e.Email == email || e.Name == name), cancellationToken);
+        var duplicateSupplier = await _dbSet.AsNoTracking()
+            .FirstOrDefaultAsync(e => (id == null || e.Id != id) && (e.Phone == phone || e.Email == email || e.Name == name), cancellationToken);
 
         if (duplicateSupplier is null)
         {
@@ -63,7 +64,8 @@ public class SupplierReadOnlyRepository : BaseReadOnlyRepository<Supplier>, ISup
         var result = await _dbSet
             .WhereIf(!string.IsNullOrEmpty(request.SearchString),
                 e => e.Name.Contains(request.SearchString) || e.Email.Contains(request.SearchString) || e.Description.Contains(request.SearchString))
-            .ApplySort(request.Sorts)
+            .ApplySorting(request.Sorts)
+            .AsNoTracking()
             .ToPagedListAsync<Supplier, SupplierDto>(
                 mapper,
                 request.Page,

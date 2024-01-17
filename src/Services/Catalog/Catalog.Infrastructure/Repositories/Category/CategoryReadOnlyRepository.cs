@@ -28,10 +28,23 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
         _fileService = fileService;
     }
 
+    public async Task<IList<CategoryDto>> GetAllCategoryAsync(CancellationToken cancellationToken = default)
+    {
+        // Handle caching ...
+        
+        var mapper = _provider.GetRequiredService<IMapper>();
+        var categories = await FindByCondition(e => e.Status)
+            .ProjectTo<CategoryDto>(mapper.ConfigurationProvider)
+            .ToListAsync(cancellationToken);
+
+        return categories;
+
+    }
+
     public async Task<IList<CategorySummaryDto>> GetCategoryHierarchyAsync(Category category,
         CancellationToken cancellationToken = default)
     {
-        var categories = await _dbSet.Where(e => (e.Path.StartsWith(category.Path) || category.Path.StartsWith(e.Path)) && e.Status)
+        var categories = await FindByCondition(e => (e.Path.StartsWith(category.Path) || category.Path.StartsWith(e.Path)) && e.Status)
             .OrderBy(e => e.Level)
             .Select(e => new CategorySummaryDto()
             {
@@ -92,15 +105,15 @@ public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICat
         return await _dbContext.ProductCategories.AnyAsync(e => e.CategoryId == categoryId, cancellationToken);
     }
 
-    public async Task<IPagedList<CategoryDto>> GetPagingResultAsync(PagingRequest request,
-        CancellationToken cancellationToken = default)
+    public async Task<IPagedList<CategoryDto>> GetPagingResultAsync(PagingRequest request, CancellationToken cancellationToken = default)
     {
         var mapper = _provider.GetRequiredService<IMapper>();
 
         var result = await _dbSet
             .WhereIf(!string.IsNullOrEmpty(request.SearchString),
                 e => e.Name.Contains(request.SearchString) || e.Description.Contains(request.SearchString))
-            .ApplySort(request.Sorts)
+            .ApplySorting(request.Sorts)
+            .AsNoTracking()
             .ToPagedListAsync<Category, CategoryDto>(
                 mapper,
                 request.Page,

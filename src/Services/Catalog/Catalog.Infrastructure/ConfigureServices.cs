@@ -64,6 +64,10 @@ public static class ConfigureServices
         // Asset
         services.AddScoped<IAssetReadOnlyRepository, AssetReadOnlyRepository>();
         services.AddScoped<IAssetWriteOnlyRepository, AssetWriteOnlyRepository>();
+        
+        // Attribute
+        services.AddScoped<IAttributeReadOnlyRepository, AttributeReadOnlyRepository>();
+        services.AddScoped<IAttributeWriteOnlyRepository, AttributeWriteOnlyRepository>();
 
         return services;
     }

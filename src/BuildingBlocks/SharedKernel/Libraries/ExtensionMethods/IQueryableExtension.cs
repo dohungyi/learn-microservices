@@ -29,7 +29,7 @@ public static class IQueryableExtensions
         return condition ? await source.FirstOrDefaultAsync(predicate, cancellationToken) : default!;
     }
     
-    public static IQueryable<TEntity> ApplySort<TEntity>(this IQueryable<TEntity> source, List<SortModel> sortModels)
+    public static IQueryable<TEntity> ApplySorting<TEntity>(this IQueryable<TEntity> source, List<SortModel> sortModels)
     {
         ArgumentNullException.ThrowIfNull((object) source, nameof (source));
 

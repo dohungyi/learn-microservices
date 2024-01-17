@@ -55,7 +55,7 @@ public class SupplierController : BaseController
     }
     
     [AllowAnonymous]
-    [HttpDelete("delete/{id}")]
+    [HttpDelete("delete/{id:guid}")]
     public async Task<IActionResult> DeleteAsync([FromRoute(Name = "id")]string supplierId, CancellationToken cancellationToken = default)
     {
         var result = await Mediator.Send(new DeleteSupplierCommand(supplierId), cancellationToken);

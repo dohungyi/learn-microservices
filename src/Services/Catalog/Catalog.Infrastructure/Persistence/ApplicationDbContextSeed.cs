@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OfficeOpenXml;
 using Serilog;
 using SharedKernel.Libraries;
+using SharedKernel.Log;
 using Enum = SharedKernel.Application.Enum;
 
 namespace Catalog.Infrastructure.Persistence;
@@ -36,7 +37,7 @@ public class ApplicationDbContextSeed
         }
         catch (Exception e)
         {
-            // Logging.Error("An error occurred while initialising the database.");
+            Logging.Error("An error occurred while initialising the database.");
             throw;
         }
     }
