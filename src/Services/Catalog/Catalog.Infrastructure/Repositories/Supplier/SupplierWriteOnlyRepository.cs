@@ -6,7 +6,7 @@ using Catalog.Infrastructure.Persistence;
 
 namespace Catalog.Infrastructure.Repositories;
 
-public class SupplierWriteOnlyRepository : BaseWriteOnlyRepository<Supplier>, ISupplierWriteOnlyRepository
+public class SupplierWriteOnlyRepository : EfCoreWriteOnlyRepository<Supplier, ApplicationDbContext>, ISupplierWriteOnlyRepository
 {
     public SupplierWriteOnlyRepository(
         ApplicationDbContext dbContext, 

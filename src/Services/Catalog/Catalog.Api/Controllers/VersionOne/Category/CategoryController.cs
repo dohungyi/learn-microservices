@@ -58,7 +58,7 @@ public class CategoryController : BaseController
     
     [AllowAnonymous]
     [HttpPut("update/{id:guid}")]
-    public async Task<IActionResult> UpdateAsync([FromRoute(Name = "id")]Guid categoryId, [FromBody]UpdateSupplierCommand command, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> UpdateAsync([FromRoute(Name = "id")]Guid categoryId, [FromBody]UpdateCategoryCommand command, CancellationToken cancellationToken = default)
     {
         if (categoryId != command.Id)
         {

@@ -5,7 +5,7 @@ using Catalog.Infrastructure.Persistence;
 
 namespace Catalog.Infrastructure.Repositories;
 
-public class CategoryWriteOnlyRepository : BaseWriteOnlyRepository<Category>, ICategoryWriteOnlyRepository
+public class CategoryWriteOnlyRepository : EfCoreWriteOnlyRepository<Category, ApplicationDbContext>, ICategoryWriteOnlyRepository
 {
     public CategoryWriteOnlyRepository(
         ApplicationDbContext dbContext,

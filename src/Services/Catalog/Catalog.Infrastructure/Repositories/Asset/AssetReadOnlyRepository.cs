@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Catalog.Infrastructure.Repositories;
 
-public class AssetReadOnlyRepository : BaseReadOnlyRepository<Asset>, IAssetReadOnlyRepository
+public class AssetReadOnlyRepository : EfCoreReadOnlyRepository<Asset, ApplicationDbContext>, IAssetReadOnlyRepository
 {
     public AssetReadOnlyRepository(
         ApplicationDbContext dbContext,

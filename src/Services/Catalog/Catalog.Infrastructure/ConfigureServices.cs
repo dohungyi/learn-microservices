@@ -41,7 +41,9 @@ public static class ConfigureServices
         #region Services
 
         services.AddScoped<ICachingService, CachingService>();
+        
         services.AddSingleton<IFileService, FileService>();
+        
         services.AddScoped<IFirebaseStorageService, FirebaseStorageService>();
 
         #endregion

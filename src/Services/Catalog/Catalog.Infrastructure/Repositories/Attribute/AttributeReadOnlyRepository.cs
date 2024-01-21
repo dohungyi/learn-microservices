@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Catalog.Infrastructure.Repositories;
 
-public class AttributeReadOnlyRepository : BaseReadOnlyRepository<Attribute>, IAttributeReadOnlyRepository
+public class AttributeReadOnlyRepository : EfCoreReadOnlyRepository<Attribute, ApplicationDbContext>, IAttributeReadOnlyRepository
 {
     public AttributeReadOnlyRepository(
         ApplicationDbContext dbContext,

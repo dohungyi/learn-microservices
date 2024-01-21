@@ -5,7 +5,7 @@ using Catalog.Infrastructure.Persistence;
 
 namespace Catalog.Infrastructure.Repositories;
 
-public class AssetWriteOnlyRepository : BaseWriteOnlyRepository<Asset>, IAssetWriteOnlyRepository
+public class AssetWriteOnlyRepository : EfCoreWriteOnlyRepository<Asset, ApplicationDbContext>, IAssetWriteOnlyRepository
 {
     public AssetWriteOnlyRepository(
         ApplicationDbContext dbContext, 

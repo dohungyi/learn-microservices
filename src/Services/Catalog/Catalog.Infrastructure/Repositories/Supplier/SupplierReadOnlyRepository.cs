@@ -12,7 +12,7 @@ using SharedKernel.Libraries;
 
 namespace Catalog.Infrastructure.Repositories;
 
-public class SupplierReadOnlyRepository : BaseReadOnlyRepository<Supplier>, ISupplierReadOnlyRepository
+public class SupplierReadOnlyRepository : EfCoreReadOnlyRepository<Supplier, ApplicationDbContext>, ISupplierReadOnlyRepository
 {
     public SupplierReadOnlyRepository(
         ApplicationDbContext dbContext,

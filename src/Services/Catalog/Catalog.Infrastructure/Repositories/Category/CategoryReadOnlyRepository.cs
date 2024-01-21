@@ -14,7 +14,7 @@ using SharedKernel.Libraries;
 
 namespace Catalog.Infrastructure.Repositories;
 
-public class CategoryReadOnlyRepository : BaseReadOnlyRepository<Category>, ICategoryReadOnlyRepository
+public class CategoryReadOnlyRepository : EfCoreReadOnlyRepository<Category, ApplicationDbContext>, ICategoryReadOnlyRepository
 {
     private readonly IFileService _fileService;
     public CategoryReadOnlyRepository(

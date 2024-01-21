@@ -4,7 +4,8 @@ using Catalog.Infrastructure.Persistence;
 
 namespace Catalog.Infrastructure.Repositories;
 
-public class AttributeWriteOnlyRepository : BaseWriteOnlyRepository<Attribute>, IAttributeWriteOnlyRepository
+public class AttributeWriteOnlyRepository : 
+    EfCoreWriteOnlyRepository<Attribute, ApplicationDbContext>, IAttributeWriteOnlyRepository
 {
     public AttributeWriteOnlyRepository(
         ApplicationDbContext dbContext, 
